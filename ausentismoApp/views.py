@@ -13,3 +13,6 @@ def informes(request):
 
 def accidentes(request):
     return HttpResponse("accidentes")
+
+def personal(request):
+    return HttpResponse("personal")
