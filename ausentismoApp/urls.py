@@ -3,9 +3,9 @@ from django.urls import path
 from ausentismoApp import views
 
 urlpatterns = [
-    path('', views.home),
-    path('ausentismos', views.ausentismos),
-    path('informes', views.informes),
-    path('accidentes', views.accidentes),
-    path('personal', views.personal)
+    path('', views.home, name="home"),
+    path('ausentismos', views.ausentismos, name="ausentismo"),
+    path('informes', views.informes, name="informes"),
+    path('accidentes', views.accidentes, name="accidentes"),
+    path('personal', views.personal, name="personal")
 ]
