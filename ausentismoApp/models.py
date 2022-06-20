@@ -13,7 +13,7 @@ class Pais(models.Model):
         verbose_name_plural = 'paises'
 
     def __str__(self):
-        return self.titulo
+        return self.nombre
 
 class Departamento(models.Model):
     nombre = models.CharField(max_length=80)
@@ -25,7 +25,7 @@ class Departamento(models.Model):
         verbose_name_plural = 'departamentos'
 
     def __str__(self):
-        return self.titulo
+        return self.nombre
 
 class Ciudad(models.Model):
     nombre = models.CharField(max_length=80)
@@ -37,7 +37,7 @@ class Ciudad(models.Model):
         verbose_name_plural = 'ciudades'
 
     def __str__(self):
-        return self.titulo
+        return self.nombre
 
 class Sede(models.Model):
     descripcion = models.CharField(max_length=50)
@@ -49,7 +49,7 @@ class Sede(models.Model):
         verbose_name_plural = 'sedes'
 
     def __str__(self):
-        return self.titulo
+        return self.descripcion
 
 class Seccion(models.Model):
     descripcion = models.CharField(max_length=50)
@@ -61,7 +61,7 @@ class Seccion(models.Model):
         verbose_name_plural = 'secciones'
 
     def __str__(self):
-        return self.titulo
+        return self.descripcion
 
 class Area(models.Model):
     descripcion = models.CharField(max_length=50)
@@ -73,7 +73,7 @@ class Area(models.Model):
         verbose_name_plural = 'areas'
 
     def __str__(self):
-        return self.titulo
+        return self.descripcion
 
 class Cargo(models.Model):
     descripcion = models.CharField(max_length=50)
@@ -85,7 +85,7 @@ class Cargo(models.Model):
         verbose_name_plural = 'cargos'
 
     def __str__(self):
-        return self.titulo
+        return self.descripcion
 
 class Afp(models.Model):
     nombre = models.CharField(max_length=80)
@@ -97,7 +97,7 @@ class Afp(models.Model):
         verbose_name_plural = 'afp'
 
     def __str__(self):
-        return self.titulo
+        return self.nombre
 
 class Arl(models.Model):
     nombre = models.CharField(max_length=80)
@@ -109,7 +109,7 @@ class Arl(models.Model):
         verbose_name_plural = 'arl'
 
     def __str__(self):
-        return self.titulo
+        return self.nombre
 
 class Eps(models.Model):
     nombre = models.CharField(max_length=80)
@@ -121,7 +121,7 @@ class Eps(models.Model):
         verbose_name_plural = 'eps'
 
     def __str__(self):
-        return self.titulo
+        return self.nombre
 
 class CajaCompensacion(models.Model):
     nombre = models.CharField(max_length=80)
@@ -133,7 +133,7 @@ class CajaCompensacion(models.Model):
         verbose_name_plural = 'cajas compensación'
 
     def __str__(self):
-        return self.titulo
+        return self.nombre
 
 class Persona(models.Model):
     TIPO_DOCUMENTO = (
@@ -210,7 +210,7 @@ class Persona(models.Model):
         verbose_name_plural = 'personas'
 
     def __str__(self):
-        return self.titulo
+        return self.tipo_documento + "-" + self.documento + " " + self.nombre
 
 
 class InfoAcademica(models.Model):
@@ -243,4 +243,4 @@ class ExperienciaLaboral(models.Model):
         verbose_name_plural = 'experiencia laboral'
 
     def __str__(self):
-        return self.titulo
+        return self.cargo
