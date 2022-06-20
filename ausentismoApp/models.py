@@ -203,9 +203,9 @@ class Persona(models.Model):
     caja = models.ForeignKey(CajaCompensacion, on_delete=models.CASCADE)
     rh = models.CharField(max_length=1, choices=RH)
     grupo_rh = models.CharField(max_length=2, choices=GRUPO_RH)
-    persona_contacto = models.CharField(max_length=100)
-    celuar_contacto = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(9999999999)])
-    coreeo_contacto = models.EmailField()
+    persona_contacto = models.CharField(max_length=100, blank=True, null=True)
+    celuar_contacto = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(9999999999)], blank=True, null=True)
+    coreeo_contacto = models.EmailField(blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now_add=True)
 
