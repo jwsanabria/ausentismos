@@ -189,7 +189,7 @@ class Persona(models.Model):
     telefono = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(9999999999)])
     celular = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(9999999999)])
     correo = models.EmailField()
-    foto = models.ImageField()
+    foto = models.ImageField(blank=True, null=True)
     fecha_ingreso = models.DateField()
     sede = models.ForeignKey(Sede, on_delete=models.CASCADE)
     area = models.ForeignKey(Area, on_delete=models.CASCADE)
