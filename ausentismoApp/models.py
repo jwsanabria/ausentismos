@@ -186,7 +186,7 @@ class Persona(models.Model):
     estrato = models.PositiveIntegerField(validators=[MinValueValidator(0), MaxValueValidator(6)])
     departamento = models.ForeignKey(Departamento, on_delete=models.CASCADE)
     ciudad = models.ForeignKey(Ciudad, on_delete=models.CASCADE)
-    telefono = models.BigIntegerField(validators=[MinValueValidator(0), MaxValueValidator(9999999999)])
+    telefono = models.BigIntegerField(validators=[MinValueValidator(0), MaxValueValidator(9999999999)], blank=True, null=True)
     celular = models.BigIntegerField(validators=[MinValueValidator(0), MaxValueValidator(9999999999)])
     correo = models.EmailField()
     foto = models.ImageField(blank=True, null=True)
