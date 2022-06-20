@@ -2,16 +2,56 @@
 {% load django_tables2 %}
 {% load i18n %}
 {% block content %}
-<div class="container bg-white">
+    <div class="container p-5 bg-white">
+        <div class="float-none">
+            <h1>{{ persona.nombre  }}</h1>
+        </div>
+        <div class="d-flex justify-content-center">
+            <div class="table-responsive">
+                <div class="pl-4"> <b><span>Tipo Documento: </span></b>{{ persona.tipo_documento }} </div>
+                <div class="pl-4"> <b><span>Documento: </span></b>{{ persona.documento }} </div>
+                <div class="pl-4"> <b><span>Genero: </span></b>{{ persona.sexo }} </div>
+                <div class="pl-4"> <b><span>Nacionalidad: </span></b>{{ persona.nacionalidad }} </div>
+                <div class="pl-4"> <b><span>Fecha nacimiento: </span></b>{{ persona.fecha_nacimiento }} </div>
+                <div class="pl-4"> <b><span>Estado civil: </span></b>{{ persona.estado_civil }} </div>
+                <div class="pl-4"> <b><span>Dirección Residencia: </span></b> {{ persona.direccion_residencia }} </div>
+                <div class="pl-4"> <b><span>Estrato: </span></b>{{ persona.estrato }} </div>
+                <div class="pl-4"> <b><span>Departamento: </span></b>{{ persona.departamento }} </div>
+                <div class="pl-4"> <b><span>Ciudad: </span></b>{{ persona.ciudad }} </div>
+                <div class="pl-4"> <b><span>Telefono: </span></b>{{ persona.telefono }} </div>
+                <div class="pl-4"> <b><span>Celular: </span></b>{{ persona.celular }} </div>
+                <div class="pl-4"> <b><span>Correo: </span></b>{{ persona.correo }} </div>
 
-       <div> <span>Nombre:</span> {{ persona.nombre  }}</div>
+                <div class="float-none pt-3">
+                    <h4>Información de nómina</h4>
+                </div>
+                <div class="pl-4"> <b><span>Fecha Ingreso: </span></b>{{ persona.fecha_ingreso }} </div>
+                <div class="pl-4"> <b><span>Sede: </span></b>{{ persona.sede }} </div>
+                <div class="pl-4"> <b><span>Area: </span></b>{{ persona.area }} </div>
+                <div class="pl-4"> <b><span>Sección: </span></b>{{ persona.seccion }} </div>
+                <div class="pl-4"> <b><span>Cargo: </span></b>{{ persona.cargo }} </div>
+                <div class="pl-4"> <b><span>Salario: </span></b>{{ persona.salario }} </div>
 
+                <div class="float-none pt-3">
+                    <h4>Seguridad social</h4>
+                </div>
+                <div class="pl-4"> <b><span>EPS: </span></b>{{ persona.eps }} </div>
+                <div class="pl-4"> <b><span>AFP: </span></b>{{ persona.afp }} </div>
+                <div class="pl-4"> <b><span>Caja compensación: </span></b>{{ persona.caja }} </div>
+                <div class="pl-4"> <b><span>RH: </span></b>{{ persona.rh }} </div>
+                <div class="pl-4"> <b><span>Grupo sanguíneo: </span></b>{{ persona.grupo_rh }} </div>
 
-       <div> <span>Documento:</span>{{ persona.documento }} </div>
+                <div class="float-none pt-3">
+                    <h4>Persona contacto</h4>
+                </div>
+                <div class="pl-4"> <b><span>Nombre: </span></b>{{ persona.persona_contacto }} </div>
+                <div class="pl-4"> <b><span>Celular: </span></b>{{ persona.celuar_contacto }} </div>
+                <div class="pl-4"> <b><span>Correo: </span></b>{{ persona.coreeo_contacto }} </div>
 
-
-       <div> <span>Dirección Residencia:</span> {{ persona.direccion_residencia }} </div>
-       <div> <span>Estado:</span> {{ persona.estado }} </div>
-
+                <div class="float-none mt-3 {% if persona.estado == '1' %} bg-success {% else %} bg-warning {% endif %}">
+                    <div> <b><span>Estado: </span></b> {% if persona.estado == '1' %} <b>ACTIVO</b> {% else %} <b>INACTIVO</b>  {% endif %} </div>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock content %}
