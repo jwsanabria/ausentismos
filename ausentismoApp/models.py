@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.utils import timezone
 
@@ -214,6 +215,9 @@ class Persona(models.Model):
 
     def __str__(self):
         return self.tipo_documento + "-" + self.documento + " " + self.nombre
+
+    def get_absolute_url(self):
+        return reverse("persona_view", kwargs={'pk': self.id})
 
 
 class InfoAcademica(models.Model):

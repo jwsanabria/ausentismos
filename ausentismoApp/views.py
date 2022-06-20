@@ -2,12 +2,19 @@ from django_tables2 import SingleTableView
 from django.shortcuts import render, HttpResponse
 from .models import Persona
 from .tables import PersonaTable
+from django.views.generic.base import View
 
 # Create your views here.
 class PersonaListView(SingleTableView):
     model = Persona
     table_class = PersonaTable
     template_name = 'personas/'
+
+
+class PersonaView(View):
+    def get(self, request, pk):
+        context_data = {"persona": Persona.objects.get(id=pk)}
+        return render(request, 'personal/infoPersonal.html', context_data)
 
 
 def home(request):

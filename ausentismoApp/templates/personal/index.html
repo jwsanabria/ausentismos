@@ -4,13 +4,14 @@
 {% load static %}
 
 {% block content %}
-<div style="background-color: #ffffff">
-    <h1>Personal</h1>
-    <div class="table" style="text-align: center">
-        <div class="col-md-10" style="font-family: 'Lora'; text-align: center">
-            {% render_table personas %}
+    <div class="container-sm p-3 bg-white">
+        <div class="float-none">
+            <h1>Empleados</h1>
+        </div>
+        <div class="d-flex justify-content-center h-100">
+            <div class="table-responsive">
+                {% render_table personas %}
+            </div>
         </div>
     </div>
-</div>
-
 {% endblock %}
