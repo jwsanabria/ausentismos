@@ -6,9 +6,11 @@
         <div class="float-none">
             <h1>{{ persona.nombre  }}</h1>
         </div>
+        <div class="row">
+
         <div class="d-flex justify-content-center flex-column">
 
-                <div class="pl-4"> <b><span>Tipo Documento: </span></b>{{ persona.tipo_documento }} </div>
+                <div class="pl-4"> <b><span class="text-dark">Tipo Documento: </span></b>{{ persona.tipo_documento }} </div>
                 <div class="pl-4"> <b><span>Documento: </span></b>{{ persona.documento }} </div>
                 <div class="pl-4"> <b><span>Genero: </span></b>{{ persona.sexo }} </div>
                 <div class="pl-4"> <b><span>Nacionalidad: </span></b>{{ persona.nacionalidad }} </div>
@@ -48,10 +50,11 @@
                 <div class="pl-4"> <b><span>Celular: </span></b>{{ persona.celuar_contacto }} </div>
                 <div class="pl-4"> <b><span>Correo: </span></b>{{ persona.coreeo_contacto }} </div>
 
-                <div class="float-none mt-3 {% if persona.estado == '1' %} bg-success {% else %} bg-warning {% endif %}">
-                    <div> <b><span>Estado: </span></b> {% if persona.estado == '1' %} <b>ACTIVO</b> {% else %} <b>INACTIVO</b>  {% endif %} </div>
+                <div class="float-none mt-3">
+                    <div> <b><span>Estado: </span> {% if persona.estado == '1' %} <span class="text-success">ACTIVO</span> {% else %} <span class="text-warning">INACTIVO</span>  {% endif %} </b></div>
                 </div>
 
+        </div>
         </div>
     </div>
 {% endblock content %}
