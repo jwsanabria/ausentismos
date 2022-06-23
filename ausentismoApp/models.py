@@ -216,6 +216,15 @@ class Persona(models.Model):
     def __str__(self):
         return self.tipo_documento + "-" + self.documento + " " + self.nombre
 
+    def display_salario(self):
+        """
+        Creates a string for the Genre. This is required to display genre in Admin.
+        """
+        #return ', '.join([genre.name for genre in self.genre.all()[:3]])
+        return '${:,.2f}'.format(self.salario)
+
+    display_salario.short_description = 'Salario'
+
     def get_absolute_url(self):
         return reverse("persona_view", kwargs={'pk': self.id})
 
