@@ -18,6 +18,13 @@ class Pais(models.Model):
     def __str__(self):
         return self.nombre
 
+    def save(self, *args, **kwargs):
+        ''' On save, update timestamps '''
+        if not self.id:
+            self.created = timezone.now()
+        self.modified = timezone.now()
+        return super(Pais, self).save(*args, **kwargs)
+
 class Departamento(models.Model):
     nombre = models.CharField(max_length=80)
     created = models.DateTimeField(auto_now_add=True)
@@ -29,6 +36,13 @@ class Departamento(models.Model):
 
     def __str__(self):
         return self.nombre
+
+    def save(self, *args, **kwargs):
+        ''' On save, update timestamps '''
+        if not self.id:
+            self.created = timezone.now()
+        self.modified = timezone.now()
+        return super(Departamento, self).save(*args, **kwargs)
 
 class Ciudad(models.Model):
     nombre = models.CharField(max_length=80)
@@ -42,6 +56,13 @@ class Ciudad(models.Model):
     def __str__(self):
         return self.nombre
 
+    def save(self, *args, **kwargs):
+        ''' On save, update timestamps '''
+        if not self.id:
+            self.created = timezone.now()
+        self.modified = timezone.now()
+        return super(Ciudad, self).save(*args, **kwargs)
+
 class Sede(models.Model):
     descripcion = models.CharField(max_length=50)
     created = models.DateTimeField(auto_now_add=True)
@@ -53,6 +74,13 @@ class Sede(models.Model):
 
     def __str__(self):
         return self.descripcion
+
+    def save(self, *args, **kwargs):
+        ''' On save, update timestamps '''
+        if not self.id:
+            self.created = timezone.now()
+        self.modified = timezone.now()
+        return super(Sede, self).save(*args, **kwargs)
 
 class Seccion(models.Model):
     descripcion = models.CharField(max_length=50)
@@ -66,6 +94,13 @@ class Seccion(models.Model):
     def __str__(self):
         return self.descripcion
 
+    def save(self, *args, **kwargs):
+        ''' On save, update timestamps '''
+        if not self.id:
+            self.created = timezone.now()
+        self.modified = timezone.now()
+        return super(Seccion, self).save(*args, **kwargs)
+
 class Area(models.Model):
     descripcion = models.CharField(max_length=50)
     created = models.DateTimeField(auto_now_add=True)
@@ -77,6 +112,13 @@ class Area(models.Model):
 
     def __str__(self):
         return self.descripcion
+
+    def save(self, *args, **kwargs):
+        ''' On save, update timestamps '''
+        if not self.id:
+            self.created = timezone.now()
+        self.modified = timezone.now()
+        return super(Area, self).save(*args, **kwargs)
 
 class Cargo(models.Model):
     descripcion = models.CharField(max_length=50)
@@ -90,6 +132,13 @@ class Cargo(models.Model):
     def __str__(self):
         return self.descripcion
 
+    def save(self, *args, **kwargs):
+        ''' On save, update timestamps '''
+        if not self.id:
+            self.created = timezone.now()
+        self.modified = timezone.now()
+        return super(Cargo, self).save(*args, **kwargs)
+
 class Afp(models.Model):
     nombre = models.CharField(max_length=80)
     created = models.DateTimeField(auto_now_add=True)
@@ -101,6 +150,13 @@ class Afp(models.Model):
 
     def __str__(self):
         return self.nombre
+
+    def save(self, *args, **kwargs):
+        ''' On save, update timestamps '''
+        if not self.id:
+            self.created = timezone.now()
+        self.modified = timezone.now()
+        return super(Afp, self).save(*args, **kwargs)
 
 
 class Arl(models.Model):
@@ -115,6 +171,13 @@ class Arl(models.Model):
     def __str__(self):
         return self.nombre
 
+    def save(self, *args, **kwargs):
+        ''' On save, update timestamps '''
+        if not self.id:
+            self.created = timezone.now()
+        self.modified = timezone.now()
+        return super(Arl, self).save(*args, **kwargs)
+
 class Eps(models.Model):
     nombre = models.CharField(max_length=80)
     created = models.DateTimeField(auto_now_add=True)
@@ -127,6 +190,13 @@ class Eps(models.Model):
     def __str__(self):
         return self.nombre
 
+    def save(self, *args, **kwargs):
+        ''' On save, update timestamps '''
+        if not self.id:
+            self.created = timezone.now()
+        self.modified = timezone.now()
+        return super(Eps, self).save(*args, **kwargs)
+
 class CajaCompensacion(models.Model):
     nombre = models.CharField(max_length=80)
     created = models.DateTimeField(auto_now_add=True)
@@ -138,6 +208,13 @@ class CajaCompensacion(models.Model):
 
     def __str__(self):
         return self.nombre
+
+    def save(self, *args, **kwargs):
+        ''' On save, update timestamps '''
+        if not self.id:
+            self.created = timezone.now()
+        self.modified = timezone.now()
+        return super(CajaCompensacion, self).save(*args, **kwargs)
 
 class Persona(models.Model):
     TIPO_DOCUMENTO = (
@@ -228,6 +305,13 @@ class Persona(models.Model):
     def get_absolute_url(self):
         return reverse("persona_view", kwargs={'pk': self.id})
 
+    def save(self, *args, **kwargs):
+        ''' On save, update timestamps '''
+        if not self.id:
+            self.created = timezone.now()
+        self.modified = timezone.now()
+        return super(Persona, self).save(*args, **kwargs)
+
 
 class InfoAcademica(models.Model):
     empleado = models.ForeignKey(Persona, on_delete=models.CASCADE)
@@ -243,6 +327,13 @@ class InfoAcademica(models.Model):
 
     def __str__(self):
         return self.titulo
+
+    def save(self, *args, **kwargs):
+        ''' On save, update timestamps '''
+        if not self.id:
+            self.created = timezone.now()
+        self.modified = timezone.now()
+        return super(InfoAcademica, self).save(*args, **kwargs)
 
 
 class ExperienciaLaboral(models.Model):
@@ -260,3 +351,10 @@ class ExperienciaLaboral(models.Model):
 
     def __str__(self):
         return self.cargo
+
+    def save(self, *args, **kwargs):
+        ''' On save, update timestamps '''
+        if not self.id:
+            self.created = timezone.now()
+        self.modified = timezone.now()
+        return super(ExperienciaLaboral, self).save(*args, **kwargs)

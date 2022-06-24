@@ -25,7 +25,7 @@ class PersonaAdmin(admin.ModelAdmin):
             'fields': ('fecha_ingreso', 'cargo', 'salario', ('sede', 'area', 'seccion'), 'estado')
         }),
         ('Seguridad social', {
-            'fields': ('eps', 'afp', 'caja', ('rh', 'grupo_rh'))
+            'fields': ('eps', 'afp', 'caja', 'arl', ('rh', 'grupo_rh'))
         }),
         ('Persona contacto', {
             'fields': ('persona_contacto', 'celuar_contacto', 'coreeo_contacto')
