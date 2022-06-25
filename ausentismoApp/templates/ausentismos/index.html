@@ -4,6 +4,39 @@
 
 {% block content %}
 
-<h1>Ausentismos</h1>
+
+    <div class="container-fluid p-5 bg-white">
+        <div class="float-none">
+            <h1>Ausentismos</h1>
+        </div>
+        <table class="table table-responsive">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Empleado</th>
+              <th scope="col">Motivo</th>
+              <th scope="col">Fecha ausentismo</th>
+                <th scope="col">Hora inicial</th>
+                <th scope="col">Hora final</th>
+                <th scope="col">Tiempo ausentismo</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for a in ausentismos %}
+
+                <tr>
+                    <th scope="row">{{ a.id }}</th>
+                    <td>{{ a.empleado }}</td>
+                    <td>{{ a.motivo }}</td>
+                    <td>{{ a.fecha_ausentismo }}</td>
+                    <td>{{ a.hora_inicial }}</td>
+                    <td>{{ a.hora_final }}</td>
+                    <td>{{ a.tiempo_ausentismo }}</td>
+                </tr>
+            {% endfor %}
+
+          </tbody>
+        </table>
+    </div>
 
 {% endblock %}

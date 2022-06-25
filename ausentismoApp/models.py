@@ -358,3 +358,50 @@ class ExperienciaLaboral(models.Model):
             self.created = timezone.now()
         self.modified = timezone.now()
         return super(ExperienciaLaboral, self).save(*args, **kwargs)
+
+
+class MotivoAusentismo(models.Model):
+    descripcion = models.CharField(max_length=150)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'motivo'
+        verbose_name_plural = 'motivos'
+
+    def __str__(self):
+        return self.descripcion
+
+    def save(self, *args, **kwargs):
+        ''' On save, update timestamps '''
+        if not self.id:
+            self.created = timezone.now()
+        self.modified = timezone.now()
+        return super(MotivoAusentismo, self).save(*args, **kwargs)
+
+
+class Ausentismo(models.Model):
+    empleado = models.ForeignKey(Persona, on_delete=models.CASCADE)
+    motivo = models.ForeignKey(MotivoAusentismo, on_delete=models.CASCADE)
+    fecha_solicitud = models.DateField()
+    fecha_ausentismo = models.DateField()
+    hora_inicial = models.TimeField()
+    hora_final = models.TimeField()
+    tiempo_ausentismo = models.TimeField()
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'ausentismo'
+        verbose_name_plural = 'ausentismos'
+
+    def __str__(self):
+        return self.empleado
+
+    def save(self, *args, **kwargs):
+        ''' On save, update timestamps '''
+        if not self.id:
+            self.created = timezone.now()
+        self.modified = timezone.now()
+        return super(Ausentismo, self).save(*args, **kwargs)
+
