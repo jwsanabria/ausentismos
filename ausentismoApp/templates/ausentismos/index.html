@@ -3,13 +3,12 @@
 {% load static %}
 
 {% block content %}
-
-
-    <div class="container-fluid p-5 bg-white">
-        <div class="float-none">
-            <h1>Ausentismos</h1>
+    <div class="card card-default">
+        <div class="card-header">
+            <h1 class="card-title">Ausentismos</h1>
         </div>
-        <table class="table table-responsive">
+        <div class="card-body">
+            <table class="table table-responsive">
           <thead>
             <tr>
               <th scope="col">#</th>
@@ -37,6 +36,11 @@
 
           </tbody>
         </table>
+        </div>
+        <div class="card-footer">
+            <a href="{% url 'ausentismo_add_view' %}" class="btn btn-primary">Registrar Ausentismo</a>
+
+        </div>
     </div>
 
 {% endblock %}
