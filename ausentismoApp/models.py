@@ -281,8 +281,8 @@ class Persona(models.Model):
     rh = models.CharField(max_length=1, choices=RH)
     grupo_rh = models.CharField(max_length=2, choices=GRUPO_RH)
     persona_contacto = models.CharField(max_length=100, blank=True, null=True)
-    celuar_contacto = models.BigIntegerField(validators=[MinValueValidator(0), MaxValueValidator(9999999999)], blank=True, null=True)
-    coreeo_contacto = models.EmailField(blank=True, null=True)
+    celular_contacto = models.BigIntegerField(validators=[MinValueValidator(0), MaxValueValidator(9999999999)], blank=True, null=True)
+    correo_contacto = models.EmailField(blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now_add=True)
 
