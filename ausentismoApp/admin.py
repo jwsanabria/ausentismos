@@ -28,7 +28,7 @@ class PersonaAdmin(admin.ModelAdmin):
             'fields': ('eps', 'afp', 'caja', 'arl', ('rh', 'grupo_rh'))
         }),
         ('Persona contacto', {
-            'fields': ('persona_contacto', 'celuar_contacto', 'coreeo_contacto')
+            'fields': ('persona_contacto', 'celular_contacto', 'correo_contacto')
         }),
     )
     inlines = [InfoAcademicaInline, ExperienciaLaboralInline]
