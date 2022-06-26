@@ -54,7 +54,7 @@ admin.site.register(Arl, AuditAdmin)
 admin.site.register(Eps, AuditAdmin)
 admin.site.register(CajaCompensacion, AuditAdmin)
 admin.site.register(MotivoAusentismo, AuditAdmin)
-admin.site.register(Ausentismo, AuditAdmin)
+admin.site.register(Ausentismo, AusentismoAdmin)
 
 
 
