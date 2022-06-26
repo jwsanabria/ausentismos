@@ -396,7 +396,7 @@ class Ausentismo(models.Model):
         verbose_name_plural = 'ausentismos'
 
     def __str__(self):
-        return self.id
+        return str(self.id)
 
     def save(self, *args, **kwargs):
         ''' On save, update timestamps '''
