@@ -35,6 +35,12 @@ class PersonaAdmin(admin.ModelAdmin):
     search_fields = ['nombre', 'documento', ]
 
 
+class AusentismoAdmin(admin.ModelAdmin):
+    readonly_fields = ('created', 'updated')
+    list_display = ('empleado', 'motivo',  'fecha_solicitud', 'fecha_ausentismo', 'hora_inicial', 'hora_final')
+    list_filter = ('motivo',)
+
+
 admin.site.register(Persona, PersonaAdmin)
 admin.site.register(Pais, AuditAdmin)
 admin.site.register(Departamento, AuditAdmin)
