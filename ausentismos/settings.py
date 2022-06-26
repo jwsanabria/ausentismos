@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'whitenoise.runserver_nostatic',
     'django_tables2',
+    'bootstrap_datepicker_plus',
     "ausentismoApp",
 ]
 
