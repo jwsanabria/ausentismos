@@ -14,4 +14,5 @@ Pillow==9.1.1
 psycopg2-binary==2.9.3
 soupsieve==2.3.2.post1
 sqlparse==0.4.2
+tablib==3.2.1
 whitenoise==6.2.0

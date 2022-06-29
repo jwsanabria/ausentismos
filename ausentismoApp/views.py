@@ -1,4 +1,5 @@
 from django_tables2 import SingleTableView, LazyPaginator
+from django_tables2.export import ExportMixin
 from django.shortcuts import render, HttpResponse
 from .models import Persona, Ausentismo
 from .forms import AusentismoForm
@@ -40,20 +41,21 @@ class RegistrarAusentismoView(CreateView):
     success_url = reverse_lazy("ausentismo")
 
 
-
-
 # Create your views here.
 class PersonaListView(SingleTableView):
     model = Persona
     table_class = PersonaTable
     template_name = 'personas/infoPersonal.html'
 
-class FilteredAusentismoListView(SingleTableMixin, FilterView):
+
+class FilteredAusentismoListView(ExportMixin, SingleTableView):
     table_class = AusentismoTable
     model = Ausentismo
     template_name = "ausentismos/index2.html"
     paginate_by = 5
     filterset_class = AusentismoFilter
+
+
 
 class PersonaView(View):
     def get(self, request, pk):
@@ -64,6 +66,7 @@ class PersonaView(View):
 def home(request):
     return render(request, "index.html")
 
+
 def ausentismos(request):
     #context_data = {"ausentismos": Ausentismo.objects.all()}
     #return render(request, "ausentismos/index.html", context_data)
@@ -71,11 +74,14 @@ def ausentismos(request):
     table.paginate(page=request.GET.get("page", 1), per_page=5)
     return render(request, "ausentismos/index.html", {"ausentismos": table})
 
+
 def informes(request):
     return render(request, "informes/index.html")
 
+
 def accidentes(request):
     return render(request, "accidentes/index.html")
+
 
 def personal(request):
     personas = PersonaTable(Persona.objects.all())
