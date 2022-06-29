@@ -1,16 +1,20 @@
 from django import forms
-from django.forms import ModelForm
+from django.forms import ModelForm, Select, DateField
+from .models import Persona
 from bootstrap_datepicker_plus.widgets import DatePickerInput, TimePickerInput
+from django.conf import settings
 
 from .models import Ausentismo
 
 class AusentismoForm(ModelForm):
+    empleado = forms.ModelChoiceField(queryset=Persona.objects.all(), widget=Select(attrs={'class': 'form-control'}))
+    fecha_solicitud = DateField(input_formats=settings.DATE_INPUT_FORMATS, widget=DatePickerInput(format='%d-%m-%Y'))
+    fecha_ausentismo = DateField(input_formats=settings.DATE_INPUT_FORMATS, widget=DatePickerInput(format='%d-%m-%Y'))
     class Meta:
         model = Ausentismo
-        fields = '__all__'
+        fields = ('empleado', 'motivo', 'fecha_solicitud', 'fecha_ausentismo', 'hora_inicial', 'hora_final', 'tiempo_ausentismo')
         widgets = {
-            'fecha_solicitud': DatePickerInput(),
-            'fecha_ausentismo': DatePickerInput(),
+            'motivo': forms.Select(attrs={'class': 'form-control'}),
             'hora_inicial': TimePickerInput(),
             'hora_final': TimePickerInput(),
             'tiempo_ausentismo': TimePickerInput(),

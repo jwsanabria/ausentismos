@@ -312,6 +312,18 @@ class Persona(models.Model):
         self.modified = timezone.now()
         return super(Persona, self).save(*args, **kwargs)
 
+    def personaToDictionary(self):
+        if self == None:
+            return None
+
+        dictionary = {}
+        dictionary["nombre"] = self.nombre
+        dictionary["documento"] = self.documento
+        dictionary["tipo_documento"] = self.tipo_documento
+        dictionary["id"] = self.id
+
+        return dictionary
+
 
 class InfoAcademica(models.Model):
     empleado = models.ForeignKey(Persona, on_delete=models.CASCADE)

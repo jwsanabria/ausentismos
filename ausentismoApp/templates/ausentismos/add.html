@@ -12,12 +12,46 @@
             <table class="text-left p-2 m-2">
                 {{ form.as_table }}
             </table>
-            <input type="submit" value="Submit" class="btn-primary">
+            <input type="submit" value="Aceptar" class="btn-primary">
         </form>
 
     </div>
 
+    <script>
+        $('.select2').select2({
+            theme: 'bootstrap4',
+            language: 'es'
+        });
+        $.ajaxSetup({
+	        data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+        });
+        $('select[name="empleado"]').select2({
+          allowClear: true,
+            language: 'es',
+            ajax: {
 
+            url: "{% url 'busqueda_persona_view' %}",
+            delay: 250,
+              data: function(params){
+                var queryParameters = {
+                    term: params.term,
+                    action: 'autocomplete'
+                }
+                return queryParameters;
+              },
+              processResults: function(data){
+                return {
+                    results: data
+                };
+              },
+              type: 'POST',
+
+            // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
+          },
+          placeholder: 'Ingrese el nombre del empleado',
+            minimumInputLength: 3,
+        });
+    </script>
 
 
 {% endblock %}

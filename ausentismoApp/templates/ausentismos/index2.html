@@ -2,7 +2,7 @@
 {% load render_table from django_tables2 %}
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
-
+{% load bootstrap4 %}
 {% load static %}
 
 {% block content %}
@@ -13,7 +13,13 @@
         <div class="card-body">
             <div class="d-flex justify-content-center">
                 <div class="table-responsive">
-                    {% render_table ausentismos %}
+                    {% if filter %}
+    <form action="" method="get" class="form form-inline">
+        {% bootstrap_form filter.form layout='inline' %}
+        {% bootstrap_button 'Filtrar' %}
+    </form>
+{% endif %}
+{% render_table table 'django_tables2/bootstrap4.html' %}
                 </div>
             </div>
         </div>
