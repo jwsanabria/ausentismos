@@ -1,5 +1,5 @@
 from django import forms
-from django.forms import ModelForm, Select, DateField
+from django.forms import ModelForm, Select, DateField, TextInput
 from .models import Persona
 from bootstrap_datepicker_plus.widgets import DatePickerInput, TimePickerInput
 from django.conf import settings
@@ -17,5 +17,5 @@ class AusentismoForm(ModelForm):
             'motivo': forms.Select(attrs={'class': 'form-control'}),
             'hora_inicial': TimePickerInput(),
             'hora_final': TimePickerInput(),
-            'tiempo_ausentismo': TimePickerInput(),
+            'tiempo_ausentismo': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Click para actualizar', 'onclick' : 'calculaTiempo()'}),
         }
