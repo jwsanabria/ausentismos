@@ -26,7 +26,7 @@ class PersonaTable(tables.Table):
 
 
 class AusentismoTable(tables.Table):
-    salario = tables.Column(accessor='empleado.salario')
+    salario = CurrencyColumn(accessor='empleado.salario')
     class Meta:
         model = Ausentismo
         row_attrs = {
