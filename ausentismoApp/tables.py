@@ -26,6 +26,7 @@ class PersonaTable(tables.Table):
 
 
 class AusentismoTable(tables.Table):
+    salario = tables.Column(accessor='empleado.salario')
     class Meta:
         model = Ausentismo
         row_attrs = {
@@ -34,5 +35,5 @@ class AusentismoTable(tables.Table):
         attrs = {'id': 'history_table', 'class': 'table table-striped table-hover'}
         template_name = "django_tables2/bootstrap4.html"
         fields = ("id", "empleado", "motivo", "fecha_solicitud", "fecha_ausentismo", "hora_inicial", "hora_final", "tiempo_ausentismo" )
-        sequence = ('id', 'empleado', 'motivo', 'fecha_solicitud', 'fecha_ausentismo', 'hora_inicial', 'hora_final', 'tiempo_ausentismo')
+        sequence = ('id', 'empleado', 'motivo', 'fecha_solicitud', 'fecha_ausentismo', 'hora_inicial', 'hora_final', 'tiempo_ausentismo', 'salario')
 

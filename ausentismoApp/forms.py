@@ -17,5 +17,5 @@ class AusentismoForm(ModelForm):
             'motivo': forms.Select(attrs={'class': 'form-control'}),
             'hora_inicial': TimePickerInput(),
             'hora_final': TimePickerInput(),
-            'tiempo_ausentismo': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Click para actualizar', 'onclick' : 'calculaTiempo()'}),
+            'tiempo_ausentismo': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Tiempo entre la hora final e inicial', 'onclick' : 'calculaTiempo()'}),
         }

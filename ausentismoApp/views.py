@@ -1,5 +1,6 @@
 from django_tables2 import SingleTableView, LazyPaginator
 from django_tables2.export import ExportMixin
+from django_tables2.config import RequestConfig
 from django.shortcuts import render, HttpResponse
 from .models import Persona, Ausentismo
 from .forms import AusentismoForm
@@ -48,12 +49,42 @@ class PersonaListView(SingleTableView):
     template_name = 'personas/infoPersonal.html'
 
 
-class FilteredAusentismoListView(ExportMixin, SingleTableView):
+class FilteredAusentismoListView(ExportMixin, SingleTableMixin, FilterView):
     table_class = AusentismoTable
     model = Ausentismo
     template_name = "ausentismos/index2.html"
     paginate_by = 5
     filterset_class = AusentismoFilter
+
+    '''
+    def get_context_data(self, **kwargs):
+        context = super(FilteredAusentismoListView, self).get_context_data(**kwargs)
+        query = Ausentismo.objects.all().select_related('empleado')
+
+        f = AusentismoFilter(self.request.GET, queryset=query)
+
+        t = AusentismoTable(data=f.qs)
+        t.paginate(page=self.request.GET.get("page", 1), per_page=5)
+
+        RequestConfig(self.request, paginate=True).configure(t)
+
+        context['filter'] = f
+        context['table'] = t
+        
+        export_format = self.request.GET.get("_export", None)
+        if TableExport.is_valid_format(export_format):
+            exporter = TableExport(export_format, query)
+            return exporter.response("query.{}".format(export_format))
+        
+        return context
+    '''
+
+    def post(self, *args, **kwargs):
+        fecha_ini = self.request.POST.get('fecha_ini', '')
+        fecha_fin = self.request.POST.get('fecha_fin', '')
+        table = AusentismoTable(Ausentismo.objects.filter(fecha_ausentismo__range=(fecha_ini, fecha_fin)))
+        table.paginate(page=self.request.GET.get("page", 1), per_page=5)
+        return render(self.request, "ausentismos/index2.html", {'table': table})
 
 
 

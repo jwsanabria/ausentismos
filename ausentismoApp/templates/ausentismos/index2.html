@@ -18,14 +18,16 @@
         {% bootstrap_form filter.form layout='inline' %}
         {% bootstrap_button 'Filtrar' %}
     </form>
+
 {% endif %}
 {% render_table table 'django_tables2/bootstrap4.html' %}
                 </div>
             </div>
         </div>
+        {% load querystring from django_tables2 %}
         <div class="card-footer">
             <a href="{% url 'ausentismo_add_view' %}" class="btn btn-primary">Registrar Ausentismo</a>
-            <a href="?_export=csv" class="btn btn-secondary">Descargar Reporte</a>
+            <a href="{% querystring '_export'='csv' %}" class="btn btn-secondary">Descargar Reporte</a>
         </div>
     </div>
 
