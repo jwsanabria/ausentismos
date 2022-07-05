@@ -27,7 +27,7 @@
         {% load querystring from django_tables2 %}
         <div class="card-footer">
             <a href="{% url 'ausentismo_add_view' %}" class="btn btn-primary">Registrar Ausentismo</a>
-            <a href="{% querystring '_export'='csv' %}" class="btn btn-secondary">Descargar Reporte</a>
+            <a href="{% querystring '_export'='xlsx' %}" class="btn btn-secondary">Descargar Reporte</a>
         </div>
     </div>
 
