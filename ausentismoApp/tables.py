@@ -1,5 +1,6 @@
 import django_tables2 as tables
 from .models import Persona, Ausentismo
+from decimal import Decimal
 import itertools
 
 class CurrencyColumn(tables.Column):
@@ -27,6 +28,14 @@ class PersonaTable(tables.Table):
 
 class AusentismoTable(tables.Table):
     salario = CurrencyColumn(accessor='empleado.salario')
+    area = tables.Column(accessor='empleado.area')
+    seccion = tables.Column(accessor='empleado_seccion')
+    cargo = tables.Column(accessor='empleado.cargo')
+    costo = tables.Column(verbose_name='Costo', empty_values=())
+
+    def render_costo(self, record):
+        return '${:,.2f}'.format(record.empleado.salario/240 * Decimal(record.tiempo_ausentismo.hour + record.tiempo_ausentismo.minute/60))
+
     class Meta:
         model = Ausentismo
         row_attrs = {
@@ -34,6 +43,6 @@ class AusentismoTable(tables.Table):
         }
         attrs = {'id': 'history_table', 'class': 'table table-striped table-hover'}
         template_name = "django_tables2/bootstrap4.html"
-        fields = ("id", "empleado", "motivo", "fecha_solicitud", "fecha_ausentismo", "hora_inicial", "hora_final", "tiempo_ausentismo" )
-        sequence = ('id', 'empleado', 'motivo', 'fecha_solicitud', 'fecha_ausentismo', 'hora_inicial', 'hora_final', 'tiempo_ausentismo', 'salario')
+        fields = ("id", "empleado", "motivo", "fecha_ausentismo", "hora_inicial", "hora_final", "tiempo_ausentismo" )
+        sequence = ('id', 'empleado', 'area', 'seccion', 'cargo', 'salario', 'fecha_ausentismo', 'tiempo_ausentismo', 'hora_inicial', 'hora_final', 'motivo', 'costo')
 
