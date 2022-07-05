@@ -29,7 +29,7 @@ class PersonaTable(tables.Table):
 class AusentismoTable(tables.Table):
     salario = CurrencyColumn(accessor='empleado.salario')
     area = tables.Column(accessor='empleado.area')
-    seccion = tables.Column(accessor='empleado_seccion')
+    seccion = tables.Column(accessor='empleado.seccion')
     cargo = tables.Column(accessor='empleado.cargo')
     costo = tables.Column(verbose_name='Costo', empty_values=())
 
