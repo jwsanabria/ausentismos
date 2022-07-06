@@ -56,36 +56,31 @@ class FilteredAusentismoListView(ExportMixin, SingleTableMixin, FilterView):
     paginate_by = 5
     filterset_class = AusentismoFilter
 
-    '''
     def get_context_data(self, **kwargs):
         context = super(FilteredAusentismoListView, self).get_context_data(**kwargs)
-        query = Ausentismo.objects.all().select_related('empleado')
+        if('fecha' in self.kwargs):
+            print('FECHA ' + self.kwargs['fecha'])
+            query = Ausentismo.objects.all().select_related('empleado')
+        else:
+            query = Ausentismo.objects.all().select_related('empleado')
 
         f = AusentismoFilter(self.request.GET, queryset=query)
 
         t = AusentismoTable(data=f.qs)
         t.paginate(page=self.request.GET.get("page", 1), per_page=5)
 
-        RequestConfig(self.request, paginate=True).configure(t)
+        RequestConfig(self.request, paginate=False).configure(t)
 
         context['filter'] = f
         context['table'] = t
         
         export_format = self.request.GET.get("_export", None)
+        '''
         if TableExport.is_valid_format(export_format):
             exporter = TableExport(export_format, query)
             return exporter.response("query.{}".format(export_format))
-        
+        '''
         return context
-    '''
-
-    def post(self, *args, **kwargs):
-        fecha_ini = self.request.POST.get('fecha_ini', '')
-        fecha_fin = self.request.POST.get('fecha_fin', '')
-        table = AusentismoTable(Ausentismo.objects.filter(fecha_ausentismo__range=(fecha_ini, fecha_fin)))
-        table.paginate(page=self.request.GET.get("page", 1), per_page=5)
-        return render(self.request, "ausentismos/index2.html", {'table': table})
-
 
 
 class PersonaView(View):

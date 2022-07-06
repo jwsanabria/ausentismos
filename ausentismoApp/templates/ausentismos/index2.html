@@ -14,12 +14,12 @@
             <div class="d-flex justify-content-center">
                 <div class="table-responsive">
                     {% if filter %}
-    <form action="" method="get" class="form form-inline">
-        {% bootstrap_form filter.form layout='inline' %}
-        {% bootstrap_button 'Filtrar' %}
-    </form>
+                        <form action="" method="get" class="form form-inline">
+                            {% bootstrap_form filter.form layout='inline' %}
+                            {% bootstrap_button 'Filtrar' %}
+                        </form>
+                    {% endif %}
 
-{% endif %}
 {% render_table table 'django_tables2/bootstrap4.html' %}
                 </div>
             </div>
