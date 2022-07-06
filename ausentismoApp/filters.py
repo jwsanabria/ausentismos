@@ -6,7 +6,6 @@ class AusentismoFilter(django_filters.FilterSet):
     fecha_ausentismo = DateFromToRangeFilter()
     class Meta:
         model = Ausentismo
-
         fields = ['empleado', 'motivo', 'empleado__area', 'empleado__seccion', 'empleado__cargo', 'fecha_ausentismo']
 
     def __init__(self, *args, **kwargs):

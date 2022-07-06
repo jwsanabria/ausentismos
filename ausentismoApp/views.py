@@ -53,9 +53,10 @@ class FilteredAusentismoListView(ExportMixin, SingleTableMixin, FilterView):
     table_class = AusentismoTable
     model = Ausentismo
     template_name = "ausentismos/index2.html"
-    paginate_by = 5
+    paginate_by = 20
     filterset_class = AusentismoFilter
 
+'''
     def get_context_data(self, **kwargs):
         context = super(FilteredAusentismoListView, self).get_context_data(**kwargs)
         if('fecha' in self.kwargs):
@@ -75,13 +76,13 @@ class FilteredAusentismoListView(ExportMixin, SingleTableMixin, FilterView):
         context['table'] = t
         
         export_format = self.request.GET.get("_export", None)
-        '''
+        
         if TableExport.is_valid_format(export_format):
             exporter = TableExport(export_format, query)
             return exporter.response("query.{}".format(export_format))
-        '''
+        
         return context
-
+'''
 
 class PersonaView(View):
     def get(self, request, pk):
