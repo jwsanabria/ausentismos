@@ -417,3 +417,172 @@ class Ausentismo(models.Model):
         self.modified = timezone.now()
         return super(Ausentismo, self).save(*args, **kwargs)
 
+
+
+class Cie10(models.Model):
+    MODALIDAD = (
+        ('Pri', 'Privada'),
+        ('Pub', 'Publica')
+    )
+    codigo = models.CharField(unique=True, max_length=4)
+    nombre = models.CharField(max_length=255)
+    descripcion = models.TextField
+    habilitado = models.BooleanField
+    aplicacion = models.CharField(max_length=255)
+    estandar_gel = models.BooleanField
+    estandar_msps = models.BooleanField
+    aplica_sexo = models.BooleanField
+    edad_minima = models.IntegerField
+    edad_maxima = models.IntegerField
+    grupo_mortalidad = models.IntegerField
+    extra_v = models.CharField(max_length=100)
+    capitulo = models.CharField(max_length=100)
+    grupo = models.IntegerField
+    subgrupo = models.IntegerField
+    categoria = models.IntegerField
+    subcategoria = models.IntegerField
+    valor_registro = models.DecimalField
+    usuario_responsable = models.CharField(max_length=200)
+    fecha_actualizacion = models.DateField
+    publico_privado = models.CharField(max_length=3, choices=MODALIDAD)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'CIE 10'
+        verbose_name_plural = 'CIE 10'
+
+    def __str__(self):
+        return str(self.id)
+
+    def save(self, *args, **kwargs):
+        ''' On save, update timestamps '''
+        if not self.id:
+            self.created = timezone.now()
+        self.modified = timezone.now()
+        return super(Cie10, self).save(*args, **kwargs)
+
+
+
+class Csst_ba_personal(models.Model):
+    codigo = models.CharField(max_length=4, unique=True)
+    descripcion = models.CharField(max_length=200)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Condición Básica Personal'
+        verbose_name_plural = 'Condiciones Básicas Personales'
+
+    def __str__(self):
+        return str(self.id)
+
+    def save(self, *args, **kwargs):
+        ''' On save, update timestamps '''
+        if not self.id:
+            self.created = timezone.now()
+        self.modified = timezone.now()
+        return super(Csst_ba_personal, self).save(*args, **kwargs)
+
+
+class Csst_ba_laboral(models.Model):
+    codigo = models.CharField(max_length=4, unique=True)
+    descripcion = models.CharField(max_length=200)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Condición Básica Laborel'
+        verbose_name_plural = 'Condiciones Básicas Laborales'
+
+    def __str__(self):
+        return str(self.id)
+
+    def save(self, *args, **kwargs):
+        ''' On save, update timestamps '''
+        if not self.id:
+            self.created = timezone.now()
+        self.modified = timezone.now()
+        return super(Csst_ba_laboral, self).save(*args, **kwargs)
+
+class Csst_inm_subestandar(models.Model):
+    codigo = models.CharField(max_length=4, unique=True)
+    descripcion = models.CharField(max_length=200)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Condición Inmediata Subestandar'
+        verbose_name_plural = 'Condiciones Inmediatas Subestandar'
+
+    def __str__(self):
+        return str(self.id)
+
+    def save(self, *args, **kwargs):
+        ''' On save, update timestamps '''
+        if not self.id:
+            self.created = timezone.now()
+        self.modified = timezone.now()
+        return super(Csst_inm_subestandar, self).save(*args, **kwargs)
+
+
+class Csst_inm_amb_subestandar(models.Model):
+    codigo = models.CharField(max_length=4, unique=True)
+    descripcion = models.CharField(max_length=200)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Condición Inmediata Ambiental Subestandar'
+        verbose_name_plural = 'Condiciones Inmediatas Ambientales Subestandar'
+
+    def __str__(self):
+        return str(self.id)
+
+    def save(self, *args, **kwargs):
+        ''' On save, update timestamps '''
+        if not self.id:
+            self.created = timezone.now()
+        self.modified = timezone.now()
+        return super(Csst_inm_amb_subestandar, self).save(*args, **kwargs)
+
+
+class Accidente(models.Model):
+    JORNADA = (
+        ('O', 'ORDINARIA'),
+        ('A', 'ADICIONAL'),
+        ('T', 'TURNOS')
+    )
+    empleado = models.ForeignKey(Persona, on_delete=models.CASCADE)
+    fecha_accidente = models.DateField
+    hora_accidente = models.TimeField
+    tipo_jornada = models.CharField(max_length=1, choices=JORNADA)
+    inicio_jornada = models.TimeField
+    final_jornada = models.TimeField
+    fallecido = models.BooleanField
+    incapacidad = models.BooleanField
+    invalidez = models.BooleanField
+    dias_incapacidad = models.PositiveIntegerField(blank=True, null=True)
+    grado_invalidez = models.PositiveIntegerField(blank=True, null=True)
+    descripcion_accidente = models.TextField
+    codigo_cie10 = models.ForeignKey(Cie10, on_delete=models.CASCADE)
+    factor_personal = models.ForeignKey(Csst_ba_personal, on_delete=models.CASCADE)
+    factor_laboral = models.ForeignKey(Csst_ba_laboral, on_delete=models.CASCADE)
+    acto_subestandar = models.ForeignKey(Csst_inm_subestandar, on_delete=models.CASCADE)
+    cond_ambientales_subestandar = models.ForeignKey(Csst_inm_amb_subestandar, on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'accidente'
+        verbose_name_plural = 'accidentes'
+
+    def __str__(self):
+        return str(self.id)
+
+    def save(self, *args, **kwargs):
+        ''' On save, update timestamps '''
+        if not self.id:
+            self.created = timezone.now()
+        self.modified = timezone.now()
+        return super(Accidente, self).save(*args, **kwargs)

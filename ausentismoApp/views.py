@@ -2,8 +2,8 @@ from django_tables2 import SingleTableView, LazyPaginator
 from django_tables2.export import ExportMixin
 from django_tables2.config import RequestConfig
 from django.shortcuts import render, HttpResponse
-from .models import Persona, Ausentismo
-from .forms import AusentismoForm
+from .models import Persona, Ausentismo, Accidente
+from .forms import AusentismoForm, AccidenteForm
 from .tables import PersonaTable, AusentismoTable
 from django.views.generic.base import View
 from django.views.generic import CreateView
@@ -40,6 +40,14 @@ class RegistrarAusentismoView(CreateView):
     form_class = AusentismoForm
     template_name = "ausentismos/add.html"
     success_url = reverse_lazy("ausentismo")
+
+class RegistrarAccidenteView(CreateView):
+    model = Accidente
+    form_class = AccidenteForm
+    template_name = "accidentes/add.html"
+    success_message = "Accdiente creado exitosamente"
+    success_url = reverse_lazy("accidentes")
+
 
 
 # Create your views here.

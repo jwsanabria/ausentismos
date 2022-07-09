@@ -1,10 +1,9 @@
 from django import forms
 from django.forms import ModelForm, Select, DateField, TextInput
-from .models import Persona
+from .models import Persona, Ausentismo, Accidente
 from bootstrap_datepicker_plus.widgets import DatePickerInput, TimePickerInput
 from django.conf import settings
 
-from .models import Ausentismo
 
 class AusentismoForm(ModelForm):
     empleado = forms.ModelChoiceField(queryset=Persona.objects.all(), widget=Select(attrs={'class': 'form-control'}))
@@ -19,3 +18,8 @@ class AusentismoForm(ModelForm):
             'hora_final': TimePickerInput(),
             'tiempo_ausentismo': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Tiempo entre la hora final e inicial', 'onclick' : 'calculaTiempo()'}),
         }
+
+class AccidenteForm(ModelForm):
+    class Meta:
+        model = Accidente
+        fields = ('__all__')
