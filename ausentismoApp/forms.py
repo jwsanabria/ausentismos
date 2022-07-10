@@ -20,6 +20,19 @@ class AusentismoForm(ModelForm):
         }
 
 class AccidenteForm(ModelForm):
+    fallecido = forms.BooleanField(widget=forms.CheckboxInput)
+    invalidez = forms.BooleanField(widget=forms.CheckboxInput)
+    incapacidad = forms.BooleanField(widget=forms.CheckboxInput)
+    fecha_accidente = DateField(input_formats=settings.DATE_INPUT_FORMATS, widget=DatePickerInput(format='%d-%m-%Y'))
+
+
     class Meta:
         model = Accidente
-        fields = ('__all__')
+        fields = ('empleado', 'fecha_accidente', 'hora_accidente', 'tipo_jornada', 'inicio_jornada', 'final_jornada',
+                  'fallecido', 'incapacidad', 'invalidez', 'dias_incapacidad', 'grado_invalidez', 'descripcion_accidente',
+                  'codigo_cie10', 'factor_personal', 'factor_laboral', 'acto_subestandar', 'cond_ambientales_subestandar')
+        widgets = {
+            'hora_accidente': TimePickerInput(),
+            'inicio_jornada': TimePickerInput(),
+            'final_jornada': TimePickerInput(),
+        }

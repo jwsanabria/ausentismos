@@ -2,6 +2,7 @@ from django.db import models
 from django.urls import reverse
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.utils import timezone
+import datetime
 
 
 # Create your models here.
@@ -554,17 +555,17 @@ class Accidente(models.Model):
         ('T', 'TURNOS')
     )
     empleado = models.ForeignKey(Persona, on_delete=models.CASCADE)
-    fecha_accidente = models.DateField
-    hora_accidente = models.TimeField
+    fecha_accidente = models.DateField()
+    hora_accidente = models.TimeField()
     tipo_jornada = models.CharField(max_length=1, choices=JORNADA)
-    inicio_jornada = models.TimeField
-    final_jornada = models.TimeField
-    fallecido = models.BooleanField
-    incapacidad = models.BooleanField
-    invalidez = models.BooleanField
+    inicio_jornada = models.TimeField()
+    final_jornada = models.TimeField()
+    fallecido = models.BooleanField(default=False)
+    incapacidad = models.BooleanField(default=False)
+    invalidez = models.BooleanField(default=False)
     dias_incapacidad = models.PositiveIntegerField(blank=True, null=True)
     grado_invalidez = models.PositiveIntegerField(blank=True, null=True)
-    descripcion_accidente = models.TextField
+    descripcion_accidente = models.TextField()
     codigo_cie10 = models.ForeignKey(Cie10, on_delete=models.CASCADE)
     factor_personal = models.ForeignKey(Csst_ba_personal, on_delete=models.CASCADE)
     factor_laboral = models.ForeignKey(Csst_ba_laboral, on_delete=models.CASCADE)
