@@ -13,7 +13,7 @@
                 {{ form.as_table }}
             </table>
             <input type="submit" value="Aceptar" class="btn btn-primary">
-            <a href="{% url "accidentes" %}" class="btn btn-danger">Cancel</a>
+            <a href="{% url "accidentes" %}" class="btn btn-danger">Cancelar</a>
         </form>
 
     </div>
@@ -30,31 +30,19 @@
             calculaTiempo()
         })
 
-        function calculaTiempo(){
-
-            var horai = document.forms["ausentismo"].elements['hora_inicial'].value;
-            var horaf = document.forms["ausentismo"].elements['hora_final'].value;
-
-            if(horai.includes(":") && horaf.includes(":")) {
-                const horaini = horai.split(":");
-                const horafin = horaf.split(":");
-
-                var t1 = new Date();
-                var t2 = new Date();
-
-                t1.setHours(horaini[0], horaini[1]);
-                t2.setHours(horafin[0], horafin[1]);
-
-                if(t1.getTime()>t2.getTime()) {
-                    alert("La fecha final debe ser posterior a la inicial");
-                    return null;
-                }
-
-                t1.setHours(t2.getHours() - t1.getHours(), t2.getMinutes() - t1.getMinutes());
-                document.forms["ausentismo"].elements['tiempo_ausentismo'].value = (t1.getHours() < 10? "0" + t1.getHours(): + t1.getHours()) + ":" + (t1.getMinutes()<10? "0"+t1.getMinutes() : t1.getMinutes());
-
+        function accidenteMortal(){
+            if($("#id_fallecido").prop("checked")){
+                alert("Accidente mortal!")
+                document.getElementById('id_incapacidad').disabled = true;
+                document.getElementById('id_invalidez').disabled = true;
+                document.getElementById('id_dias_incapacidad').readOnly = true;
+                document.getElementById('id_grado_invalidez').readOnly = true;
+            }else{
+                document.getElementById('id_incapacidad').disabled = false;
+                document.getElementById('id_invalidez').disabled = false;
+                document.getElementById('id_dias_incapacidad').readOnly = false;
+                document.getElementById('id_grado_invalidez').readOnly = false;
             }
-
         }
 
 

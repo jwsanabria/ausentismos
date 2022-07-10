@@ -20,9 +20,10 @@ class AusentismoForm(ModelForm):
         }
 
 class AccidenteForm(ModelForm):
-    fallecido = forms.BooleanField(widget=forms.CheckboxInput)
-    invalidez = forms.BooleanField(widget=forms.CheckboxInput)
-    incapacidad = forms.BooleanField(widget=forms.CheckboxInput)
+    empleado = forms.ModelChoiceField(queryset=Persona.objects.all(), widget=Select(attrs={'class': 'form-control'}))
+    fallecido = forms.BooleanField(widget=forms.CheckboxInput(attrs={'class': 'form-control', 'onclick': 'accidenteMortal()'}))
+    invalidez = forms.BooleanField(widget=forms.CheckboxInput(attrs={'class': 'form-control'}))
+    incapacidad = forms.BooleanField(widget=forms.CheckboxInput(attrs={'class': 'form-control'}))
     fecha_accidente = DateField(input_formats=settings.DATE_INPUT_FORMATS, widget=DatePickerInput(format='%d-%m-%Y'))
 
 
@@ -35,4 +36,13 @@ class AccidenteForm(ModelForm):
             'hora_accidente': TimePickerInput(),
             'inicio_jornada': TimePickerInput(),
             'final_jornada': TimePickerInput(),
+            'tipo_jornada': Select(attrs={'class': 'form-control',  'placeholder': 'Seleccione jornada'}),
+            'dias_incapacidad': forms.NumberInput(attrs={'class': 'form-control'}),
+            'grado_invalidez': forms.NumberInput(attrs={'class': 'form-control', 'min': 0, 'max': 100}),
+            'codigo_cie10': Select(attrs={'class': 'form-control'}),
+            'factor_personal': Select(attrs={'class': 'form-control'}),
+            'factor_laboral': Select(attrs={'class': 'form-control'}),
+            'acto_subestandar': Select(attrs={'class': 'form-control'}),
+            'cond_ambientales_subestandar': Select(attrs={'class': 'form-control'}),
+
         }
