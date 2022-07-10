@@ -427,24 +427,24 @@ class Cie10(models.Model):
     )
     codigo = models.CharField(unique=True, max_length=4)
     nombre = models.CharField(max_length=255)
-    descripcion = models.TextField
-    habilitado = models.BooleanField
+    descripcion = models.CharField(max_length=255, default="")
+    habilitado = models.BooleanField(default=True)
     aplicacion = models.CharField(max_length=255)
-    estandar_gel = models.BooleanField
-    estandar_msps = models.BooleanField
-    aplica_sexo = models.BooleanField
-    edad_minima = models.IntegerField
-    edad_maxima = models.IntegerField
-    grupo_mortalidad = models.IntegerField
+    estandar_gel = models.BooleanField(default=False)
+    estandar_msps = models.BooleanField(default=False)
+    aplica_sexo = models.BooleanField(default=False)
+    edad_minima = models.IntegerField(default=0)
+    edad_maxima = models.IntegerField(default=0)
+    grupo_mortalidad = models.IntegerField(default=0)
     extra_v = models.CharField(max_length=100)
     capitulo = models.CharField(max_length=100)
-    grupo = models.IntegerField
-    subgrupo = models.IntegerField
-    categoria = models.IntegerField
-    subcategoria = models.IntegerField
-    valor_registro = models.DecimalField
+    grupo = models.IntegerField(default=0)
+    subgrupo = models.IntegerField(default=0)
+    categoria = models.IntegerField(default=0)
+    subcategoria = models.IntegerField(default=0)
+    valor_registro = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
     usuario_responsable = models.CharField(max_length=200)
-    fecha_actualizacion = models.DateField
+    fecha_actualizacion = models.DateField(default=datetime.date.today)
     publico_privado = models.CharField(max_length=3, choices=MODALIDAD)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now_add=True)
