@@ -55,6 +55,11 @@ admin.site.register(Eps, AuditAdmin)
 admin.site.register(CajaCompensacion, AuditAdmin)
 admin.site.register(MotivoAusentismo, AuditAdmin)
 admin.site.register(Ausentismo, AusentismoAdmin)
+admin.site.register(Cie10, AuditAdmin)
+admin.site.register(Csst_ba_laboral, AuditAdmin)
+admin.site.register(Csst_ba_personal, AuditAdmin)
+admin.site.register(Csst_inm_subestandar, AuditAdmin)
+admin.site.register(Csst_inm_amb_subestandar, AuditAdmin)
 
 
 

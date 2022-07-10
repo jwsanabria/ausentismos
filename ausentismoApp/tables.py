@@ -1,5 +1,5 @@
 import django_tables2 as tables
-from .models import Persona, Ausentismo
+from .models import Persona, Ausentismo, Accidente
 from decimal import Decimal
 import itertools
 
@@ -46,3 +46,15 @@ class AusentismoTable(tables.Table):
         fields = ("id", "empleado", "motivo", "fecha_ausentismo", "hora_inicial", "hora_final", "tiempo_ausentismo" )
         sequence = ('id', 'empleado', 'area', 'seccion', 'cargo', 'salario', 'fecha_ausentismo', 'tiempo_ausentismo', 'hora_inicial', 'hora_final', 'motivo', 'costo')
 
+
+class AccidenteTable(tables.Table):
+
+    class Meta:
+        model = Accidente
+        row_attrs = {
+            "data-id": lambda record: record.id
+        }
+        attrs = {'id': 'history_table', 'class': 'table table-striped table-hover'}
+        template_name = "django_tables2/bootstrap4.html"
+        fields = ("id", "empleado", "fecha_accidente", "fallecido" )
+        sequence = ('id', 'empleado', 'fecha_accidente', 'fallecido')

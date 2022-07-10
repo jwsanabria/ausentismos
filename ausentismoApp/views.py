@@ -4,14 +4,14 @@ from django_tables2.config import RequestConfig
 from django.shortcuts import render, HttpResponse
 from .models import Persona, Ausentismo, Accidente
 from .forms import AusentismoForm, AccidenteForm
-from .tables import PersonaTable, AusentismoTable
+from .tables import PersonaTable, AusentismoTable, AccidenteTable
 from django.views.generic.base import View
 from django.views.generic import CreateView
 from django.urls import reverse_lazy
 from django.http import JsonResponse
 from django_filters.views import FilterView
 from django_tables2.views import SingleTableMixin
-from .filters import AusentismoFilter
+from .filters import AusentismoFilter, AccidenteFilter
 from django.core import serializers
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
 
@@ -56,6 +56,13 @@ class PersonaListView(SingleTableView):
     table_class = PersonaTable
     template_name = 'personas/infoPersonal.html'
 
+
+class FilteredAccidenteListView(ExportMixin, SingleTableMixin, FilterView):
+    table_class = AccidenteTable
+    model = Accidente
+    template_name = "accidentes/index.html"
+    paginate_by = 20
+    filterset_class = AccidenteFilter
 
 class FilteredAusentismoListView(ExportMixin, SingleTableMixin, FilterView):
     table_class = AusentismoTable
