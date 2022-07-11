@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm, Select, DateField, TextInput
-from .models import Persona, Ausentismo, Accidente
+from .models import Persona, Ausentismo, Accidente, CostosAccInsumosMedicos
 from bootstrap_datepicker_plus.widgets import DatePickerInput, TimePickerInput
 from django.conf import settings
 
@@ -45,4 +45,18 @@ class AccidenteForm(ModelForm):
             'acto_subestandar': Select(attrs={'class': 'form-control'}),
             'cond_ambientales_subestandar': Select(attrs={'class': 'form-control'}),
 
+        }
+
+
+
+class CostosAccInsumosMedicosForm(ModelForm):
+
+    class Meta:
+        model = CostosAccInsumosMedicos
+        exclude = ('accidente',)
+        fields = ('insumo', 'valor', 'cantidad')
+        widgets = {
+            'valor': forms.NumberInput(attrs={'class': 'form-control'}),
+            'insumo': forms.TextInput(attrs={'class': 'form-control'}),
+            'cantidad': forms.NumberInput(attrs={'class': 'form-control'})
         }

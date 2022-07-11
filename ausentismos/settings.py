@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django_tables2',
     'django_filters',
     'bootstrap_datepicker_plus',
+    'django_bootstrap_icons',
     'crispy_forms',
     'bootstrap4',
     "ausentismoApp",

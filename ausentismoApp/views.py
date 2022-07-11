@@ -2,11 +2,11 @@ from django_tables2 import SingleTableView, LazyPaginator
 from django_tables2.export import ExportMixin
 from django_tables2.config import RequestConfig
 from django.shortcuts import render, HttpResponse
-from .models import Persona, Ausentismo, Accidente
-from .forms import AusentismoForm, AccidenteForm
+from .models import Persona, Ausentismo, Accidente, CostosAccInsumosMedicos
+from .forms import AusentismoForm, AccidenteForm, CostosAccInsumosMedicosForm
 from .tables import PersonaTable, AusentismoTable, AccidenteTable
 from django.views.generic.base import View
-from django.views.generic import CreateView
+from django.views.generic import CreateView, ListView, UpdateView
 from django.urls import reverse_lazy
 from django.http import JsonResponse
 from django_filters.views import FilterView
@@ -133,3 +133,35 @@ def personal(request):
     }
 
     return render(request, 'personal/index.html', context)
+
+
+class CostosView(View):
+    def get(self, request, pk):
+        context_data = {"accidente": Accidente.objects.get(id=pk),
+                        "listInsumosMed": CostosAccInsumosMedicos.objects.filter(accidente=pk)}
+        return render(request, 'accidentes/documentar.html', context_data)
+
+
+class CostosNuevosView(CreateView):
+    model = CostosAccInsumosMedicos
+    template_name = "accidentes/costo_insumos_med.html"
+    form_class = CostosAccInsumosMedicosForm
+
+    def get_context_data(self, **kwargs):
+        context = super(CostosNuevosView, self).get_context_data(**kwargs)
+        context['acc'] = self.kwargs['acc']
+        return context
+
+    def form_valid(self, form):
+        form.instance.accidente = Accidente.objects.get(pk=self.kwargs['acc'])
+        context = {'acc': self.kwargs['acc']}
+        self.success_url = reverse_lazy("costos_list", kwargs={'pk': self.kwargs['acc']})
+        return super(CostosNuevosView, self).form_valid(form)
+
+
+class CostosEditView(UpdateView):
+    model = CostosAccInsumosMedicos
+    template_name = "catalogos/subcategoria_form.html"
+    context_object_name = 'obj'
+    form_class = CostosAccInsumosMedicosForm
+    success_url = reverse_lazy("ausentismo:costos_list")

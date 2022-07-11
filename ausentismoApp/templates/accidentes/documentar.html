@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+{% load render_table from django_tables2 %}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+{% load bootstrap4 %}
+{% load static %}
+{% load filters_web %}
+
+{% block content %}
+    <div class="text-center bg-white font-weight-bold"><h1 class="card-title bg-white align-content-center font-weight-bold text-capitalize">Costos del accidente</h1></div>
+    <div class="card card-default">
+        <div class="card-header">
+            <h3 class="card-title">Costos de Insumos Medicos</h3>
+        </div>
+        <div class="card-body">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <a class="btn btn-warning" onclick="return abrir_modal('{% url 'costos_new' accidente.id %}')" href="#"><span class="fa fa-plus-circle"></span> Agregar Insumo Médico</a>
+                </div>
+
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Insumo</th>
+                                <th>Valor</th>
+                                <th>Cantidad</th>
+                                <th class="all">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for item in listInsumosMed %}
+                            <tr>
+                                <td>{{ item.id }}</td>
+                                <td>{{ item.insumo }}</td>
+                                <td>{{ item.valor|prepend_dollars }}</td>
+                                <td>{{ item.cantidad }}</td>
+
+                                <td>
+                                    <a onclick="return abrir_modal ('{% url 'costos_edit' item.id %}')"
+                                       class="btn btn-primary btn-circle" href="#">
+                                        <span class="fa fa-edit"></span>
+                                    </a>
+
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Costos de transporte</h3>
+        </div>
+        <div class="card-body">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <a class="btn btn-warning" onclick="return abrir_modal('{% url 'costos_new' accidente.id %}')" href="#"><span class="fa fa-plus-circle"></span> Agregar transporte</a>
+                </div>
+
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Insumo</th>
+                                <th>Valor</th>
+                                <th>Cantidad</th>
+                                <th class="all">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for item in listInsumosMed %}
+                            <tr>
+                                <td>{{ item.id }}</td>
+                                <td>{{ item.insumo }}</td>
+                                <td>{{ item.valor|prepend_dollars }}</td>
+                                <td>{{ item.cantidad }}</td>
+
+                                <td>
+                                    <a onclick="return abrir_modal ('{% url 'costos_edit' item.id %}')"
+                                       class="btn btn-primary btn-circle" href="#">
+                                        <span class="fa fa-edit"></span>
+                                    </a>
+
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+
+    <div class="card card-default">
+        <div class="card-header">
+            <h3 class="card-title">Otros costos</h3>
+        </div>
+        <div class="card-body">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <a class="btn btn-warning" onclick="return abrir_modal('{% url 'costos_new' accidente.id %}')" href="#"><span class="fa fa-plus-circle"></span> Agregar otros</a>
+                </div>
+
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Insumo</th>
+                                <th>Valor</th>
+                                <th>Cantidad</th>
+                                <th class="all">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for item in listInsumosMed %}
+                            <tr>
+                                <td>{{ item.id }}</td>
+                                <td>{{ item.insumo }}</td>
+                                <td>{{ item.valor|prepend_dollars }}</td>
+                                <td>{{ item.cantidad }}</td>
+
+                                <td>
+                                    <a onclick="return abrir_modal ('{% url 'costos_edit' item.id %}')"
+                                       class="btn btn-primary btn-circle" href="#">
+                                        <span class="fa fa-edit"></span>
+                                    </a>
+
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+
+{% endblock %}

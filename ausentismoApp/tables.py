@@ -48,6 +48,12 @@ class AusentismoTable(tables.Table):
 
 
 class AccidenteTable(tables.Table):
+    template = '''<a href="{{record.get_documentar_url}}" ">Documentar</a>'''
+    botones_action = tables.TemplateColumn(
+        template,
+        verbose_name=u'Acciones',
+        orderable=False,
+    )
 
     class Meta:
         model = Accidente
@@ -56,5 +62,6 @@ class AccidenteTable(tables.Table):
         }
         attrs = {'id': 'history_table', 'class': 'table table-striped table-hover'}
         template_name = "django_tables2/bootstrap4.html"
-        fields = ("id", "empleado", "fecha_accidente", "fallecido" )
-        sequence = ('id', 'empleado', 'fecha_accidente', 'fallecido')
+        fields = ("id", "empleado", "fecha_accidente", "fallecido", 'botones_action' )
+        sequence = ('id', 'empleado', 'fecha_accidente', 'fallecido', 'botones_action')
+

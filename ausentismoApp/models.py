@@ -560,9 +560,9 @@ class Accidente(models.Model):
     tipo_jornada = models.CharField(max_length=1, choices=JORNADA)
     inicio_jornada = models.TimeField()
     final_jornada = models.TimeField()
-    fallecido = models.BooleanField(default=False)
-    incapacidad = models.BooleanField(default=False)
-    invalidez = models.BooleanField(default=False)
+    fallecido = models.BooleanField(default=False,blank=True, null=True)
+    incapacidad = models.BooleanField(default=False,blank=True, null=True)
+    invalidez = models.BooleanField(default=False,blank=True, null=True)
     dias_incapacidad = models.PositiveIntegerField(blank=True, null=True)
     grado_invalidez = models.PositiveIntegerField(blank=True, null=True)
     descripcion_accidente = models.TextField()
@@ -587,3 +587,27 @@ class Accidente(models.Model):
             self.created = timezone.now()
         self.modified = timezone.now()
         return super(Accidente, self).save(*args, **kwargs)
+
+    def get_documentar_url(self):
+        return reverse("costos_list", kwargs={'pk': self.id})
+
+
+class CostosAccInsumosMedicos(models.Model):
+    accidente = models.ForeignKey(Accidente, on_delete=models.CASCADE)
+    insumo = models.CharField(max_length=200)
+    valor = models.DecimalField(decimal_places=2, max_digits=10)
+    cantidad = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(1000)])
+
+    class Meta:
+        verbose_name = 'Costos Accidente Insumo Médico'
+        verbose_name_plural = 'Costos Accidnte Insumos Médicos'
+
+    def __str__(self):
+        return str(self.id)
+
+    def save(self, *args, **kwargs):
+        ''' On save, update timestamps '''
+        if not self.id:
+            self.created = timezone.now()
+        self.modified = timezone.now()
+        return super(CostosAccInsumosMedicos, self).save(*args, **kwargs)
