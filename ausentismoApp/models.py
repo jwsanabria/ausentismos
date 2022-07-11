@@ -454,7 +454,7 @@ class Cie10(models.Model):
         verbose_name_plural = 'CIE 10'
 
     def __str__(self):
-        return str(self.id)
+        return '%s - %s' % (self.codigo, self.nombre)
 
     def save(self, *args, **kwargs):
         ''' On save, update timestamps '''
@@ -476,7 +476,7 @@ class Csst_ba_personal(models.Model):
         verbose_name_plural = 'Condiciones Básicas Personales'
 
     def __str__(self):
-        return str(self.id)
+        return '%s - %s' % (self.codigo, self.descripcion)
 
     def save(self, *args, **kwargs):
         ''' On save, update timestamps '''
@@ -497,7 +497,7 @@ class Csst_ba_laboral(models.Model):
         verbose_name_plural = 'Condiciones Básicas Laborales'
 
     def __str__(self):
-        return str(self.id)
+        return '%s - %s' % (self.codigo, self.descripcion)
 
     def save(self, *args, **kwargs):
         ''' On save, update timestamps '''
@@ -517,7 +517,7 @@ class Csst_inm_subestandar(models.Model):
         verbose_name_plural = 'Condiciones Inmediatas Subestandar'
 
     def __str__(self):
-        return str(self.id)
+        return '%s - %s' % (self.codigo, self.descripcion)
 
     def save(self, *args, **kwargs):
         ''' On save, update timestamps '''
@@ -538,7 +538,7 @@ class Csst_inm_amb_subestandar(models.Model):
         verbose_name_plural = 'Condiciones Inmediatas Ambientales Subestandar'
 
     def __str__(self):
-        return str(self.id)
+        return '%s - %s' % (self.codigo, self.descripcion)
 
     def save(self, *args, **kwargs):
         ''' On save, update timestamps '''
