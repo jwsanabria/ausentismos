@@ -21,7 +21,6 @@ class AusentismoForm(ModelForm):
 
 class AccidenteForm(ModelForm):
     empleado = forms.ModelChoiceField(queryset=Persona.objects.all(), widget=Select(attrs={'class': 'form-control'}))
-    fallecido = forms.BooleanField(widget=forms.CheckboxInput(attrs={ 'onclick': 'accidenteMortal()'}))
     fecha_accidente = DateField(input_formats=settings.DATE_INPUT_FORMATS, widget=DatePickerInput(format='%d-%m-%Y'))
 
 
@@ -44,7 +43,8 @@ class AccidenteForm(ModelForm):
             'cond_ambientales_subestandar': Select(attrs={'class': 'form-control'}),
             'descripcion_accidente': forms.Textarea(attrs={'class': 'form-control', 'rows':"5", 'cols':"50"}),
             'invalidez': forms.CheckboxInput(),
-            'incapacidad': forms.CheckboxInput()
+            'incapacidad': forms.CheckboxInput(),
+            'fallecido': forms.CheckboxInput(attrs={ 'onclick': 'accidenteMortal()'})
 
         }
 
