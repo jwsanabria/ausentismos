@@ -20,28 +20,27 @@
 
     <script>
 
-        $('[name="hora_inicial"]').on('dp.change', function(e){
-            var formatedValue = e.date.format(e.date._f);
-            calculaTiempo()
-        })
+        $( document ).ready(function() {
+            accidenteMortal();
+        });
 
-        $('[name="hora_final"]').on('dp.change', function(e){
-            var formatedValue = e.date.format(e.date._f);
-            calculaTiempo()
-        })
 
-        function accidenteMortal(){
-            if($("#id_fallecido").prop("checked")){
+        function accidenteMortal() {
+            if ($("#id_fallecido").prop("checked")) {
                 alert("Accidente mortal!")
                 document.getElementById('id_incapacidad').disabled = true;
                 document.getElementById('id_invalidez').disabled = true;
                 document.getElementById('id_dias_incapacidad').readOnly = true;
                 document.getElementById('id_grado_invalidez').readOnly = true;
-            }else{
+                document.getElementById('id_dias_incapacidad').value = "";
+                document.getElementById('id_grado_invalidez').value = "";
+            } else {
                 document.getElementById('id_incapacidad').disabled = false;
                 document.getElementById('id_invalidez').disabled = false;
                 document.getElementById('id_dias_incapacidad').readOnly = false;
                 document.getElementById('id_grado_invalidez').readOnly = false;
+                document.getElementById('id_dias_incapacidad').value = "";
+                document.getElementById('id_grado_invalidez').value = "";
             }
         }
 

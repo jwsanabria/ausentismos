@@ -30,6 +30,8 @@ DEBUG = True
 ALLOWED_HOSTS = ['127.0.0.1', '.herokuapp.com']
 
 
+
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -121,7 +123,7 @@ AUTH_PASSWORD_VALIDATORS = [
 #LANGUAGE_CODE = 'en-us'
 LANGUAGE_CODE = 'es-eu'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Bogota'
 
 USE_I18N = True
 

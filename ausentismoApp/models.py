@@ -2,6 +2,8 @@ from django.db import models
 from django.urls import reverse
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.utils import timezone
+from django.core.exceptions import ValidationError
+from .validators import validador_fecha_futura
 import datetime
 
 
@@ -555,7 +557,7 @@ class Accidente(models.Model):
         ('T', 'TURNOS')
     )
     empleado = models.ForeignKey(Persona, on_delete=models.CASCADE)
-    fecha_accidente = models.DateField()
+    fecha_accidente = models.DateField(validators=[validador_fecha_futura])
     hora_accidente = models.TimeField()
     tipo_jornada = models.CharField(max_length=1, choices=JORNADA)
     inicio_jornada = models.TimeField()
@@ -586,6 +588,8 @@ class Accidente(models.Model):
         if not self.id:
             self.created = timezone.now()
         self.modified = timezone.now()
+        if self.fecha_accidente > datetime.date.today():
+            raise ValidationError("La fecha del accidente no puede ser mayor a hoy!")
         return super(Accidente, self).save(*args, **kwargs)
 
     def get_documentar_url(self):

@@ -3,6 +3,7 @@ from django.forms import ModelForm, Select, DateField, TextInput
 from .models import Persona, Ausentismo, Accidente, CostosAccInsumosMedicos
 from bootstrap_datepicker_plus.widgets import DatePickerInput, TimePickerInput
 from django.conf import settings
+from .validators import validador_fecha_futura
 
 
 class AusentismoForm(ModelForm):
@@ -21,7 +22,7 @@ class AusentismoForm(ModelForm):
 
 class AccidenteForm(ModelForm):
     empleado = forms.ModelChoiceField(queryset=Persona.objects.all(), widget=Select(attrs={'class': 'form-control'}))
-    fecha_accidente = DateField(input_formats=settings.DATE_INPUT_FORMATS, widget=DatePickerInput(format='%d-%m-%Y'))
+    fecha_accidente = DateField(input_formats=settings.DATE_INPUT_FORMATS, widget=DatePickerInput(format='%d-%m-%Y'), validators=[validador_fecha_futura])
 
 
     class Meta:
