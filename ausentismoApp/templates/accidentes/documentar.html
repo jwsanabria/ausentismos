@@ -51,8 +51,8 @@
 
                                     <td>
                                         <a onclick="return abrir_modal ('{% url 'costos_edit' item.id %}')"
-                                           class="btn btn-primary btn-circle" href="#">
-                                            <span class="fa fa-edit"></span>
+                                           class="btn btn-danger btn-circle" href="#">
+                                                <span class="fa fa-remove"></span>
                                         </a>
 
                                     </td>
@@ -101,8 +101,8 @@
                                         <td>{{ item.valor|prepend_dollars }}</td>
                                         <td>
                                             <a onclick="return abrir_modal ('{% url 'costos_edit' item.id %}')"
-                                               class="btn btn-primary btn-circle" href="#">
-                                                <span class="fa fa-edit"></span>
+                                               class="btn btn-danger btn-circle" href="#">
+                                                <span class="fa fa-remove"></span>
                                             </a>
                                         </td>
                                     </tr>
@@ -148,8 +148,8 @@
                                         <td>{{ item.valor|prepend_dollars }}</td>
                                         <td>
                                             <a onclick="return abrir_modal ('{% url 'costos_edit' item.id %}')"
-                                               class="btn btn-primary btn-circle" href="#">
-                                                <span class="fa fa-edit"></span>
+                                               class="btn btn-danger btn-circle" href="#">
+                                                <span class="fa fa-remove"></span>
                                             </a>
                                         </td>
                                     </tr>
