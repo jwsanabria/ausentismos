@@ -8,3 +8,10 @@ def validador_fecha_futura(value):
             _('%(value)s es superior a la fecha actual'),
             params={'value': str(value)},
         )
+
+def validador_valor_positivo(value):
+    if value <= 0.0:
+        raise ValidationError(
+            _('%(value)s es inferior o igual a 0'),
+            params={'value': str(value)},
+        )

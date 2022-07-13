@@ -2,8 +2,8 @@ from django_tables2 import SingleTableView, LazyPaginator
 from django_tables2.export import ExportMixin
 from django_tables2.config import RequestConfig
 from django.shortcuts import render, HttpResponse
-from .models import Persona, Ausentismo, Accidente, CostosAccInsumosMedicos
-from .forms import AusentismoForm, AccidenteForm, CostosAccInsumosMedicosForm
+from .models import Persona, Ausentismo, Accidente, CostosAccInsumosMedicos, CostosAccTransporte, CostosAccOtros
+from .forms import AusentismoForm, AccidenteForm, CostosAccInsumosMedicosForm, CostosAccTransporteForm, CostosAccOtrosForm
 from .tables import PersonaTable, AusentismoTable, AccidenteTable
 from django.views.generic.base import View
 from django.views.generic import CreateView, ListView, UpdateView
@@ -12,6 +12,7 @@ from django.http import JsonResponse
 from django_filters.views import FilterView
 from django_tables2.views import SingleTableMixin
 from .filters import AusentismoFilter, AccidenteFilter
+from django.shortcuts import get_object_or_404
 from django.core import serializers
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
 
@@ -137,8 +138,61 @@ def personal(request):
 
 class CostosView(View):
     def get(self, request, pk):
-        context_data = {"accidente": Accidente.objects.get(id=pk),
-                        "listInsumosMed": CostosAccInsumosMedicos.objects.filter(accidente=pk)}
+        accidente = get_object_or_404(Accidente, id= pk)
+        f_insumos = CostosAccInsumosMedicosForm(initial={"accidente": accidente})
+        f_transporte = CostosAccTransporteForm(initial={"accidente": accidente})
+        f_otros = CostosAccOtrosForm(initial={"accidente": accidente})
+        context_data = {"accidente": accidente,
+                        'f_insumos': f_insumos,
+                        'f_transporte': f_transporte,
+                        'f_otros': f_otros,
+                        "listInsumosMed": CostosAccInsumosMedicos.objects.filter(accidente=pk),
+                        "listTransporte": CostosAccTransporte.objects.filter(accidente=pk),
+                        "listOtros": CostosAccOtros.objects.filter(accidente=pk)}
+        return render(request, 'accidentes/documentar.html', context_data)
+
+    def post(self, request, *args, **kwargs):
+        accidente = get_object_or_404(Accidente, id=kwargs['pk'])
+        if 'nuevo_insumo' in request.POST:
+            f_insumos = CostosAccInsumosMedicosForm(request.POST)
+            f_transporte = CostosAccTransporteForm(initial={"accidente": accidente})
+            f_otros = CostosAccOtrosForm(initial={"accidente": accidente})
+
+            f_insumos.instance.accidente = accidente
+            if f_insumos.is_valid():
+                f_insumos.save()
+                f_insumos = CostosAccInsumosMedicosForm(initial={"accidente": accidente})
+
+        if 'nuevo_transporte' in request.POST:
+            f_transporte = CostosAccTransporteForm(request.POST)
+            f_insumos = CostosAccInsumosMedicosForm(initial={"accidente": accidente})
+            f_otros = CostosAccOtrosForm(initial={"accidente": accidente})
+
+            f_transporte.instance.accidente = accidente
+            if f_transporte.is_valid():
+                f_transporte.save()
+                f_transporte = CostosAccTransporteForm(initial={"accidente": accidente})
+
+
+
+        if 'nuevo_otros' in request.POST:
+            f_otros = CostosAccOtrosForm(request.POST)
+            f_insumos = CostosAccInsumosMedicosForm(initial={"accidente": accidente})
+            f_transporte = CostosAccTransporteForm(initial={"accidente": accidente})
+            f_otros.instance.accidente = accidente
+            if f_otros.is_valid():
+                f_otros.save()
+                f_otros = CostosAccOtrosForm(initial={"accidente": accidente})
+
+
+        context_data = {"accidente": accidente,
+                        'f_insumos': f_insumos,
+                        'f_transporte': f_transporte,
+                        'f_otros': f_otros,
+                        "listInsumosMed": CostosAccInsumosMedicos.objects.filter(accidente=accidente.id),
+                        "listTransporte": CostosAccTransporte.objects.filter(accidente=accidente.id),
+                        "listOtros": CostosAccOtros.objects.filter(accidente=accidente.id)}
+
         return render(request, 'accidentes/documentar.html', context_data)
 
 

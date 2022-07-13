@@ -15,7 +15,7 @@ urlpatterns = [
     path('accidentes/add', RegistrarAccidenteView.as_view(), name="accidente_add_view"),
 
     path('accidentes/documentar/<int:pk>', CostosView.as_view() , name='costos_list'),
-    path('accidentes/costos_medicos/new/<int:acc>', CostosNuevosView.as_view(), name='costos_new'),
+    path('accidentes/costos_medicos/new', CostosNuevosView.as_view(), name='costos_new'),
     path('accidentes/costos_medicos/edit/<int:pk>', CostosEditView.as_view(), name='costos_edit'),
 
 ]

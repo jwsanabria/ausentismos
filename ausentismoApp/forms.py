@@ -1,9 +1,9 @@
 from django import forms
 from django.forms import ModelForm, Select, DateField, TextInput
-from .models import Persona, Ausentismo, Accidente, CostosAccInsumosMedicos
+from .models import Persona, Ausentismo, Accidente, CostosAccInsumosMedicos, CostosAccTransporte, CostosAccOtros
 from bootstrap_datepicker_plus.widgets import DatePickerInput, TimePickerInput
 from django.conf import settings
-from .validators import validador_fecha_futura
+from .validators import validador_fecha_futura, validador_valor_positivo
 
 
 class AusentismoForm(ModelForm):
@@ -52,13 +52,44 @@ class AccidenteForm(ModelForm):
 
 
 class CostosAccInsumosMedicosForm(ModelForm):
+    valor = forms.DecimalField(validators=[validador_valor_positivo])
+    nuevo_insumo = forms.BooleanField(widget=forms.HiddenInput, initial=True)
+
 
     class Meta:
         model = CostosAccInsumosMedicos
-        exclude = ('accidente',)
+
         fields = ('insumo', 'valor', 'cantidad')
         widgets = {
             'valor': forms.NumberInput(attrs={'class': 'form-control'}),
             'insumo': forms.TextInput(attrs={'class': 'form-control'}),
             'cantidad': forms.NumberInput(attrs={'class': 'form-control'})
+        }
+
+class CostosAccTransporteForm(ModelForm):
+    valor = forms.DecimalField(validators=[validador_valor_positivo])
+    nuevo_transporte = forms.BooleanField(widget=forms.HiddenInput, initial=True)
+
+
+    class Meta:
+        model = CostosAccTransporte
+
+        fields = ('elemento', 'valor')
+        widgets = {
+            'valor': forms.NumberInput(attrs={'class': 'form-control'}),
+            'elemento': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+
+class CostosAccOtrosForm(ModelForm):
+    valor = forms.DecimalField(validators=[validador_valor_positivo])
+    nuevo_otros = forms.BooleanField(widget=forms.HiddenInput, initial=True)
+
+
+    class Meta:
+        model = CostosAccOtros
+
+        fields = ('elemento', 'valor')
+        widgets = {
+            'valor': forms.NumberInput(attrs={'class': 'form-control mb-2 mr-sm-2', 'placeholder': 'Valor Unitario'}),
+            'elemento': forms.TextInput(attrs={'class': 'form-control mb-2 mr-sm-2', 'placeholder': 'Elemento'}),
         }

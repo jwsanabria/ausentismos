@@ -5,6 +5,7 @@ from django.utils import timezone
 from django.core.exceptions import ValidationError
 from .validators import validador_fecha_futura
 import datetime
+from decimal import Decimal
 
 
 # Create your models here.
@@ -599,8 +600,9 @@ class Accidente(models.Model):
 class CostosAccInsumosMedicos(models.Model):
     accidente = models.ForeignKey(Accidente, on_delete=models.CASCADE)
     insumo = models.CharField(max_length=200)
-    valor = models.DecimalField(decimal_places=2, max_digits=10)
+    valor = models.DecimalField(decimal_places=2, max_digits=10, validators=[MinValueValidator(Decimal('0.01'))])
     cantidad = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(1000)])
+
 
     class Meta:
         verbose_name = 'Costos Accidente Insumo Médico'
@@ -615,3 +617,69 @@ class CostosAccInsumosMedicos(models.Model):
             self.created = timezone.now()
         self.modified = timezone.now()
         return super(CostosAccInsumosMedicos, self).save(*args, **kwargs)
+
+
+class CostosAccTransporte(models.Model):
+    accidente = models.ForeignKey(Accidente, on_delete=models.CASCADE)
+    insumo = models.CharField(max_length=200)
+    valor = models.DecimalField(decimal_places=2, max_digits=10, validators=[MinValueValidator(Decimal('0.01'))])
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Costo de transporte'
+        verbose_name_plural = 'Costos de transporte'
+
+    def __str__(self):
+        return str(self.id)
+
+    def save(self, *args, **kwargs):
+        ''' On save, update timestamps '''
+        if not self.id:
+            self.created = timezone.now()
+        self.modified = timezone.now()
+        return super(CostosAccTransporte, self).save(*args, **kwargs)
+
+
+class CostosAccTransporte(models.Model):
+    accidente = models.ForeignKey(Accidente, on_delete=models.CASCADE)
+    elemento = models.CharField(max_length=200)
+    valor = models.DecimalField(decimal_places=2, max_digits=10, validators=[MinValueValidator(Decimal('0.01'))])
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Costo de transporte'
+        verbose_name_plural = 'Costos de transporte'
+
+    def __str__(self):
+        return str(self.id)
+
+    def save(self, *args, **kwargs):
+        ''' On save, update timestamps '''
+        if not self.id:
+            self.created = timezone.now()
+        self.modified = timezone.now()
+        return super(CostosAccTransporte, self).save(*args, **kwargs)
+
+
+class CostosAccOtros(models.Model):
+    accidente = models.ForeignKey(Accidente, on_delete=models.CASCADE)
+    elemento = models.CharField(max_length=200)
+    valor = models.DecimalField(decimal_places=2, max_digits=10, validators=[MinValueValidator(Decimal('0.01'))])
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Otro costo'
+        verbose_name_plural = 'Otros costos'
+
+    def __str__(self):
+        return str(self.id)
+
+    def save(self, *args, **kwargs):
+        ''' On save, update timestamps '''
+        if not self.id:
+            self.created = timezone.now()
+        self.modified = timezone.now()
+        return super(CostosAccOtros, self).save(*args, **kwargs)
