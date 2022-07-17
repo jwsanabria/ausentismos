@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm, Select, DateField, TextInput
-from .models import Persona, Ausentismo, Accidente, CostosAccInsumosMedicos, CostosAccTransporte, CostosAccOtros
+from .models import Persona, Ausentismo, Accidente, CostosAccInsumosMedicos, CostosAccTransporte, CostosAccOtros, CostosAccRepuestos, CostosAccManoObra, CostosAccMaquinaria
 from bootstrap_datepicker_plus.widgets import DatePickerInput, TimePickerInput
 from django.conf import settings
 from .validators import validador_fecha_futura, validador_valor_positivo
@@ -92,4 +92,53 @@ class CostosAccOtrosForm(ModelForm):
         widgets = {
             'valor': forms.NumberInput(attrs={'class': 'form-control mb-2 mr-sm-2', 'placeholder': 'Valor Unitario'}),
             'elemento': forms.TextInput(attrs={'class': 'form-control mb-2 mr-sm-2', 'placeholder': 'Elemento'}),
+        }
+
+class CostosAccMaquinariaForm(ModelForm):
+    valor = forms.DecimalField(validators=[validador_valor_positivo])
+    nuevo_maquinaria = forms.BooleanField(widget=forms.HiddenInput, initial=True)
+
+
+    class Meta:
+        model = CostosAccMaquinaria
+
+        fields = ('elemento', 'valor', 'cantidad')
+        widgets = {
+            'valor': forms.NumberInput(attrs={'class': 'form-control mb-2 mr-sm-2', 'placeholder': 'Valor hora'}),
+            'elemento': forms.TextInput(attrs={'class': 'form-control mb-2 mr-sm-2', 'placeholder': 'Elemento'}),
+            'cantidad': forms.NumberInput(attrs={'class': 'form-control mb-2 mr-sm-2', 'placeholder': 'Cantidad'}),
+        }
+
+
+
+class CostosAccRepuestoForm(ModelForm):
+    valor = forms.DecimalField(validators=[validador_valor_positivo])
+    nuevo_repuesto = forms.BooleanField(widget=forms.HiddenInput, initial=True)
+
+
+    class Meta:
+        model = CostosAccRepuestos
+
+        fields = ('elemento', 'valor', 'cantidad')
+        widgets = {
+            'valor': forms.NumberInput(attrs={'class': 'form-control mb-2 mr-sm-2', 'placeholder': 'Valor hora'}),
+            'elemento': forms.TextInput(attrs={'class': 'form-control mb-2 mr-sm-2', 'placeholder': 'Elemento'}),
+            'cantidad': forms.NumberInput(attrs={'class': 'form-control mb-2 mr-sm-2', 'placeholder': 'Cantidad'}),
+        }
+
+
+
+class CostosAccManoObraForm(ModelForm):
+    valor = forms.DecimalField(validators=[validador_valor_positivo])
+    nuevo_manoObra = forms.BooleanField(widget=forms.HiddenInput, initial=True)
+
+
+    class Meta:
+        model = CostosAccManoObra
+
+        fields = ('descripcion', 'valor', 'cantidad')
+        widgets = {
+            'valor': forms.NumberInput(attrs={'class': 'form-control mb-2 mr-sm-2', 'placeholder': 'Valor hora'}),
+            'descripcion': forms.TextInput(attrs={'class': 'form-control mb-2 mr-sm-2', 'placeholder': 'Descripción'}),
+            'cantidad': forms.NumberInput(attrs={'class': 'form-control mb-2 mr-sm-2', 'placeholder': 'Cantidad'}),
         }

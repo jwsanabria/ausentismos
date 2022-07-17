@@ -619,27 +619,6 @@ class CostosAccInsumosMedicos(models.Model):
         return super(CostosAccInsumosMedicos, self).save(*args, **kwargs)
 
 
-class CostosAccTransporte(models.Model):
-    accidente = models.ForeignKey(Accidente, on_delete=models.CASCADE)
-    insumo = models.CharField(max_length=200)
-    valor = models.DecimalField(decimal_places=2, max_digits=10, validators=[MinValueValidator(Decimal('0.01'))])
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        verbose_name = 'Costo de transporte'
-        verbose_name_plural = 'Costos de transporte'
-
-    def __str__(self):
-        return str(self.id)
-
-    def save(self, *args, **kwargs):
-        ''' On save, update timestamps '''
-        if not self.id:
-            self.created = timezone.now()
-        self.modified = timezone.now()
-        return super(CostosAccTransporte, self).save(*args, **kwargs)
-
 
 class CostosAccTransporte(models.Model):
     accidente = models.ForeignKey(Accidente, on_delete=models.CASCADE)
@@ -683,3 +662,72 @@ class CostosAccOtros(models.Model):
             self.created = timezone.now()
         self.modified = timezone.now()
         return super(CostosAccOtros, self).save(*args, **kwargs)
+
+
+class CostosAccMaquinaria(models.Model):
+    accidente = models.ForeignKey(Accidente, on_delete=models.CASCADE)
+    elemento = models.CharField(max_length=200)
+    valor = models.DecimalField(decimal_places=2, max_digits=10, validators=[MinValueValidator(Decimal('0.01'))])
+    cantidad = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(1000)])
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Maquinaria requerida'
+        verbose_name_plural = 'Lista de maquinaria requerida'
+
+    def __str__(self):
+        return str(self.id)
+
+    def save(self, *args, **kwargs):
+        ''' On save, update timestamps '''
+        if not self.id:
+            self.created = timezone.now()
+        self.modified = timezone.now()
+        return super(CostosAccMaquinaria, self).save(*args, **kwargs)
+
+
+class CostosAccRepuestos(models.Model):
+    accidente = models.ForeignKey(Accidente, on_delete=models.CASCADE)
+    elemento = models.CharField(max_length=200)
+    valor = models.DecimalField(decimal_places=2, max_digits=10, validators=[MinValueValidator(Decimal('0.01'))])
+    cantidad = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(1000)])
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Repuesto requerido'
+        verbose_name_plural = 'Lista de repuestos requeridos'
+
+    def __str__(self):
+        return str(self.id)
+
+    def save(self, *args, **kwargs):
+        ''' On save, update timestamps '''
+        if not self.id:
+            self.created = timezone.now()
+        self.modified = timezone.now()
+        return super(CostosAccRepuestos, self).save(*args, **kwargs)
+
+
+class CostosAccManoObra(models.Model):
+    accidente = models.ForeignKey(Accidente, on_delete=models.CASCADE)
+    descripcion = models.CharField(max_length=200)
+    valor = models.DecimalField(decimal_places=2, max_digits=10, validators=[MinValueValidator(Decimal('0.01'))])
+    cantidad = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(1000)])
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Mano de obra requerida'
+        verbose_name_plural = 'Lista de mano de obra requerida'
+
+    def __str__(self):
+        return str(self.id)
+
+    def save(self, *args, **kwargs):
+        ''' On save, update timestamps '''
+        if not self.id:
+            self.created = timezone.now()
+        self.modified = timezone.now()
+        return super(CostosAccManoObra, self).save(*args, **kwargs)

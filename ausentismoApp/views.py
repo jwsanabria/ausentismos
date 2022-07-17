@@ -2,8 +2,8 @@ from django_tables2 import SingleTableView, LazyPaginator
 from django_tables2.export import ExportMixin
 from django_tables2.config import RequestConfig
 from django.shortcuts import render, HttpResponse
-from .models import Persona, Ausentismo, Accidente, CostosAccInsumosMedicos, CostosAccTransporte, CostosAccOtros
-from .forms import AusentismoForm, AccidenteForm, CostosAccInsumosMedicosForm, CostosAccTransporteForm, CostosAccOtrosForm
+from .models import Persona, Ausentismo, Accidente, CostosAccInsumosMedicos, CostosAccTransporte, CostosAccOtros, CostosAccRepuestos, CostosAccManoObra, CostosAccMaquinaria
+from .forms import AusentismoForm, AccidenteForm, CostosAccInsumosMedicosForm, CostosAccTransporteForm, CostosAccOtrosForm, CostosAccManoObraForm, CostosAccRepuestoForm, CostosAccMaquinariaForm
 from .tables import PersonaTable, AusentismoTable, AccidenteTable
 from django.views.generic.base import View
 from django.views.generic import CreateView, ListView, UpdateView
@@ -142,13 +142,23 @@ class CostosView(View):
         f_insumos = CostosAccInsumosMedicosForm(initial={"accidente": accidente})
         f_transporte = CostosAccTransporteForm(initial={"accidente": accidente})
         f_otros = CostosAccOtrosForm(initial={"accidente": accidente})
+        f_maquinaria = CostosAccMaquinariaForm(initial={"accidente": accidente})
+        f_repuesto = CostosAccRepuestoForm(initial={"accidente": accidente})
+        f_manoObra = CostosAccManoObraForm(initial={"accidente": accidente})
+
         context_data = {"accidente": accidente,
                         'f_insumos': f_insumos,
                         'f_transporte': f_transporte,
                         'f_otros': f_otros,
+                        'f_maquinaria': f_maquinaria,
+                        'f_manoObra': f_manoObra,
+                        'f_repuesto': f_repuesto,
                         "listInsumosMed": CostosAccInsumosMedicos.objects.filter(accidente=pk),
                         "listTransporte": CostosAccTransporte.objects.filter(accidente=pk),
-                        "listOtros": CostosAccOtros.objects.filter(accidente=pk)}
+                        "listOtros": CostosAccOtros.objects.filter(accidente=pk),
+                        "listMaquinaria": CostosAccMaquinaria.objects.filter(accidente=pk),
+                        "listRepuestos": CostosAccRepuestos.objects.filter(accidente=pk),
+                        "listManoObra": CostosAccManoObra.objects.filter(accidente=pk)}
         return render(request, 'accidentes/documentar.html', context_data)
 
     def post(self, request, *args, **kwargs):
@@ -157,6 +167,9 @@ class CostosView(View):
             f_insumos = CostosAccInsumosMedicosForm(request.POST)
             f_transporte = CostosAccTransporteForm(initial={"accidente": accidente})
             f_otros = CostosAccOtrosForm(initial={"accidente": accidente})
+            f_maquinaria = CostosAccMaquinariaForm(initial={"accidente": accidente})
+            f_repuesto = CostosAccRepuestoForm(initial={"accidente": accidente})
+            f_manoObra = CostosAccManoObraForm(initial={"accidente": accidente})
 
             f_insumos.instance.accidente = accidente
             if f_insumos.is_valid():
@@ -167,6 +180,9 @@ class CostosView(View):
             f_transporte = CostosAccTransporteForm(request.POST)
             f_insumos = CostosAccInsumosMedicosForm(initial={"accidente": accidente})
             f_otros = CostosAccOtrosForm(initial={"accidente": accidente})
+            f_maquinaria = CostosAccMaquinariaForm(initial={"accidente": accidente})
+            f_repuesto = CostosAccRepuestoForm(initial={"accidente": accidente})
+            f_manoObra = CostosAccManoObraForm(initial={"accidente": accidente})
 
             f_transporte.instance.accidente = accidente
             if f_transporte.is_valid():
@@ -174,24 +190,72 @@ class CostosView(View):
                 f_transporte = CostosAccTransporteForm(initial={"accidente": accidente})
 
 
-
         if 'nuevo_otros' in request.POST:
             f_otros = CostosAccOtrosForm(request.POST)
             f_insumos = CostosAccInsumosMedicosForm(initial={"accidente": accidente})
             f_transporte = CostosAccTransporteForm(initial={"accidente": accidente})
+            f_maquinaria = CostosAccMaquinariaForm(initial={"accidente": accidente})
+            f_repuesto = CostosAccRepuestoForm(initial={"accidente": accidente})
+            f_manoObra = CostosAccManoObraForm(initial={"accidente": accidente})
+
             f_otros.instance.accidente = accidente
             if f_otros.is_valid():
                 f_otros.save()
                 f_otros = CostosAccOtrosForm(initial={"accidente": accidente})
 
 
+        if 'nuevo_maquinaria' in request.POST:
+            f_maquinaria = CostosAccMaquinariaForm(request.POST)
+            f_otros = CostosAccOtrosForm(initial={"accidente": accidente})
+            f_insumos = CostosAccInsumosMedicosForm(initial={"accidente": accidente})
+            f_transporte = CostosAccTransporteForm(initial={"accidente": accidente})
+            f_repuesto = CostosAccRepuestoForm(initial={"accidente": accidente})
+            f_manoObra = CostosAccManoObraForm(initial={"accidente": accidente})
+
+            f_maquinaria.instance.accidente = accidente
+            if f_otros.is_valid():
+                f_otros.save()
+                f_maquinaria = CostosAccMaquinariaForm(initial={"accidente": accidente})
+
+        if 'nuevo_repuesto' in request.POST:
+            f_repuesto = CostosAccRepuestoForm(request.POST)
+            f_otros = CostosAccOtrosForm(initial={"accidente": accidente})
+            f_insumos = CostosAccInsumosMedicosForm(initial={"accidente": accidente})
+            f_transporte = CostosAccTransporteForm(initial={"accidente": accidente})
+            f_maquinaria = CostosAccMaquinariaForm(initial={"accidente": accidente})
+            f_manoObra = CostosAccManoObraForm(initial={"accidente": accidente})
+
+            f_repuesto.instance.accidente = accidente
+            if f_otros.is_valid():
+                f_otros.save()
+                f_repuesto = CostosAccRepuestoForm(initial={"accidente": accidente})
+
+        if 'nuevo_manoObra' in request.POST:
+            f_manoObra = CostosAccManoObraForm(request.POST)
+            f_otros = CostosAccOtrosForm(initial={"accidente": accidente})
+            f_insumos = CostosAccInsumosMedicosForm(initial={"accidente": accidente})
+            f_transporte = CostosAccTransporteForm(initial={"accidente": accidente})
+            f_maquinaria = CostosAccMaquinariaForm(initial={"accidente": accidente})
+            f_repuesto = CostosAccRepuestoForm(initial={"accidente": accidente})
+
+            f_manoObra.instance.accidente = accidente
+            if f_otros.is_valid():
+                f_otros.save()
+                f_manoObra = CostosAccManoObraForm(initial={"accidente": accidente})
+
         context_data = {"accidente": accidente,
                         'f_insumos': f_insumos,
                         'f_transporte': f_transporte,
                         'f_otros': f_otros,
+                        'f_maquinaria': f_maquinaria,
+                        'f_manoObra': f_manoObra,
+                        'f_repuesto': f_repuesto,
                         "listInsumosMed": CostosAccInsumosMedicos.objects.filter(accidente=accidente.id),
                         "listTransporte": CostosAccTransporte.objects.filter(accidente=accidente.id),
-                        "listOtros": CostosAccOtros.objects.filter(accidente=accidente.id)}
+                        "listOtros": CostosAccOtros.objects.filter(accidente=accidente.id),
+                        "listMaquinaria": CostosAccMaquinaria.objects.filter(accidente=accidente.id),
+                        "listRepuestos": CostosAccRepuestos.objects.filter(accidente=accidente.id),
+                        "listManoObra": CostosAccManoObra.objects.filter(accidente=accidente.id)}
 
         return render(request, 'accidentes/documentar.html', context_data)
 
