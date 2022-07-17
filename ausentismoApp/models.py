@@ -756,3 +756,30 @@ class FactorIPC(models.Model):
             self.created = timezone.now()
         self.modified = timezone.now()
         return super(FactorIPC, self).save(*args, **kwargs)
+
+
+class ExpectativaVida(models.Model):
+    GENERO = (
+        ('M', 'Masculino'),
+        ('F', 'Femenino'),
+        ('B', 'No binario')
+    )
+    edad = models.PositiveIntegerField(validators=[MinValueValidator(10), MaxValueValidator(150)])
+    tipo = models.CharField(max_length=1, choices=GENERO)
+    expectativa = models.DecimalField(decimal_places=2, max_digits=3)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Expectativa de vida'
+        verbose_name_plural = 'Expectativas de vida'
+
+    def __str__(self):
+        return str(self.id)
+
+    def save(self, *args, **kwargs):
+        ''' On save, update timestamps '''
+        if not self.id:
+            self.created = timezone.now()
+        self.modified = timezone.now()
+        return super(ExpectativaVida, self).save(*args, **kwargs)
