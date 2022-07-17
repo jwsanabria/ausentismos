@@ -766,7 +766,7 @@ class ExpectativaVida(models.Model):
     )
     edad = models.PositiveIntegerField(validators=[MinValueValidator(10), MaxValueValidator(150)])
     tipo = models.CharField(max_length=1, choices=GENERO)
-    expectativa = models.DecimalField(decimal_places=2, max_digits=3)
+    expectativa = models.DecimalField(decimal_places=2, max_digits=5)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now_add=True)
 
