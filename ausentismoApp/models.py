@@ -596,6 +596,9 @@ class Accidente(models.Model):
     def get_documentar_url(self):
         return reverse("costos_list", kwargs={'pk': self.id})
 
+    def get_lucro_url(self):
+        return reverse("lucro_cesante", kwargs={'pk': self.id})
+
 
 class CostosAccInsumosMedicos(models.Model):
     accidente = models.ForeignKey(Accidente, on_delete=models.CASCADE)
@@ -731,3 +734,25 @@ class CostosAccManoObra(models.Model):
             self.created = timezone.now()
         self.modified = timezone.now()
         return super(CostosAccManoObra, self).save(*args, **kwargs)
+
+
+class FactorIPC(models.Model):
+    anio = models.PositiveIntegerField(validators=[MinValueValidator(1900), MaxValueValidator(2100)])
+    mes = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(12)])
+    factor = models.DecimalField(decimal_places=2, max_digits=5)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Factor IPC'
+        verbose_name_plural = 'Lista de factores IPC'
+
+    def __str__(self):
+        return str(self.id)
+
+    def save(self, *args, **kwargs):
+        ''' On save, update timestamps '''
+        if not self.id:
+            self.created = timezone.now()
+        self.modified = timezone.now()
+        return super(FactorIPC, self).save(*args, **kwargs)

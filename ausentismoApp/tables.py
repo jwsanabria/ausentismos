@@ -48,7 +48,7 @@ class AusentismoTable(tables.Table):
 
 
 class AccidenteTable(tables.Table):
-    template = '''<a href="{{record.get_documentar_url}}" class="btn btn-outline-info  btn-sm">Documentar</a><a href="{{record.get_documentar_url}}" class="btn btn-outline-info  btn-sm">Lucro</a><a href="{{record.get_documentar_url}}"   class="btn btn-outline-info btn-sm">Adaptación al cambio</a><a href="{{record.get_documentar_url}}" class="btn btn-secondary  btn-sm">Apropiaciones Nómina</a><a href="{{record.get_documentar_url}}" class="btn btn-primary  btn-sm">Balance</a>'''
+    template = '''<a href="{{record.get_documentar_url}}" class="btn btn-outline-info  btn-sm">Documentar</a><a href="{{record.get_lucro_url}}" class="btn btn-outline-info  btn-sm">Lucro</a><a href="{{record.get_documentar_url}}"   class="btn btn-outline-info btn-sm">Adaptación al cambio</a><a href="{{record.get_documentar_url}}" class="btn btn-secondary  btn-sm">Apropiaciones Nómina</a><a href="{{record.get_documentar_url}}" class="btn btn-primary  btn-sm">Balance</a>'''
     botones_action = tables.TemplateColumn(
         template,
         verbose_name=u'Acciones',

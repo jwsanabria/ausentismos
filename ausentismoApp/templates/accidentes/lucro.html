@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+    <h3>Estado del accidentado: {{ estado }}</h3>
+    <h3>Edad: {{ edad.years }} años</h3>
+    <h3>Salario: {{ salario }}</h3>
+    <p id="ipc_inicial"></p>
+    <p id="ipc_final"></p>
+    <div class="panel-heading">
+                        <form method="post" class="form-inline">
+                            {% csrf_token %}
+                            {{ f_danomaterial.as_p }}
+
+                            <button type="submit" class="btn btn-primary mb-2"><span class="fa fa-save"></span> Guardar</button>
+                        </form>
+                    </div>
+</div>
+</div>
+
+{% endblock content%}
+
+{% block javascript%}
+<script>
+    $ ("#id_fecha_liquidacion"). focusout (function (e) {
+        e.preventDefault ();
+        // get the nickname
+        var fecha_liquidacion = $ (this) .val ();
+        console.log(fecha_liquidacion)
+        // GET AJAX request
+        $ .ajax ({
+            type: 'GET',
+            url: "{% url 'liquidacion_view'%}",
+            data: {"fecha_liquidacion": fecha_liquidacion},
+            dataType:"json",
+            success: function (response) {
+                console.log(response)
+                // if not valid user, alert the user
+                /*if (! response ["valid"]) {
+                    alert ("You cannot create a friend with same nick name");
+                    var nickName = $ ("# id_nick_name");
+                    nickName.val ("")
+                    nickName.focus ()
+                }*/
+                if (response[0].ipc_inicial){
+                    $("#ipc_inicial").text("IPC Inicial: " + response[0].ipc_inicial);
+                    $("#ipc_final").text("IPC Final: " + response[0].ipc_final);
+                }
+            },
+            error: function (response) {
+                console.log (response)
+            }
+        })
+    })
+</script>
+{% endblock javascript%}

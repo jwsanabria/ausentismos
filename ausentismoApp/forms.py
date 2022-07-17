@@ -142,3 +142,7 @@ class CostosAccManoObraForm(ModelForm):
             'descripcion': forms.TextInput(attrs={'class': 'form-control mb-2 mr-sm-2', 'placeholder': 'Descripción'}),
             'cantidad': forms.NumberInput(attrs={'class': 'form-control mb-2 mr-sm-2', 'placeholder': 'Cantidad'}),
         }
+
+
+class DanoMaterialForm(forms.Form):
+    fecha_liquidacion = DateField(input_formats=settings.DATE_INPUT_FORMATS, widget=DatePickerInput(format='%d-%m-%Y'))

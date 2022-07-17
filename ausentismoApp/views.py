@@ -3,7 +3,7 @@ from django_tables2.export import ExportMixin
 from django_tables2.config import RequestConfig
 from django.shortcuts import render, HttpResponse
 from .models import Persona, Ausentismo, Accidente, CostosAccInsumosMedicos, CostosAccTransporte, CostosAccOtros, CostosAccRepuestos, CostosAccManoObra, CostosAccMaquinaria
-from .forms import AusentismoForm, AccidenteForm, CostosAccInsumosMedicosForm, CostosAccTransporteForm, CostosAccOtrosForm, CostosAccManoObraForm, CostosAccRepuestoForm, CostosAccMaquinariaForm
+from .forms import AusentismoForm, AccidenteForm, CostosAccInsumosMedicosForm, CostosAccTransporteForm, CostosAccOtrosForm, CostosAccManoObraForm, CostosAccRepuestoForm, CostosAccMaquinariaForm, DanoMaterialForm
 from .tables import PersonaTable, AusentismoTable, AccidenteTable
 from django.views.generic.base import View
 from django.views.generic import CreateView, ListView, UpdateView
@@ -13,6 +13,8 @@ from django_filters.views import FilterView
 from django_tables2.views import SingleTableMixin
 from .filters import AusentismoFilter, AccidenteFilter
 from django.shortcuts import get_object_or_404
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
 from django.core import serializers
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
 
@@ -24,17 +26,34 @@ class BuscarPersonaView(View):
             action = request.POST['action']
 
             if action == 'autocomplete':
-                data = []
+                data = {}
                 for i in Persona.objects.filter(nombre__icontains=request.POST['term']):
                     item = i.personaToDictionary()
                     item['text'] = i.__str__()
                     item['id'] = i.id
-                    data.append(item)
+                    data = {'data': item}
         except Exception as e:
             data['error']: str(e)
 
         return JsonResponse(data, safe=False)
 
+
+class LiquidacionView(View):
+    def get(self, request):
+        data = {}
+        try:
+            fecha_liquidacion = request.GET['fecha_liquidacion']
+
+            data = []
+            fecha_liquidacion = datetime.strptime(fecha_liquidacion, "%d-%m-%Y")
+            item = {}
+            item['ipc_final'] = 8.79
+            item['ipc_inicial'] = 7.3
+            data.append(item)
+        except Exception as e:
+            data['error']: str(e)
+
+        return JsonResponse(data, safe=False)
 
 class RegistrarAusentismoView(CreateView):
     model = Ausentismo
@@ -258,6 +277,26 @@ class CostosView(View):
                         "listManoObra": CostosAccManoObra.objects.filter(accidente=accidente.id)}
 
         return render(request, 'accidentes/documentar.html', context_data)
+
+
+class LucroView(View):
+    def get(self, request, pk):
+        accidente = get_object_or_404(Accidente, id= pk)
+        salario = accidente.empleado.salario
+        edad = relativedelta(datetime.now(), accidente.empleado.fecha_nacimiento)
+        estado = "LESIONADO"
+        if accidente.fallecido :
+            estado = "FALLECIDO"
+
+        context_data = {"accidente": accidente,
+                        'salario': salario,
+                        'edad': edad,
+                        'estado': estado,
+                        'f_danomaterial': DanoMaterialForm()}
+
+
+        return render(request, 'accidentes/lucro.html', context_data)
+
 
 
 class CostosNuevosView(CreateView):
