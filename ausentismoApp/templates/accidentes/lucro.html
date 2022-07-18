@@ -165,10 +165,11 @@
                     <td>${instance[0]['pk']}</td>
                     <td> ${fields["descripcion"] || ""} </td>
                     <td> ${valor || ""} </td>
-                    <td><a onclick=" ${instance[0]['pk']})"
-                                               class="btn btn-danger btn-circle" href="#">
-                                                <span class="fa fa-remove"></span>
-                                            </a></td>
+                    <td>
+                        <a onclick=" ${instance[0]['pk']})" class="btn btn-danger btn-circle" href="#">
+                           <span class="fa fa-remove"></span>
+                        </a>
+                    </td>
                     </tr> `
                 )
             },

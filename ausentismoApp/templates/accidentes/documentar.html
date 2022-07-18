@@ -20,7 +20,7 @@
             <div class="card-body">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <form method="post" class="form-inline">
+                        <form method="post" class="form-inline" id="form_insumo">
                             {% csrf_token %}
                             {{ f_insumos.as_p }}
                             <div>
@@ -31,7 +31,7 @@
 
                     <!-- /.panel-heading -->
                     <div class="panel-body">
-                        <table width="100%" class="table table-striped table-bordered table-hover table-sm" id="dataTables-example">
+                        <table width="100%" class="table table-striped table-bordered table-hover table-sm" id="insumo_table">
                             <thead>
                                 <tr>
                                     <th>Id</th>
@@ -73,7 +73,7 @@
             <div class="card-body">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <form method="post" class="form-inline">
+                        <form method="post" class="form-inline" id="form_transporte">
                             {% csrf_token %}
                             {{ f_transporte.as_p }}
                             <div>
@@ -84,7 +84,7 @@
 
                         <!-- /.panel-heading -->
                     <div class="panel-body">
-                        <table width="100%" class="table table-striped table-bordered table-hover table-sm" id="dataTables-example">
+                        <table width="100%" class="table table-striped table-bordered table-hover table-sm" id="transporte_table">
                             <thead>
                                 <tr>
                                     <th>Id</th>
@@ -121,7 +121,7 @@
             <div class="card-body">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <form method="post" class="form-inline">
+                        <form method="post" class="form-inline" id="form_otros">
                             {% csrf_token %}
                             {{ f_otros.as_p }}
 
@@ -131,7 +131,7 @@
 
                         <!-- /.panel-heading -->
                     <div class="panel-body">
-                        <table width="100%" class="table table-striped table-bordered table-hover table-sm" id="dataTables-example">
+                        <table width="100%" class="table table-striped table-bordered table-hover table-sm" id="otros_table">
                             <thead>
                                 <tr>
                                     <th>Id</th>
@@ -169,9 +169,9 @@
             <div class="card-body">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <form method="post" class="form-inline">
+                        <form method="post" class="form-inline" id="form_maquinaria">
                             {% csrf_token %}
-                            {{ f_maquinarias.as_p }}
+                            {{ f_maquinaria.as_p }}
 
                             <button type="submit" class="btn btn-primary mb-2"><span class="fa fa-save"></span> Guardar</button>
                         </form>
@@ -179,7 +179,7 @@
 
                         <!-- /.panel-heading -->
                     <div class="panel-body">
-                        <table width="100%" class="table table-striped table-bordered table-hover table-sm" id="dataTables-example">
+                        <table width="100%" class="table table-striped table-bordered table-hover table-sm" id="maquinaria_table">
                             <thead>
                                 <tr>
                                     <th>Id</th>
@@ -218,7 +218,7 @@
             <div class="card-body">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <form method="post" class="form-inline">
+                        <form method="post" class="form-inline" id="form_repuesto">
                             {% csrf_token %}
                             {{ f_repuesto.as_p }}
 
@@ -228,7 +228,7 @@
 
                         <!-- /.panel-heading -->
                     <div class="panel-body">
-                        <table width="100%" class="table table-striped table-bordered table-hover table-sm" id="dataTables-example">
+                        <table width="100%" class="table table-striped table-bordered table-hover table-sm" id="repuesto_table">
                             <thead>
                                 <tr>
                                     <th>Id</th>
@@ -267,7 +267,7 @@
             <div class="card-body">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <form method="post" class="form-inline">
+                        <form method="post" class="form-inline" id="form_mano_obra">
                             {% csrf_token %}
                             {{ f_manoObra.as_p }}
 
@@ -277,7 +277,7 @@
 
                         <!-- /.panel-heading -->
                     <div class="panel-body">
-                        <table width="100%" class="table table-striped table-bordered table-hover table-sm" id="dataTables-example">
+                        <table width="100%" class="table table-striped table-bordered table-hover table-sm" id="mano_obra_table">
                             <thead>
                                 <tr>
                                     <th>Id</th>
@@ -320,5 +320,316 @@
         $( function() {
             $( "#accordion" ).accordion();
         } );
+
+
+        $ ("#form_mano_obra"). submit (function (e) {
+            // preventing from page reload and default actions
+            e.preventDefault ();
+            // serialize the data for sending the form data.
+            var serializedData = $ (this) .serialize ();
+            // make POST ajax call
+            $ .ajax ({
+                type: 'POST',
+                url: "{% url 'ajax_mano_obra' accidente.id %}",
+                data: serializedData,
+                success: function (response) {
+                    // on successfull creating object
+                    // first\. clear the form.
+                    $ ("#form_mano_obra"). trigger ('reset');
+                    // 2\. focus to nickname input
+                    $ ("#id_descripcion"). focus ();
+
+                    // display the newly friend to table.
+                    var instance = JSON.parse (response ["instance"]);
+                    console.log(instance)
+                    var fields = instance [0] ["fields"];
+
+                    var formatter = new Intl.NumberFormat('en-US', {
+                        style: 'currency',
+                        currency: 'USD',
+                        // These options are needed to round to whole numbers if that's what you want.
+                        // minimumFractionDigits: 0, // (this suffices for whole numbers, but will print 2500.10 as $2,500.1)
+                        // maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
+                        });
+
+                    var valor = formatter.format(fields["valor"])
+                    $ ("#mano_obra_table tbody"). prepend (
+                        `<tr>
+                        <td>${instance[0]['pk']}</td>
+                        <td> ${fields["descripcion"] || ""} </td>
+                        <td> ${valor || ""} </td>
+                        <td> ${fields["cantidad"] || ""} </td>
+                        <td>
+                            <a onclick=" ${instance[0]['pk']})" class="btn btn-danger btn-circle" href="#">
+                               <span class="fa fa-remove"></span>
+                            </a>
+                        </td>
+                        </tr> `
+                    )
+                },
+                error: function (response) {
+                    // alert the error if any error occured
+                    alert (response["responseJSON"] ["error"]["valor"]);
+                }
+            })
+        })
+
+        $ ("#form_repuesto"). submit (function (e) {
+            // preventing from page reload and default actions
+            e.preventDefault ();
+            // serialize the data for sending the form data.
+            var serializedData = $ (this) .serialize ();
+            // make POST ajax call
+            $ .ajax ({
+                type: 'POST',
+                url: "{% url 'ajax_repuesto' accidente.id %}",
+                data: serializedData,
+                success: function (response) {
+                    // on successfull creating object
+                    // first\. clear the form.
+                    $ ("#form_repuesto"). trigger ('reset');
+                    // 2\. focus to nickname input
+                    $ ("#id_elemento"). focus ();
+
+                    // display the newly friend to table.
+                    var instance = JSON.parse (response ["instance"]);
+                    console.log(instance)
+                    var fields = instance [0] ["fields"];
+
+                    var formatter = new Intl.NumberFormat('en-US', {
+                        style: 'currency',
+                        currency: 'USD',
+                        // These options are needed to round to whole numbers if that's what you want.
+                        // minimumFractionDigits: 0, // (this suffices for whole numbers, but will print 2500.10 as $2,500.1)
+                        // maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
+                        });
+
+                    var valor = formatter.format(fields["valor"])
+                    $ ("#repuesto_table tbody"). prepend (
+                        `<tr>
+                        <td>${instance[0]['pk']}</td>
+                        <td> ${fields["elemento"] || ""} </td>
+                        <td> ${valor || ""} </td>
+                        <td> ${fields["cantidad"] || ""} </td>
+                        <td>
+                            <a onclick=" ${instance[0]['pk']})" class="btn btn-danger btn-circle" href="#">
+                               <span class="fa fa-remove"></span>
+                            </a>
+                        </td>
+                        </tr> `
+                    )
+                },
+                error: function (response) {
+                    // alert the error if any error occured
+                    alert (response["responseJSON"] ["error"]["valor"]);
+                }
+            })
+        })
+
+        $ ("#form_maquinaria"). submit (function (e) {
+            // preventing from page reload and default actions
+            e.preventDefault ();
+            // serialize the data for sending the form data.
+            var serializedData = $ (this) .serialize ();
+            // make POST ajax call
+            $ .ajax ({
+                type: 'POST',
+                url: "{% url 'ajax_maquinaria' accidente.id %}",
+                data: serializedData,
+                success: function (response) {
+                    // on successfull creating object
+                    // first\. clear the form.
+                    $ ("#form_maquinaria"). trigger ('reset');
+                    // 2\. focus to nickname input
+                    $ ("#id_elemento"). focus ();
+
+                    // display the newly friend to table.
+                    var instance = JSON.parse (response ["instance"]);
+                    console.log(instance)
+                    var fields = instance [0] ["fields"];
+
+                    var formatter = new Intl.NumberFormat('en-US', {
+                        style: 'currency',
+                        currency: 'USD',
+                        // These options are needed to round to whole numbers if that's what you want.
+                        // minimumFractionDigits: 0, // (this suffices for whole numbers, but will print 2500.10 as $2,500.1)
+                        // maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
+                        });
+
+                    var valor = formatter.format(fields["valor"])
+                    $ ("#maquinaria_table tbody"). prepend (
+                        `<tr>
+                        <td>${instance[0]['pk']}</td>
+                        <td> ${fields["elemento"] || ""} </td>
+                        <td> ${valor || ""} </td>
+                        <td> ${fields["cantidad"] || ""} </td>
+                        <td>
+                            <a onclick=" ${instance[0]['pk']})" class="btn btn-danger btn-circle" href="#">
+                               <span class="fa fa-remove"></span>
+                            </a>
+                        </td>
+                        </tr> `
+                    )
+                },
+                error: function (response) {
+                    // alert the error if any error occured
+                    alert (response["responseJSON"] ["error"]["valor"]);
+                }
+            })
+        })
+
+        $ ("#form_otros"). submit (function (e) {
+            // preventing from page reload and default actions
+            e.preventDefault ();
+            // serialize the data for sending the form data.
+            var serializedData = $ (this) .serialize ();
+            // make POST ajax call
+            $ .ajax ({
+                type: 'POST',
+                url: "{% url 'ajax_otros' accidente.id %}",
+                data: serializedData,
+                success: function (response) {
+                    // on successfull creating object
+                    // first\. clear the form.
+                    $ ("#form_otros"). trigger ('reset');
+                    // 2\. focus to nickname input
+                    $ ("#id_elemento"). focus ();
+
+                    // display the newly friend to table.
+                    var instance = JSON.parse (response ["instance"]);
+                    console.log(instance)
+                    var fields = instance [0] ["fields"];
+
+                    var formatter = new Intl.NumberFormat('en-US', {
+                        style: 'currency',
+                        currency: 'USD',
+                        // These options are needed to round to whole numbers if that's what you want.
+                        // minimumFractionDigits: 0, // (this suffices for whole numbers, but will print 2500.10 as $2,500.1)
+                        // maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
+                        });
+
+                    var valor = formatter.format(fields["valor"])
+                    $ ("#otros_table tbody"). prepend (
+                        `<tr>
+                        <td>${instance[0]['pk']}</td>
+                        <td> ${fields["elemento"] || ""} </td>
+                        <td> ${valor || ""} </td>
+                        <td>
+                            <a onclick=" ${instance[0]['pk']})" class="btn btn-danger btn-circle" href="#">
+                               <span class="fa fa-remove"></span>
+                            </a>
+                        </td>
+                        </tr> `
+                    )
+                },
+                error: function (response) {
+                    // alert the error if any error occured
+                    alert (response["responseJSON"] ["error"]["valor"]);
+                }
+            })
+        })
+
+        $ ("#form_transporte"). submit (function (e) {
+            // preventing from page reload and default actions
+            e.preventDefault ();
+            // serialize the data for sending the form data.
+            var serializedData = $ (this) .serialize ();
+            // make POST ajax call
+            $ .ajax ({
+                type: 'POST',
+                url: "{% url 'ajax_transporte' accidente.id %}",
+                data: serializedData,
+                success: function (response) {
+                    // on successfull creating object
+                    // first\. clear the form.
+                    $ ("#form_transporte"). trigger ('reset');
+                    // 2\. focus to nickname input
+                    $ ("#id_elemento"). focus ();
+
+                    // display the newly friend to table.
+                    var instance = JSON.parse (response ["instance"]);
+                    console.log(instance)
+                    var fields = instance [0] ["fields"];
+
+                    var formatter = new Intl.NumberFormat('en-US', {
+                        style: 'currency',
+                        currency: 'USD',
+                        // These options are needed to round to whole numbers if that's what you want.
+                        // minimumFractionDigits: 0, // (this suffices for whole numbers, but will print 2500.10 as $2,500.1)
+                        // maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
+                        });
+
+                    var valor = formatter.format(fields["valor"])
+                    $ ("#transporte_table tbody"). prepend (
+                        `<tr>
+                        <td>${instance[0]['pk']}</td>
+                        <td> ${fields["elemento"] || ""} </td>
+                        <td> ${valor || ""} </td>
+                        <td>
+                            <a onclick=" ${instance[0]['pk']})" class="btn btn-danger btn-circle" href="#">
+                               <span class="fa fa-remove"></span>
+                            </a>
+                        </td>
+                        </tr> `
+                    )
+                },
+                error: function (response) {
+                    // alert the error if any error occured
+                    alert (response["responseJSON"] ["error"]["valor"]);
+                }
+            })
+        })
+
+        $ ("#form_insumo"). submit (function (e) {
+            // preventing from page reload and default actions
+            e.preventDefault ();
+            // serialize the data for sending the form data.
+            var serializedData = $ (this) .serialize ();
+            // make POST ajax call
+            $ .ajax ({
+                type: 'POST',
+                url: "{% url 'ajax_insumo' accidente.id %}",
+                data: serializedData,
+                success: function (response) {
+                    // on successfull creating object
+                    // first\. clear the form.
+                    $ ("#form_insumo"). trigger ('reset');
+                    // 2\. focus to nickname input
+                    $ ("#id_insumo"). focus ();
+
+                    // display the newly friend to table.
+                    var instance = JSON.parse (response ["instance"]);
+                    console.log(instance)
+                    var fields = instance [0] ["fields"];
+
+                    var formatter = new Intl.NumberFormat('en-US', {
+                        style: 'currency',
+                        currency: 'USD',
+                        // These options are needed to round to whole numbers if that's what you want.
+                        // minimumFractionDigits: 0, // (this suffices for whole numbers, but will print 2500.10 as $2,500.1)
+                        // maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
+                        });
+
+                    var valor = formatter.format(fields["valor"])
+                    $ ("#insumo_table tbody"). prepend (
+                        `<tr>
+                        <td>${instance[0]['pk']}</td>
+                        <td> ${fields["insumo"] || ""} </td>
+                        <td> ${valor || ""} </td>
+                        <td> ${fields["cantidad"] || ""} </td>
+                        <td>
+                            <a onclick=" ${instance[0]['pk']})" class="btn btn-danger btn-circle" href="#">
+                               <span class="fa fa-remove"></span>
+                            </a>
+                        </td>
+                        </tr> `
+                    )
+                },
+                error: function (response) {
+                    // alert the error if any error occured
+                    alert (response["responseJSON"] ["error"]["valor"]);
+                }
+            })
+        })
     </script>
 {% endblock javascript %}

@@ -20,5 +20,11 @@ urlpatterns = [
     path('accidentes/costos_medicos/new', CostosNuevosView.as_view(), name='costos_new'),
     path('accidentes/costos_medicos/edit/<int:pk>', CostosEditView.as_view(), name='costos_edit'),
     path('accidentes/lucro/dano_emergente/<int:pk>', views.postDanoEmergente, name = "dano_emergente_view"),
+    path('accidentes/costos/mano_obra/<int:pk>', views.postManoObra, name = "ajax_mano_obra"),
+    path('accidentes/costos/repuesto/<int:pk>', views.postRepuesto, name = "ajax_repuesto"),
+    path('accidentes/costos/maquinaria/<int:pk>', views.postMaquinaria, name = "ajax_maquinaria"),
+    path('accidentes/costos/otros/<int:pk>', views.postOtros, name = "ajax_otros"),
+    path('accidentes/costos/transporte/<int:pk>', views.postTransporte, name = "ajax_transporte"),
+    path('accidentes/costos/insumo_medico/<int:pk>', views.postInsumo, name = "ajax_insumo"),
 
 ]

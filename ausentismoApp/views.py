@@ -22,6 +22,139 @@ from django.views.decorators.csrf import csrf_protect, csrf_exempt
 
 interes_tecnico = 0.004867
 
+
+def postInsumo (request, *args, **kwargs):
+    accidente = get_object_or_404(Accidente, id=kwargs['pk'])
+    # request should be ajax and method should be POST.
+    if request.is_ajax and request.method == "POST":
+        # get the form data
+        form = CostosAccInsumosMedicosForm(request.POST)
+        form.instance.accidente = accidente
+        # save the data and after fetch the object in instance
+        if form.is_valid():
+            instance = form.save()
+            # serialize an object in json
+            ser_instance = serializers.serialize('json', [instance,])
+            # send to client side.
+            return JsonResponse({"instance": ser_instance}, status=200)
+        else:
+            # some form errors occured.
+            return JsonResponse({"error": form.errors}, status=400)
+
+    # some error occured
+    return JsonResponse({"error": ""}, status=400)
+
+
+
+def postOtros (request, *args, **kwargs):
+    accidente = get_object_or_404(Accidente, id=kwargs['pk'])
+    # request should be ajax and method should be POST.
+    if request.is_ajax and request.method == "POST":
+        # get the form data
+        form = CostosAccOtrosForm(request.POST)
+        form.instance.accidente = accidente
+        # save the data and after fetch the object in instance
+        if form.is_valid():
+            instance = form.save()
+            # serialize an object in json
+            ser_instance = serializers.serialize('json', [instance,])
+            # send to client side.
+            return JsonResponse({"instance": ser_instance}, status=200)
+        else:
+            # some form errors occured.
+            return JsonResponse({"error": form.errors}, status=400)
+
+    # some error occured
+    return JsonResponse({"error": ""}, status=400)
+
+def postTransporte (request, *args, **kwargs):
+    accidente = get_object_or_404(Accidente, id=kwargs['pk'])
+    # request should be ajax and method should be POST.
+    if request.is_ajax and request.method == "POST":
+        # get the form data
+        form = CostosAccTransporteForm(request.POST)
+        form.instance.accidente = accidente
+        # save the data and after fetch the object in instance
+        if form.is_valid():
+            instance = form.save()
+            # serialize an object in json
+            ser_instance = serializers.serialize('json', [instance,])
+            # send to client side.
+            return JsonResponse({"instance": ser_instance}, status=200)
+        else:
+            # some form errors occured.
+            return JsonResponse({"error": form.errors}, status=400)
+
+    # some error occured
+    return JsonResponse({"error": ""}, status=400)
+
+
+
+def postMaquinaria (request, *args, **kwargs):
+    accidente = get_object_or_404(Accidente, id=kwargs['pk'])
+    # request should be ajax and method should be POST.
+    if request.is_ajax and request.method == "POST":
+        # get the form data
+        form = CostosAccMaquinariaForm(request.POST)
+        form.instance.accidente = accidente
+        # save the data and after fetch the object in instance
+        if form.is_valid():
+            instance = form.save()
+            # serialize an object in json
+            ser_instance = serializers.serialize('json', [instance,])
+            # send to client side.
+            return JsonResponse({"instance": ser_instance}, status=200)
+        else:
+            # some form errors occured.
+            return JsonResponse({"error": form.errors}, status=400)
+
+    # some error occured
+    return JsonResponse({"error": ""}, status=400)
+
+
+def postRepuesto (request, *args, **kwargs):
+    accidente = get_object_or_404(Accidente, id=kwargs['pk'])
+    # request should be ajax and method should be POST.
+    if request.is_ajax and request.method == "POST":
+        # get the form data
+        form = CostosAccRepuestoForm(request.POST)
+        form.instance.accidente = accidente
+        # save the data and after fetch the object in instance
+        if form.is_valid():
+            instance = form.save()
+            # serialize an object in json
+            ser_instance = serializers.serialize('json', [instance,])
+            # send to client side.
+            return JsonResponse({"instance": ser_instance}, status=200)
+        else:
+            # some form errors occured.
+            return JsonResponse({"error": form.errors}, status=400)
+
+    # some error occured
+    return JsonResponse({"error": ""}, status=400)
+
+def postManoObra (request, *args, **kwargs):
+    accidente = get_object_or_404(Accidente, id=kwargs['pk'])
+    # request should be ajax and method should be POST.
+    if request.is_ajax and request.method == "POST":
+        # get the form data
+        form = CostosAccManoObraForm(request.POST)
+        form.instance.accidente = accidente
+        # save the data and after fetch the object in instance
+        if form.is_valid():
+            instance = form.save()
+            # serialize an object in json
+            ser_instance = serializers.serialize('json', [instance,])
+            # send to client side.
+            return JsonResponse({"instance": ser_instance}, status=200)
+        else:
+            # some form errors occured.
+            return JsonResponse({"error": form.errors}, status=400)
+
+    # some error occured
+    return JsonResponse({"error": ""}, status=400)
+
+
 def postDanoEmergente (request, *args, **kwargs):
     accidente = get_object_or_404(Accidente, id=kwargs['pk'])
     # request should be ajax and method should be POST.
@@ -248,103 +381,6 @@ class CostosView(View):
                         "listManoObra": CostosAccManoObra.objects.filter(accidente=pk)}
         return render(request, 'accidentes/documentar.html', context_data)
 
-    def post(self, request, *args, **kwargs):
-        accidente = get_object_or_404(Accidente, id=kwargs['pk'])
-        if 'nuevo_insumo' in request.POST:
-            f_insumos = CostosAccInsumosMedicosForm(request.POST)
-            f_transporte = CostosAccTransporteForm(initial={"accidente": accidente})
-            f_otros = CostosAccOtrosForm(initial={"accidente": accidente})
-            f_maquinaria = CostosAccMaquinariaForm(initial={"accidente": accidente})
-            f_repuesto = CostosAccRepuestoForm(initial={"accidente": accidente})
-            f_manoObra = CostosAccManoObraForm(initial={"accidente": accidente})
-
-            f_insumos.instance.accidente = accidente
-            if f_insumos.is_valid():
-                f_insumos.save()
-                f_insumos = CostosAccInsumosMedicosForm(initial={"accidente": accidente})
-
-        if 'nuevo_transporte' in request.POST:
-            f_transporte = CostosAccTransporteForm(request.POST)
-            f_insumos = CostosAccInsumosMedicosForm(initial={"accidente": accidente})
-            f_otros = CostosAccOtrosForm(initial={"accidente": accidente})
-            f_maquinaria = CostosAccMaquinariaForm(initial={"accidente": accidente})
-            f_repuesto = CostosAccRepuestoForm(initial={"accidente": accidente})
-            f_manoObra = CostosAccManoObraForm(initial={"accidente": accidente})
-
-            f_transporte.instance.accidente = accidente
-            if f_transporte.is_valid():
-                f_transporte.save()
-                f_transporte = CostosAccTransporteForm(initial={"accidente": accidente})
-
-
-        if 'nuevo_otros' in request.POST:
-            f_otros = CostosAccOtrosForm(request.POST)
-            f_insumos = CostosAccInsumosMedicosForm(initial={"accidente": accidente})
-            f_transporte = CostosAccTransporteForm(initial={"accidente": accidente})
-            f_maquinaria = CostosAccMaquinariaForm(initial={"accidente": accidente})
-            f_repuesto = CostosAccRepuestoForm(initial={"accidente": accidente})
-            f_manoObra = CostosAccManoObraForm(initial={"accidente": accidente})
-
-            f_otros.instance.accidente = accidente
-            if f_otros.is_valid():
-                f_otros.save()
-                f_otros = CostosAccOtrosForm(initial={"accidente": accidente})
-
-
-        if 'nuevo_maquinaria' in request.POST:
-            f_maquinaria = CostosAccMaquinariaForm(request.POST)
-            f_otros = CostosAccOtrosForm(initial={"accidente": accidente})
-            f_insumos = CostosAccInsumosMedicosForm(initial={"accidente": accidente})
-            f_transporte = CostosAccTransporteForm(initial={"accidente": accidente})
-            f_repuesto = CostosAccRepuestoForm(initial={"accidente": accidente})
-            f_manoObra = CostosAccManoObraForm(initial={"accidente": accidente})
-
-            f_maquinaria.instance.accidente = accidente
-            if f_otros.is_valid():
-                f_otros.save()
-                f_maquinaria = CostosAccMaquinariaForm(initial={"accidente": accidente})
-
-        if 'nuevo_repuesto' in request.POST:
-            f_repuesto = CostosAccRepuestoForm(request.POST)
-            f_otros = CostosAccOtrosForm(initial={"accidente": accidente})
-            f_insumos = CostosAccInsumosMedicosForm(initial={"accidente": accidente})
-            f_transporte = CostosAccTransporteForm(initial={"accidente": accidente})
-            f_maquinaria = CostosAccMaquinariaForm(initial={"accidente": accidente})
-            f_manoObra = CostosAccManoObraForm(initial={"accidente": accidente})
-
-            f_repuesto.instance.accidente = accidente
-            if f_otros.is_valid():
-                f_otros.save()
-                f_repuesto = CostosAccRepuestoForm(initial={"accidente": accidente})
-
-        if 'nuevo_manoObra' in request.POST:
-            f_manoObra = CostosAccManoObraForm(request.POST)
-            f_otros = CostosAccOtrosForm(initial={"accidente": accidente})
-            f_insumos = CostosAccInsumosMedicosForm(initial={"accidente": accidente})
-            f_transporte = CostosAccTransporteForm(initial={"accidente": accidente})
-            f_maquinaria = CostosAccMaquinariaForm(initial={"accidente": accidente})
-            f_repuesto = CostosAccRepuestoForm(initial={"accidente": accidente})
-
-            f_manoObra.instance.accidente = accidente
-            if f_otros.is_valid():
-                f_otros.save()
-                f_manoObra = CostosAccManoObraForm(initial={"accidente": accidente})
-
-        context_data = {"accidente": accidente,
-                        'f_insumos': f_insumos,
-                        'f_transporte': f_transporte,
-                        'f_otros': f_otros,
-                        'f_maquinaria': f_maquinaria,
-                        'f_manoObra': f_manoObra,
-                        'f_repuesto': f_repuesto,
-                        "listInsumosMed": CostosAccInsumosMedicos.objects.filter(accidente=accidente.id),
-                        "listTransporte": CostosAccTransporte.objects.filter(accidente=accidente.id),
-                        "listOtros": CostosAccOtros.objects.filter(accidente=accidente.id),
-                        "listMaquinaria": CostosAccMaquinaria.objects.filter(accidente=accidente.id),
-                        "listRepuestos": CostosAccRepuestos.objects.filter(accidente=accidente.id),
-                        "listManoObra": CostosAccManoObra.objects.filter(accidente=accidente.id)}
-
-        return render(request, 'accidentes/documentar.html', context_data)
 
 
 class LucroView(View):
