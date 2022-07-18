@@ -783,3 +783,25 @@ class ExpectativaVida(models.Model):
             self.created = timezone.now()
         self.modified = timezone.now()
         return super(ExpectativaVida, self).save(*args, **kwargs)
+
+
+class CostosAccDanoEmergente(models.Model):
+    accidente = models.ForeignKey(Accidente, on_delete=models.CASCADE)
+    descripcion = models.CharField(max_length=200)
+    valor = models.DecimalField(decimal_places=2, max_digits=10, validators=[MinValueValidator(Decimal('0.01'))])
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Daño emergente'
+        verbose_name_plural = 'Lista de daños emergentes'
+
+    def __str__(self):
+        return str(self.id)
+
+    def save(self, *args, **kwargs):
+        ''' On save, update timestamps '''
+        if not self.id:
+            self.created = timezone.now()
+        self.modified = timezone.now()
+        return super(CostosAccDanoEmergente, self).save(*args, **kwargs)

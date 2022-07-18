@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm, Select, DateField, TextInput
-from .models import Persona, Ausentismo, Accidente, CostosAccInsumosMedicos, CostosAccTransporte, CostosAccOtros, CostosAccRepuestos, CostosAccManoObra, CostosAccMaquinaria
+from .models import *
 from bootstrap_datepicker_plus.widgets import DatePickerInput, TimePickerInput
 from django.conf import settings
 from .validators import validador_fecha_futura, validador_valor_positivo
@@ -147,3 +147,15 @@ class CostosAccManoObraForm(ModelForm):
 class DanoMaterialForm(forms.Form):
     fecha_liquidacion = DateField(input_formats=settings.DATE_INPUT_FORMATS, widget=DatePickerInput(format='%d-%m-%Y'))
 
+
+class CostosAccDanoEmergenteForm(ModelForm):
+    valor = forms.DecimalField(validators=[validador_valor_positivo])
+
+    class Meta:
+        model = CostosAccDanoEmergente
+
+        fields = ('descripcion', 'valor')
+        widgets = {
+            'valor': forms.NumberInput(attrs={'class': 'form-control mb-2 mr-sm-2', 'placeholder': 'Valor hora'}),
+            'descripcion': forms.TextInput(attrs={'class': 'form-control mb-2 mr-sm-2', 'placeholder': 'Descripción'}),
+        }

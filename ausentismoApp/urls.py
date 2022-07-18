@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path
 from ausentismoApp import views
-from .views import PersonaView, RegistrarAusentismoView, BuscarPersonaView, FilteredAusentismoListView, RegistrarAccidenteView, FilteredAccidenteListView, CostosView, CostosNuevosView, CostosEditView, LucroView, LiquidacionView
+from .views import *
 
 urlpatterns = [
     path('', views.home, name="home"),
@@ -19,5 +19,6 @@ urlpatterns = [
     path('accidentes/lucro/liquidar', LiquidacionView.as_view(), name="liquidacion_view"),
     path('accidentes/costos_medicos/new', CostosNuevosView.as_view(), name='costos_new'),
     path('accidentes/costos_medicos/edit/<int:pk>', CostosEditView.as_view(), name='costos_edit'),
+    path('accidentes/lucro/dano_emergente/<int:pk>', views.postDanoEmergente, name = "dano_emergente_view"),
 
 ]

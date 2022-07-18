@@ -22,6 +22,28 @@ from django.views.decorators.csrf import csrf_protect, csrf_exempt
 
 interes_tecnico = 0.004867
 
+def postDanoEmergente (request, *args, **kwargs):
+    accidente = get_object_or_404(Accidente, id=kwargs['pk'])
+    # request should be ajax and method should be POST.
+    if request.is_ajax and request.method == "POST":
+        # get the form data
+        form = CostosAccDanoEmergenteForm(request.POST)
+        form.instance.accidente = accidente
+        # save the data and after fetch the object in instance
+        if form.is_valid():
+            instance = form.save()
+            # serialize an object in json
+            ser_instance = serializers.serialize('json', [instance,])
+            # send to client side.
+            return JsonResponse({"instance": ser_instance}, status=200)
+        else:
+            # some form errors occured.
+            return JsonResponse({"error": form.errors}, status=400)
+
+    # some error occured
+    return JsonResponse({"error": ""}, status=400)
+
+
 class BuscarPersonaView(View):
     def post(self, request, *args, **kwargs):
         data = {}
@@ -327,7 +349,9 @@ class CostosView(View):
 
 class LucroView(View):
     def get(self, request, pk):
+        f_dano_emergente = CostosAccDanoEmergenteForm()
         accidente = get_object_or_404(Accidente, id= pk)
+
         salario = accidente.empleado.salario
         edad = relativedelta(datetime.now(), accidente.empleado.fecha_nacimiento)
         tiempo_expectativa = 0
@@ -348,7 +372,9 @@ class LucroView(View):
                         'lcf': tiempo_expectativa * 12,
                         'interes_tecnico': interes_tecnico,
                         'expectativa': tiempo_expectativa + edad.years,
-                        'f_danomaterial': DanoMaterialForm()}
+                        'f_dano_emergente': f_dano_emergente,
+                        'f_danomaterial': DanoMaterialForm(),
+                        'list_dano_emergente': CostosAccDanoEmergente.objects.filter(accidente=pk)}
 
 
         return render(request, 'accidentes/lucro.html', context_data)
