@@ -13,16 +13,16 @@
     <div id="accordion">
         <h3>Daño material futuro titulo lucro cesante</h3>
         <div class="card">
-            <h5>Estado del accidentado: {{ estado }}</h5>
-            <h5>Edad: {{ edad.years }} años</h5>
-            <h5>Expectativa: {{ expectativa }} años</h5>
-            <h5>Salario: {{ salario }}</h5>
-            <p id="ipc_inicial"></p>
-            <p id="ipc_final"></p>
-            <p id="liq_lcc"></p>
-            <h5>Número de meses a liq lcf: {{ lcf }}</h5>
-            <p id="liq_lcf"></p>
-            <h5>Interes técnico: {{ interes_tecnico }}</h5>
+            <h6><span style="font-weight: bold">Estado del accidentado:</span> {{ estado }}</h6>
+            <h6>Edad: {{ edad.years }} años</h6>
+            <h6>Expectativa: {{ expectativa }} años</h6>
+            <h6>Salario: {{ salario }}</h6>
+            <h6 id="ipc_inicial"></h6>
+            <h6 id="ipc_final"></h6>
+            <h6 id="liq_lcc"></h6>
+            <h6>Número de meses a liq lcf: {{ lcf }}</h6>
+            <h6 id="liq_lcf"></h6>
+            <h6>Interes técnico: {{ interes_tecnico }}</h6>
             <div class="panel-heading">
                 <form method="post" class="form-inline">
                     {% csrf_token %}
@@ -32,8 +32,8 @@
                 </form>
             </div>
 
-            <p id="lucro_cesante_consolidado"></p>
-            <p id="lucro_cesante_futuro"></p>
+            <h6 id="lucro_cesante_consolidado"></h6>
+            <h6 id="lucro_cesante_futuro"></h6>
         </div>
         <h3>Daños morales</h3>
         <div class="card">
