@@ -2,9 +2,9 @@ from django_tables2 import SingleTableView, LazyPaginator
 from django_tables2.export import ExportMixin
 from django_tables2.config import RequestConfig
 from django.shortcuts import render, HttpResponse
-from .models import Persona, Ausentismo, Accidente, CostosAccInsumosMedicos, CostosAccTransporte, CostosAccOtros, CostosAccRepuestos, CostosAccManoObra, CostosAccMaquinaria
-from .forms import AusentismoForm, AccidenteForm, CostosAccInsumosMedicosForm, CostosAccTransporteForm, CostosAccOtrosForm, CostosAccManoObraForm, CostosAccRepuestoForm, CostosAccMaquinariaForm, DanoMaterialForm
-from .tables import PersonaTable, AusentismoTable, AccidenteTable
+from .models import *
+from .forms import *
+from .tables import *
 from django.views.generic.base import View
 from django.views.generic import CreateView, ListView, UpdateView
 from django.urls import reverse_lazy
@@ -15,9 +15,12 @@ from .filters import AusentismoFilter, AccidenteFilter
 from django.shortcuts import get_object_or_404
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
+from django.db.models import ObjectDoesNotExist
 from django.core import serializers
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
 
+
+interes_tecnico = 0.004867
 
 class BuscarPersonaView(View):
     def post(self, request, *args, **kwargs):
@@ -43,12 +46,55 @@ class LiquidacionView(View):
         data = {}
         try:
             fecha_liquidacion = request.GET['fecha_liquidacion']
+            id_accidente = request.GET['id_accidente']
+            num_meses_exp = request.GET['lcf']
+            accidente = get_object_or_404(Accidente, id=id_accidente)
 
             data = []
             fecha_liquidacion = datetime.strptime(fecha_liquidacion, "%d-%m-%Y")
+            factor_ipc_final = 0.0
+            factor_ipc_inicial = 0.0
+            diferencia = relativedelta(fecha_liquidacion, accidente.fecha_accidente)
+            num_meses_liq = diferencia.years * 12 + diferencia.months
+
+            if num_meses_liq == 0:
+                num_meses_liq = 1.0
+
+            try:
+                f_ipc_final = FactorIPC.objects.filter(anio=fecha_liquidacion.year).filter(mes=fecha_liquidacion.month).get()
+                factor_ipc_final = f_ipc_final.factor
+                f_ipc_inicial = FactorIPC.objects.filter(anio=accidente.fecha_accidente.year).filter(mes=accidente.fecha_accidente.month).get()
+                factor_ipc_inicial = f_ipc_inicial.factor
+            except ObjectDoesNotExist:
+                pass
+
+            ingreso_base = accidente.empleado.salario + (accidente.empleado.salario * 25 / 100)
+            valor_actualizado = ingreso_base - (ingreso_base * 25 / 100)
+            valor_presente = 0
+            renta_actualizada = 0
+            lucro_cesante_consolidado = 0
+            lucro_cesante_futuro = 0
+
+
+            valor_presente = valor_actualizado * (factor_ipc_final / factor_ipc_inicial)
+
+            if accidente.fallecido:
+                renta_actualizada = valor_presente
+            else:
+                renta_actualizada = valor_presente * accidente.grado_invalidez
+
+
+            lucro_cesante_consolidado = renta_actualizada * ((Decimal(1.0) + Decimal(interes_tecnico)) ** (Decimal(num_meses_liq) - Decimal(1.0)) / Decimal(interes_tecnico))
+
+            lucro_cesante_futuro = renta_actualizada * ((Decimal(1.0) + Decimal(interes_tecnico)) ** Decimal(num_meses_exp) - Decimal(1.0)) / (Decimal(interes_tecnico) * (Decimal(1.0) + Decimal(interes_tecnico)) ** Decimal(num_meses_exp))
+
             item = {}
-            item['ipc_final'] = 8.79
-            item['ipc_inicial'] = 7.3
+            item['ipc_final'] = factor_ipc_final
+            item['ipc_inicial'] = factor_ipc_inicial
+            item['lcc']= num_meses_liq
+            item['lucro_cesante_consolidado']= lucro_cesante_consolidado
+            item['lucro_cesante_futuro']= lucro_cesante_futuro
+
             data.append(item)
         except Exception as e:
             data['error']: str(e)
@@ -284,6 +330,13 @@ class LucroView(View):
         accidente = get_object_or_404(Accidente, id= pk)
         salario = accidente.empleado.salario
         edad = relativedelta(datetime.now(), accidente.empleado.fecha_nacimiento)
+        tiempo_expectativa = 0
+        try:
+            expectativa = ExpectativaVida.objects.filter(edad = edad.years).filter(tipo = accidente.empleado.sexo).get()
+            tiempo_expectativa = expectativa.expectativa
+        except ObjectDoesNotExist:
+            pass
+
         estado = "LESIONADO"
         if accidente.fallecido :
             estado = "FALLECIDO"
@@ -292,6 +345,9 @@ class LucroView(View):
                         'salario': salario,
                         'edad': edad,
                         'estado': estado,
+                        'lcf': tiempo_expectativa * 12,
+                        'interes_tecnico': interes_tecnico,
+                        'expectativa': tiempo_expectativa + edad.years,
                         'f_danomaterial': DanoMaterialForm()}
 
 

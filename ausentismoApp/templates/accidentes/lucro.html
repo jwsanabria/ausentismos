@@ -1,41 +1,61 @@
 {% extends "base.html" %}
-
+{% load render_table from django_tables2 %}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+{% load bootstrap4 %}
 {% load static %}
+{% load filters_web %}
 
 {% block content %}
+    <div class="text-center bg-white font-weight-bold">
+        <h1 class="card-title bg-white align-content-center font-weight-bold text-capitalize">Documentación de lucro</h1>
+    </div>
+    <div id="accordion">
+        <h3>Daño material futuro titulo lucro cesante</h3>
+        <div class="card">
+            <h5>Estado del accidentado: {{ estado }}</h5>
+            <h5>Edad: {{ edad.years }} años</h5>
+            <h5>Expectativa: {{ expectativa }} años</h5>
+            <h5>Salario: {{ salario }}</h5>
+            <p id="ipc_inicial"></p>
+            <p id="ipc_final"></p>
+            <p id="liq_lcc"></p>
+            <h5>Número de meses a liq lcf: {{ lcf }}</h5>
+            <p id="liq_lcf"></p>
+            <h5>Interes técnico: {{ interes_tecnico }}</h5>
+            <div class="panel-heading">
+                <form method="post" class="form-inline">
+                    {% csrf_token %}
+                    {{ f_danomaterial.as_p }}
 
-<div class="modal-dialog" role="document">
-<div class="modal-content">
-    <h3>Estado del accidentado: {{ estado }}</h3>
-    <h3>Edad: {{ edad.years }} años</h3>
-    <h3>Salario: {{ salario }}</h3>
-    <p id="ipc_inicial"></p>
-    <p id="ipc_final"></p>
-    <div class="panel-heading">
-                        <form method="post" class="form-inline">
-                            {% csrf_token %}
-                            {{ f_danomaterial.as_p }}
 
-                            <button type="submit" class="btn btn-primary mb-2"><span class="fa fa-save"></span> Guardar</button>
-                        </form>
-                    </div>
-</div>
-</div>
+                </form>
+            </div>
 
+            <p id="lucro_cesante_consolidado"></p>
+            <p id="lucro_cesante_futuro"></p>
+        </div>
+        <h3>Daños morales</h3>
+        <div class="card">
+        </div>
+        <h3>Daño material a titulo de daño emergente</h3>
+        <div class="card">
+        </div>
+    </div>
 {% endblock content%}
 
 {% block javascript%}
 <script>
     $ ("#id_fecha_liquidacion"). focusout (function (e) {
         e.preventDefault ();
-        // get the nickname
+
         var fecha_liquidacion = $ (this) .val ();
         console.log(fecha_liquidacion)
         // GET AJAX request
         $ .ajax ({
             type: 'GET',
             url: "{% url 'liquidacion_view'%}",
-            data: {"fecha_liquidacion": fecha_liquidacion},
+            data: {"fecha_liquidacion": fecha_liquidacion, "id_accidente": {{ accidente.id }}, "lcf": {{ lcf }}},
             dataType:"json",
             success: function (response) {
                 console.log(response)
@@ -46,9 +66,13 @@
                     nickName.val ("")
                     nickName.focus ()
                 }*/
-                if (response[0].ipc_inicial){
+                if (response[0]){
+                    console.log("Hay info")
                     $("#ipc_inicial").text("IPC Inicial: " + response[0].ipc_inicial);
                     $("#ipc_final").text("IPC Final: " + response[0].ipc_final);
+                    $("#liq_lcc").text("Número de meses a liq lcc: " + response[0].lcc);
+                    $("#lucro_cesante_consolidado").text("Lucro cesante consolidado: " + response[0].lucro_cesante_consolidado);
+                    $("#lucro_cesante_futuro").text("Lucro cesante futuro: " + response[0].lucro_cesante_futuro);
                 }
             },
             error: function (response) {
@@ -56,5 +80,9 @@
             }
         })
     })
+
+    $( function() {
+        $( "#accordion" ).accordion();
+    } );
 </script>
 {% endblock javascript%}

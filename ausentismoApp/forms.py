@@ -146,3 +146,4 @@ class CostosAccManoObraForm(ModelForm):
 
 class DanoMaterialForm(forms.Form):
     fecha_liquidacion = DateField(input_formats=settings.DATE_INPUT_FORMATS, widget=DatePickerInput(format='%d-%m-%Y'))
+

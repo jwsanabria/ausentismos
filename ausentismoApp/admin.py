@@ -60,6 +60,8 @@ admin.site.register(Csst_ba_laboral, AuditAdmin)
 admin.site.register(Csst_ba_personal, AuditAdmin)
 admin.site.register(Csst_inm_subestandar, AuditAdmin)
 admin.site.register(Csst_inm_amb_subestandar, AuditAdmin)
+admin.site.register(ExpectativaVida, AuditAdmin)
+admin.site.register(FactorIPC, AuditAdmin)
 
 
 
