@@ -39,6 +39,9 @@
                                     <th>Tiempo</th>
                                     <th>Factor</th>
                                     <th>Salario</th>
+                                    <th>Valor Diario</th>
+                                    <th>Valor Factor</th>
+                                    <th>Total</th>
                                     <th class="all">Acciones</th>
                                 </tr>
                             </thead>
@@ -51,6 +54,9 @@
                                         <td>{{ item.tiempo }}</td>
                                         <td>{{ item.factor }}</td>
                                         <td>{{ item.salario|prepend_dollars }}</td>
+                                        <td>{{ item.valor_diario|prepend_dollars }}</td>
+                                        <td>{{ item.valor_factor }}</td>
+                                        <td>{{ item.total|prepend_dollars }}</td>
                                         <td>
                                             <a onclick="return abrir_modal ('{% url 'costos_edit' item.id %}')"
                                                class="btn btn-danger btn-circle" href="#">
@@ -112,6 +118,8 @@
                     });
 
                 var salario = formatter.format(fields["salario"])
+                var total = formatter.format(fields["total"])
+                var valorDiario = formatter.format(fields["valor_diario"])
                 $ ("#acompanamientos_table tbody"). prepend (
                     `<tr>
                     <td>${instance[0]['pk']}</td>
@@ -119,9 +127,14 @@
                     <td> ${fields["tipo_acompanamiento"] || ""} </td>
                     <td> ${fields["tiempo"] || ""} </td>
                     <td> ${fields["factor"] || ""} </td>
-
-
                     <td> ${salario || ""} </td>
+                    <td> ${valorDiario || ""} </td>
+                    <td> ${fields["valor_factor"] || ""} </td>
+                    <td> ${total || ""} </td>
+
+
+
+
                     <td>
                         <a onclick=" ${instance[0]['pk']})" class="btn btn-danger btn-circle" href="#">
                            <span class="fa fa-remove"></span>
