@@ -599,6 +599,9 @@ class Accidente(models.Model):
     def get_lucro_url(self):
         return reverse("lucro_cesante", kwargs={'pk': self.id})
 
+    def get_nomina_url(self):
+        return reverse("apropiaciones_nomina", kwargs={'pk': self.id})
+
 
 class CostosAccInsumosMedicos(models.Model):
     accidente = models.ForeignKey(Accidente, on_delete=models.CASCADE)
@@ -805,3 +808,62 @@ class CostosAccDanoEmergente(models.Model):
             self.created = timezone.now()
         self.modified = timezone.now()
         return super(CostosAccDanoEmergente, self).save(*args, **kwargs)
+
+
+class FactorTiemposAcompanamiento(models.Model):
+    tipo_acompanamiento = models.CharField(max_length=5, unique=True)
+    descripción = models.CharField(max_length=50)
+    factor = models.DecimalField(decimal_places=2, max_digits=4)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Factor tiempo acompañamiento'
+        verbose_name_plural = 'Lista de factores'
+
+    def __str__(self):
+        return str(self.tipo_acompanamiento)
+
+    def save(self, *args, **kwargs):
+        ''' On save, update timestamps '''
+        if not self.id:
+            self.created = timezone.now()
+        self.modified = timezone.now()
+        return super(FactorTiemposAcompanamiento, self).save(*args, **kwargs)
+
+
+class TiemposAccAcompanamiento(models.Model):
+    TIPO = (
+        ('A', 'Se encontraba en la actividad con el accidentado al momento del accidente'),
+        ('B', 'Ayudó en el rescate o estabilización del accidentado'),
+        ('C', 'Se encontraba en el área del accidente'),
+        ('D', 'Ayuda en la investigación del accidente'),
+        ('E', 'Ayuda en la implementación de acciones de corrección')
+    )
+    accidente = models.ForeignKey(Accidente, on_delete=models.CASCADE)
+    empleado = models.ForeignKey(Persona, on_delete=models.CASCADE)
+    tipo_acompanamiento = models.CharField(max_length=1, choices=TIPO)
+    tiempo = models.TimeField()
+    factor = models.ForeignKey(FactorTiemposAcompanamiento, on_delete=models.CASCADE)
+    salario = models.DecimalField(decimal_places=2, max_digits=10)
+    valor_diario = models.DecimalField(decimal_places=2, max_digits=10)
+    valor_factor = models.DecimalField(decimal_places=2, max_digits=10)
+    total = models.DecimalField(decimal_places=2, max_digits=10)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Acompañaieno en el accidente'
+        verbose_name_plural = 'Acompañamientos en el accidente'
+
+    def __str__(self):
+        return str(self.id)
+
+    def save(self, *args, **kwargs):
+        ''' On save, update timestamps '''
+        if not self.id:
+            self.created = timezone.now()
+        self.modified = timezone.now()
+        return super(TiemposAccAcompanamiento, self).save(*args, **kwargs)
+
+

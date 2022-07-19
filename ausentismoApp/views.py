@@ -417,6 +417,39 @@ class LucroView(View):
 
 
 
+class AprociacionesView(View):
+    def get(self, request, pk):
+        f_dano_emergente = CostosAccDanoEmergenteForm()
+        accidente = get_object_or_404(Accidente, id= pk)
+
+        salario = accidente.empleado.salario
+        edad = relativedelta(datetime.now(), accidente.empleado.fecha_nacimiento)
+        tiempo_expectativa = 0
+        try:
+            expectativa = ExpectativaVida.objects.filter(edad = edad.years).filter(tipo = accidente.empleado.sexo).get()
+            tiempo_expectativa = expectativa.expectativa
+        except ObjectDoesNotExist:
+            pass
+
+        estado = "LESIONADO"
+        if accidente.fallecido :
+            estado = "FALLECIDO"
+
+        context_data = {"accidente": accidente,
+                        'salario': salario,
+                        'edad': edad,
+                        'estado': estado,
+                        'lcf': tiempo_expectativa * 12,
+                        'interes_tecnico': interes_tecnico,
+                        'expectativa': tiempo_expectativa + edad.years,
+                        'f_dano_emergente': f_dano_emergente,
+                        'f_danomaterial': DanoMaterialForm(),
+                        'list_dano_emergente': CostosAccDanoEmergente.objects.filter(accidente=pk)}
+
+
+        return render(request, 'accidentes/apropiaciones.html', context_data)
+
+
 class CostosNuevosView(CreateView):
     model = CostosAccInsumosMedicos
     template_name = "accidentes/costo_insumos_med.html"
