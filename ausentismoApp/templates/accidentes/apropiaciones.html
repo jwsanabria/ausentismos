@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% load render_table from django_tables2 %}
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
 {% load bootstrap4 %}
@@ -8,47 +7,22 @@
 
 {% block content %}
     <div class="text-center bg-white font-weight-bold">
-        <h1 class="card-title bg-white align-content-center font-weight-bold text-capitalize">Documentación de lucro</h1>
+        <h1 class="card-title bg-white align-content-center font-weight-bold text-capitalize">Apropiaciones de Nómina</h1>
     </div>
     <div id="accordion">
         <h3>Apropiaciones de Nómina</h3>
         <div class="card">
-            <h6><span style="font-weight: bold">Estado del accidentado:</span> {{ estado }}</h6>
-            <h6>Edad: {{ edad.years }} años</h6>
-            <h6>Expectativa: {{ expectativa }} años</h6>
-            <h6>Salario: {{ salario }}</h6>
-            <h6 id="ipc_inicial"></h6>
-            <h6 id="ipc_final"></h6>
-            <h6 id="liq_lcc"></h6>
-            <h6>Número de meses a liq lcf: {{ lcf }}</h6>
-            <h6 id="liq_lcf"></h6>
-            <h6>Interes técnico: {{ interes_tecnico }}</h6>
-            <div class="panel-heading">
-                <form method="post" class="form-inline">
-                    {% csrf_token %}
-                    {{ f_danomaterial.as_p }}
-
-
-                </form>
-            </div>
-
-            <h6 id="lucro_cesante_consolidado"></h6>
-            <h6 id="lucro_cesante_futuro"></h6>
-        </div>
-        <h3>Daños morales</h3>
-        <div class="card">
-        </div>
-        <h3>Daño material a titulo de daño emergente</h3>
-        <div class="card">
             <div class="card-header">
-                <h4 class="card-title">Daño material</h4>
+                <h4 class="card-title">Acompañamientos en el accidente</h4>
             </div>
             <div class="card-body">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <form method="post" class="form-inline" id="form_dano_emergente">
+                        <form method="post" class="form" id="form_acompanamiento">
                             {% csrf_token %}
-                            {{ f_dano_emergente.as_p }}
+                            <table class="text-left p-2 m-2">
+                                {{ f_tiempos_acompanamiento.as_table }}
+                            </table>
 
                             <button type="submit" class="btn btn-primary mb-2"><span class="fa fa-save"></span> Guardar</button>
                         </form>
@@ -56,21 +30,27 @@
 
                         <!-- /.panel-heading -->
                     <div class="panel-body">
-                        <table width="100%" class="table table-striped table-bordered table-hover table-sm" id="dano_emergente_table">
+                        <table width="100%" class="table table-striped table-bordered table-hover table-sm" id="acompanamientos_table">
                             <thead>
                                 <tr>
                                     <th>Id</th>
-                                    <th>Descripción</th>
-                                    <th>Valor</th>
+                                    <th>Empleado</th>
+                                    <th>Tipo</th>
+                                    <th>Tiempo</th>
+                                    <th>Factor</th>
+                                    <th>Salario</th>
                                     <th class="all">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for item in list_dano_emergente %}
+                                {% for item in list_acompanamientos %}
                                     <tr>
                                         <td>{{ item.id }}</td>
-                                        <td>{{ item.descripcion }}</td>
-                                        <td>{{ item.valor|prepend_dollars }}</td>
+                                        <td>{{ item.empleado }}</td>
+                                        <td>{{ item.tipo_acompanamiento }}</td>
+                                        <td>{{ item.tiempo }}</td>
+                                        <td>{{ item.factor }}</td>
+                                        <td>{{ item.salario|prepend_dollars }}</td>
                                         <td>
                                             <a onclick="return abrir_modal ('{% url 'costos_edit' item.id %}')"
                                                class="btn btn-danger btn-circle" href="#">
@@ -85,51 +65,23 @@
                 </div>
             </div>
         </div>
+        <h3>Daño material a titulo de daño emergente</h3>
+        <div class="card">
+        </div>
     </div>
 {% endblock content%}
 
 {% block javascript%}
 <script>
-    $ ("#id_fecha_liquidacion"). focusout (function (e) {
-        e.preventDefault ();
 
-        var fecha_liquidacion = $ (this) .val ();
-        console.log(fecha_liquidacion)
-        // GET AJAX request
-        $ .ajax ({
-            type: 'GET',
-            url: "{% url 'liquidacion_view'%}",
-            data: {"fecha_liquidacion": fecha_liquidacion, "id_accidente": {{ accidente.id }}, "lcf": {{ lcf }}},
-            dataType:"json",
-            success: function (response) {
-                console.log(response)
-                // if not valid user, alert the user
-                /*if (! response ["valid"]) {
-                    alert ("You cannot create a friend with same nick name");
-                    var nickName = $ ("# id_nick_name");
-                    nickName.val ("")
-                    nickName.focus ()
-                }*/
-                if (response[0]){
-                    console.log("Hay info")
-                    $("#ipc_inicial").text("IPC Inicial: " + response[0].ipc_inicial);
-                    $("#ipc_final").text("IPC Final: " + response[0].ipc_final);
-                    $("#liq_lcc").text("Número de meses a liq lcc: " + response[0].lcc);
-                    $("#lucro_cesante_consolidado").text("Lucro cesante consolidado: " + response[0].lucro_cesante_consolidado);
-                    $("#lucro_cesante_futuro").text("Lucro cesante futuro: " + response[0].lucro_cesante_futuro);
-                }
-            },
-            error: function (response) {
-                console.log (response)
-            }
-        })
-    })
 
     $( function() {
         $( "#accordion" ).accordion();
     } );
 
-    $ ("#form_dano_emergente"). submit (function (e) {
+
+
+    $ ("#form_acompanamiento"). submit (function (e) {
         // preventing from page reload and default actions
         e.preventDefault ();
         // serialize the data for sending the form data.
@@ -137,14 +89,14 @@
         // make POST ajax call
         $ .ajax ({
             type: 'POST',
-            url: "{% url 'dano_emergente_view' accidente.id %}",
+            url: "{% url 'ajax_acompanamiento' accidente.id %}",
             data: serializedData,
             success: function (response) {
                 // on successfull creating object
                 // first\. clear the form.
-                $ ("#form_dano_emergente"). trigger ('reset');
+                $ ("#form_acompanamiento"). trigger ('reset');
                 // 2\. focus to nickname input
-                $ ("#id_descripcion"). focus ();
+                //$ ("#id_descripcion"). focus ();
 
                 // display the newly friend to table.
                 var instance = JSON.parse (response ["instance"]);
@@ -159,12 +111,17 @@
                     // maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
                     });
 
-                var valor = formatter.format(fields["valor"])
-                $ ("#dano_emergente_table tbody"). prepend (
+                var salario = formatter.format(fields["salario"])
+                $ ("#acompanamientos_table tbody"). prepend (
                     `<tr>
                     <td>${instance[0]['pk']}</td>
-                    <td> ${fields["descripcion"] || ""} </td>
-                    <td> ${valor || ""} </td>
+                    <td> ${fields["empleado"] || ""} </td>
+                    <td> ${fields["tipo_acompanamiento"] || ""} </td>
+                    <td> ${fields["tiempo"] || ""} </td>
+                    <td> ${fields["factor"] || ""} </td>
+
+
+                    <td> ${salario || ""} </td>
                     <td>
                         <a onclick=" ${instance[0]['pk']})" class="btn btn-danger btn-circle" href="#">
                            <span class="fa fa-remove"></span>
@@ -179,5 +136,39 @@
             }
         })
     })
+
+    $('.select2').select2({
+        theme: 'bootstrap4',
+        language: 'es'
+    });
+    $.ajaxSetup({
+        data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+    });
+    $('select[name="empleado"]').select2({
+        allowClear: true,
+        language: 'es',
+        ajax: {
+
+            url: "{% url 'busqueda_persona_view' %}",
+            delay: 250,
+              data: function(params){
+                var queryParameters = {
+                    term: params.term,
+                    action: 'autocomplete'
+                }
+                return queryParameters;
+              },
+              processResults: function(data){
+                return {
+                    results: data
+                };
+              },
+              type: 'POST',
+
+            // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
+        },
+        placeholder: 'Ingrese el nombre del empleado',
+        minimumInputLength: 3,
+    });
 </script>
 {% endblock javascript%}

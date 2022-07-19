@@ -23,6 +23,38 @@ from django.views.decorators.csrf import csrf_protect, csrf_exempt
 interes_tecnico = 0.004867
 
 
+
+
+def postAcompanamiento (request, *args, **kwargs):
+    accidente = get_object_or_404(Accidente, id=kwargs['pk'])
+    # request should be ajax and method should be POST.
+    if request.is_ajax and request.method == "POST":
+        # get the form data
+        form = TiemposAccAcompanamientoForm(request.POST)
+        acompanante = get_object_or_404(Persona, id=request.POST["empleado"])
+        factor = get_object_or_404(FactorTiemposAcompanamiento, id=request.POST["factor"])
+        form.instance.salario = acompanante.salario
+        form.instance.valor_diario = acompanante.salario/30
+        form.instance.valor_factor = factor.factor
+        form.instance.total = ((acompanante.salario/30)*factor.factor)*1
+
+
+        form.instance.accidente = accidente
+        # save the data and after fetch the object in instance
+        if form.is_valid():
+            instance = form.save()
+            # serialize an object in json
+            ser_instance = serializers.serialize('json', [instance,])
+            # send to client side.
+            return JsonResponse({"instance": ser_instance}, status=200)
+        else:
+            # some form errors occured.
+            return JsonResponse({"error": form.errors}, status=400)
+
+    # some error occured
+    return JsonResponse({"error": ""}, status=400)
+
+
 def postInsumo (request, *args, **kwargs):
     accidente = get_object_or_404(Accidente, id=kwargs['pk'])
     # request should be ajax and method should be POST.
@@ -184,12 +216,12 @@ class BuscarPersonaView(View):
             action = request.POST['action']
 
             if action == 'autocomplete':
-                data = {}
+                data = []
                 for i in Persona.objects.filter(nombre__icontains=request.POST['term']):
                     item = i.personaToDictionary()
                     item['text'] = i.__str__()
                     item['id'] = i.id
-                    data = {'data': item}
+                    data.append(item)
         except Exception as e:
             data['error']: str(e)
 
@@ -419,33 +451,12 @@ class LucroView(View):
 
 class AprociacionesView(View):
     def get(self, request, pk):
-        f_dano_emergente = CostosAccDanoEmergenteForm()
+        f_tiempos_acompanamiento = TiemposAccAcompanamientoForm()
         accidente = get_object_or_404(Accidente, id= pk)
 
-        salario = accidente.empleado.salario
-        edad = relativedelta(datetime.now(), accidente.empleado.fecha_nacimiento)
-        tiempo_expectativa = 0
-        try:
-            expectativa = ExpectativaVida.objects.filter(edad = edad.years).filter(tipo = accidente.empleado.sexo).get()
-            tiempo_expectativa = expectativa.expectativa
-        except ObjectDoesNotExist:
-            pass
-
-        estado = "LESIONADO"
-        if accidente.fallecido :
-            estado = "FALLECIDO"
-
         context_data = {"accidente": accidente,
-                        'salario': salario,
-                        'edad': edad,
-                        'estado': estado,
-                        'lcf': tiempo_expectativa * 12,
-                        'interes_tecnico': interes_tecnico,
-                        'expectativa': tiempo_expectativa + edad.years,
-                        'f_dano_emergente': f_dano_emergente,
-                        'f_danomaterial': DanoMaterialForm(),
-                        'list_dano_emergente': CostosAccDanoEmergente.objects.filter(accidente=pk)}
-
+                        'f_tiempos_acompanamiento': f_tiempos_acompanamiento,
+                        'list_acompanamientos': TiemposAccAcompanamiento.objects.filter(accidente=pk)}
 
         return render(request, 'accidentes/apropiaciones.html', context_data)
 

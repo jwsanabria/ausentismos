@@ -27,4 +27,5 @@ urlpatterns = [
     path('accidentes/costos/transporte/<int:pk>', views.postTransporte, name = "ajax_transporte"),
     path('accidentes/costos/insumo_medico/<int:pk>', views.postInsumo, name = "ajax_insumo"),
     path('accidentes/apropiaciones/<int:pk>', AprociacionesView.as_view(), name='apropiaciones_nomina'),
+    path('accidentes/apropiaciones/new/<int:pk>', views.postAcompanamiento, name='ajax_acompanamiento'),
 ]

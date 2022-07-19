@@ -63,6 +63,7 @@ admin.site.register(Csst_inm_amb_subestandar, AuditAdmin)
 admin.site.register(ExpectativaVida, AuditAdmin)
 admin.site.register(FactorIPC, AuditAdmin)
 admin.site.register(FactorTiemposAcompanamiento, AuditAdmin)
+admin.site.register(TipoAcompanamiento, AuditAdmin)
 
 
 

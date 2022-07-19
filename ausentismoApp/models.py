@@ -832,17 +832,30 @@ class FactorTiemposAcompanamiento(models.Model):
         return super(FactorTiemposAcompanamiento, self).save(*args, **kwargs)
 
 
+
+class TipoAcompanamiento(models.Model):
+    descripcion = models.CharField(max_length=80, unique=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Tipo acompañamiento'
+        verbose_name_plural = 'Lista de tipos de acompañamiento'
+
+    def __str__(self):
+        return str(self.descripcion)
+
+    def save(self, *args, **kwargs):
+        ''' On save, update timestamps '''
+        if not self.id:
+            self.created = timezone.now()
+        self.modified = timezone.now()
+        return super(TipoAcompanamiento, self).save(*args, **kwargs)
+
 class TiemposAccAcompanamiento(models.Model):
-    TIPO = (
-        ('A', 'Se encontraba en la actividad con el accidentado al momento del accidente'),
-        ('B', 'Ayudó en el rescate o estabilización del accidentado'),
-        ('C', 'Se encontraba en el área del accidente'),
-        ('D', 'Ayuda en la investigación del accidente'),
-        ('E', 'Ayuda en la implementación de acciones de corrección')
-    )
     accidente = models.ForeignKey(Accidente, on_delete=models.CASCADE)
     empleado = models.ForeignKey(Persona, on_delete=models.CASCADE)
-    tipo_acompanamiento = models.CharField(max_length=1, choices=TIPO)
+    tipo_acompanamiento = models.ForeignKey(TipoAcompanamiento, on_delete=models.CASCADE)
     tiempo = models.TimeField()
     factor = models.ForeignKey(FactorTiemposAcompanamiento, on_delete=models.CASCADE)
     salario = models.DecimalField(decimal_places=2, max_digits=10)

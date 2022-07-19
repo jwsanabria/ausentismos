@@ -159,3 +159,23 @@ class CostosAccDanoEmergenteForm(ModelForm):
             'valor': forms.NumberInput(attrs={'class': 'form-control mb-2 mr-sm-2', 'placeholder': 'Valor hora'}),
             'descripcion': forms.TextInput(attrs={'class': 'form-control mb-2 mr-sm-2', 'placeholder': 'Descripción'}),
         }
+
+
+class TiemposAccAcompanamientoForm(ModelForm):
+    empleado = forms.ModelChoiceField(queryset=Persona.objects.all(), widget=Select(attrs={'class': 'form-control'}))
+
+    def __init__(self, *args, **kwargs):
+        super(TiemposAccAcompanamientoForm, self).__init__(*args, **kwargs)
+
+        for name in self.fields.keys():
+            self.fields[name].widget.attrs.update({
+                'class': 'form-control',
+            })
+
+    class Meta:
+        model = TiemposAccAcompanamiento
+        exclude = ('salario', 'valor_diario', 'valor_factor', 'total')
+        fields = ('empleado', 'tipo_acompanamiento', 'tiempo', 'factor')
+        widgets = {
+            'tiempo': TimePickerInput()
+        }
