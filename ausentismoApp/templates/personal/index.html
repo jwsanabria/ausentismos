@@ -1,16 +1,21 @@
 {% extends "base.html" %}
 {% load render_table from django_tables2 %}
-
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+{% load bootstrap4 %}
 {% load static %}
 
 {% block content %}
-    <div class="container-sm p-3 bg-white">
-        <div class="float-none">
-            <h1>Empleados</h1>
+    <div class="card card-default">
+        <div class="card-header">
+            <h1 class="card-title">Empleados</h1>
         </div>
-        <div class="d-flex justify-content-center">
-            <div class="table-responsive">
-                {% render_table personas %}
+        <div class="card-body">
+            <div class="d-flex justify-content-center">
+                <div class="table-responsive">
+                    {% render_table personas %}
+
+                </div>
             </div>
         </div>
     </div>
