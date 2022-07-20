@@ -27,20 +27,12 @@ interes_tecnico = 0.004867
 
 
 
-def postAcompanamiento (request, *args, **kwargs):
+def postAdicionales (request, *args, **kwargs):
     accidente = get_object_or_404(Accidente, id=kwargs['pk'])
     # request should be ajax and method should be POST.
     if request.is_ajax and request.method == "POST":
         # get the form data
-        form = TiemposAccAcompanamientoForm(request.POST)
-        acompanante = get_object_or_404(Persona, id=request.POST["empleado"])
-        factor = get_object_or_404(FactorTiemposAcompanamiento, id=request.POST["factor"])
-        form.instance.salario = acompanante.salario
-        form.instance.valor_diario = acompanante.salario/30
-        form.instance.valor_factor = factor.factor
-        form.instance.total = ((acompanante.salario/30)*factor.factor)*1
-
-
+        form = CostosAccAdicionalesForm(request.POST)
         form.instance.accidente = accidente
         # save the data and after fetch the object in instance
         if form.is_valid():
@@ -56,6 +48,53 @@ def postAcompanamiento (request, *args, **kwargs):
     # some error occured
     return JsonResponse({"error": ""}, status=400)
 
+
+def postCapacitador(request, *args, **kwargs):
+    accidente = get_object_or_404(Accidente, id=kwargs['pk'])
+    capacitador = get_object_or_404(Persona, id=request.POST["capacitador"])
+    # request should be ajax and method should be POST.
+    if request.is_ajax and request.method == "POST":
+        # get the form data
+        form = CapacitacionAccForm(request.POST)
+        form.instance.accidente = accidente
+        form.instance.salario = capacitador.salario
+        # save the data and after fetch the object in instance
+        if form.is_valid():
+            instance = form.save()
+            # serialize an object in json
+            ser_instance = serializers.serialize('json', [instance,])
+            # send to client side.
+            return JsonResponse({"instance": ser_instance}, status=200)
+        else:
+            # some form errors occured.
+            return JsonResponse({"error": form.errors}, status=400)
+
+    # some error occured
+    return JsonResponse({"error": ""}, status=400)
+
+
+def postReemplazo(request, *args, **kwargs):
+    accidente = get_object_or_404(Accidente, id=kwargs['pk'])
+    reemplazo = get_object_or_404(Persona, id=request.POST["reemplazo"])
+    # request should be ajax and method should be POST.
+    if request.is_ajax and request.method == "POST":
+        # get the form data
+        form = ReemplazosAccForm(request.POST)
+        form.instance.accidente = accidente
+        form.instance.salario = reemplazo.salario
+        # save the data and after fetch the object in instance
+        if form.is_valid():
+            instance = form.save()
+            # serialize an object in json
+            ser_instance = serializers.serialize('json', [instance,])
+            # send to client side.
+            return JsonResponse({"instance": ser_instance}, status=200)
+        else:
+            # some form errors occured.
+            return JsonResponse({"error": form.errors}, status=400)
+
+    # some error occured
+    return JsonResponse({"error": ""}, status=400)
 
 def postInsumo (request, *args, **kwargs):
     accidente = get_object_or_404(Accidente, id=kwargs['pk'])
@@ -525,3 +564,31 @@ class CostosEditView(UpdateView):
     context_object_name = 'obj'
     form_class = CostosAccInsumosMedicosForm
     success_url = reverse_lazy("ausentismo:costos_list")
+
+
+class AdaptacionCambioView(View):
+    def get(self, request, pk):
+        accidente = get_object_or_404(Accidente, id=pk)
+        f_reemplazo = ReemplazosAccForm()
+        f_capacitador = CapacitacionAccForm()
+        f_costos_adicionales = CostosAccAdicionalesForm()
+
+        context_data = {"accidente": accidente,
+                    'f_reemplazo': f_reemplazo,
+                    'f_capacitador': f_capacitador,
+                    'f_costos_adicionales': f_costos_adicionales,
+                    'list_reemplazos': ReemplazoAccidente.objects.filter(accidente=pk),
+                    'list_capacitadores': CapacitadorAccidente.objects.filter(accidente=pk),
+                    'list_costos': CostosAccAdicionales.objects.filter(accidente=pk), }
+
+        return render(request, 'accidentes/adaptacion_cambio.html', context_data)
+
+
+class BalanceView(View):
+    def get(self, request, pk):
+        accidente = get_object_or_404(Accidente, id=pk)
+
+        context_data = {"accidente": accidente,
+                     }
+
+        return render(request, 'accidentes/balance.html', context_data)

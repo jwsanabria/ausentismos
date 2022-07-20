@@ -114,69 +114,6 @@
 
 
 
-    $ ("#form_acompanamientos"). submit (function (e) {
-        // preventing from page reload and default actions
-        e.preventDefault ();
-        // serialize the data for sending the form data.
-        var serializedData = $ (this) .serialize ();
-        // make POST ajax call
-        $ .ajax ({
-            type: 'POST',
-            url: "{% url 'ajax_acompanamiento' accidente.id %}",
-            data: serializedData,
-            success: function (response) {
-                // on successfull creating object
-                // first\. clear the form.
-                $ ("#form_acompanamiento"). trigger ('reset');
-                // 2\. focus to nickname input
-                //$ ("#id_descripcion"). focus ();
-
-                // display the newly friend to table.
-                var instance = JSON.parse (response ["instance"]);
-                console.log(instance)
-                var fields = instance [0] ["fields"];
-
-                var formatter = new Intl.NumberFormat('en-US', {
-                    style: 'currency',
-                    currency: 'USD',
-                    // These options are needed to round to whole numbers if that's what you want.
-                    // minimumFractionDigits: 0, // (this suffices for whole numbers, but will print 2500.10 as $2,500.1)
-                    // maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
-                    });
-
-                var salario = formatter.format(fields["salario"])
-                var total = formatter.format(fields["total"])
-                var valorDiario = formatter.format(fields["valor_diario"])
-                $ ("#acompanamientos_table tbody"). prepend (
-                    `<tr>
-                    <td>${instance[0]['pk']}</td>
-                    <td> ${fields["empleado"] || ""} </td>
-                    <td> ${fields["tipo_acompanamiento"] || ""} </td>
-                    <td> ${fields["tiempo"] || ""} </td>
-                    <td> ${fields["factor"] || ""} </td>
-                    <td> ${salario || ""} </td>
-                    <td> ${valorDiario || ""} </td>
-                    <td> ${fields["valor_factor"] || ""} </td>
-                    <td> ${total || ""} </td>
-
-
-
-
-                    <td>
-                        <a onclick=" ${instance[0]['pk']})" class="btn btn-danger btn-circle" href="#">
-                           <span class="fa fa-remove"></span>
-                        </a>
-                    </td>
-                    </tr> `
-                )
-            },
-            error: function (response) {
-                // alert the error if any error occured
-                alert (response["responseJSON"] ["error"]["valor"]);
-            }
-        })
-    })
-
     $('.select2').select2({
         theme: 'bootstrap4',
         language: 'es'

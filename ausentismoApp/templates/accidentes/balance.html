@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+{% load bootstrap4 %}
+{% load static %}
+{% load filters_web %}
+
+{% block content %}
+    <div class="text-center bg-white font-weight-bold">
+        <h1 class="card-title bg-white align-content-center font-weight-bold text-capitalize">Balance del accidente</h1>
+    </div>
+    <div id="accordion">
+        <h3>Datos del Accidente</h3>
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Datos del accidente</h4>
+            </div>
+            <div class="card-body">
+
+            </div>
+        </div>
+    </div>
+{% endblock content%}
+
+{% block javascript%}
+<script>
+
+    $( function() {
+        $( "#accordion" ).accordion();
+    } );
+
+</script>
+{% endblock javascript%}

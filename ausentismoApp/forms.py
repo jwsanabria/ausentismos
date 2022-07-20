@@ -179,3 +179,55 @@ class TiemposAccAcompanamientoForm(ModelForm):
         widgets = {
             'tiempo': TimePickerInput()
         }
+
+class ReemplazosAccForm(ModelForm):
+    reemplazo = forms.ModelChoiceField(queryset=Persona.objects.all(), widget=Select(attrs={'class': 'form-control'}))
+
+    def __init__(self, *args, **kwargs):
+        super(ReemplazosAccForm, self).__init__(*args, **kwargs)
+
+        for name in self.fields.keys():
+            self.fields[name].widget.attrs.update({
+                'class': 'form-control',
+            })
+
+    class Meta:
+        model = ReemplazoAccidente
+        exclude = ('salario',)
+        fields = ('reemplazo', 'tipo_reemplazo', 'dias')
+        widgets = {
+            'dias': forms.NumberInput(attrs={'class': 'form-control'}),
+        }
+
+
+
+class CapacitacionAccForm(ModelForm):
+    capacitador = forms.ModelChoiceField(queryset=Persona.objects.all(), widget=Select(attrs={'class': 'form-control'}))
+
+    def __init__(self, *args, **kwargs):
+        super(CapacitacionAccForm, self).__init__(*args, **kwargs)
+
+        for name in self.fields.keys():
+            self.fields[name].widget.attrs.update({
+                'class': 'form-control',
+            })
+
+    class Meta:
+        model = CapacitadorAccidente
+        exclude = ('salario',)
+        fields = ('capacitador', 'dias')
+        widgets = {
+            'dias': forms.NumberInput(attrs={'class': 'form-control'}),
+        }
+
+class CostosAccAdicionalesForm(ModelForm):
+    valor = forms.DecimalField(validators=[validador_valor_positivo])
+
+    class Meta:
+        model = CostosAccAdicionales
+
+        fields = ('actividad', 'valor')
+        widgets = {
+            'valor': forms.NumberInput(attrs={'class': 'form-control mb-2 mr-sm-2', 'placeholder': 'Valor'}),
+            'actividad': forms.TextInput(attrs={'class': 'form-control mb-2 mr-sm-2', 'placeholder': 'Actividad'}),
+        }

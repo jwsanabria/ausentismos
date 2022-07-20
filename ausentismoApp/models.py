@@ -602,6 +602,12 @@ class Accidente(models.Model):
     def get_nomina_url(self):
         return reverse("apropiaciones_nomina", kwargs={'pk': self.id})
 
+    def get_cambio_url(self):
+        return reverse("adaptacion_cambio", kwargs={'pk': self.id})
+
+    def get_balance_url(self):
+        return reverse("balance", kwargs={'pk': self.id})
+
 
 class CostosAccInsumosMedicos(models.Model):
     accidente = models.ForeignKey(Accidente, on_delete=models.CASCADE)
@@ -879,6 +885,56 @@ class TiemposAccAcompanamiento(models.Model):
         self.modified = timezone.now()
         return super(TiemposAccAcompanamiento, self).save(*args, **kwargs)
 
+class ReemplazoAccidente(models.Model):
+    TIPO_REEMPLAZO=(
+        ('INTERNO', 'Interno'),
+        ('EXTERNO', 'Externo')
+    )
+    accidente = models.ForeignKey(Accidente, on_delete=models.CASCADE)
+    reemplazo = models.ForeignKey(Persona, on_delete=models.CASCADE)
+    tipo_reemplazo = models.CharField(max_length=7, choices=TIPO_REEMPLAZO)
+    dias = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(150)])
+    salario = models.DecimalField(decimal_places=2, max_digits=10)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Remplazo del accideentado'
+        verbose_name_plural = 'Reemplazo del accidentado'
+
+    def __str__(self):
+        return str(self.reemplazo)
+
+    def save(self, *args, **kwargs):
+        ''' On save, update timestamps '''
+        if not self.id:
+            self.created = timezone.now()
+        self.modified = timezone.now()
+        return super(ReemplazoAccidente, self).save(*args, **kwargs)
+
+
+class CapacitadorAccidente(models.Model):
+    accidente = models.ForeignKey(Accidente, on_delete=models.CASCADE)
+    capacitador = models.ForeignKey(Persona, on_delete=models.CASCADE)
+    dias = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(150)])
+    salario = models.DecimalField(decimal_places=2, max_digits=10)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Capacitación para el reemplazo'
+        verbose_name_plural = 'Capacitación para el reemplazo'
+
+    def __str__(self):
+        return str(self.capacitador)
+
+    def save(self, *args, **kwargs):
+        ''' On save, update timestamps '''
+        if not self.id:
+            self.created = timezone.now()
+        self.modified = timezone.now()
+        return super(CapacitadorAccidente, self).save(*args, **kwargs)
+
 
 class FactorAccParafiscales(models.Model):
     descripcion = models.CharField(max_length=80, unique=True)
@@ -899,5 +955,28 @@ class FactorAccParafiscales(models.Model):
             self.created = timezone.now()
         self.modified = timezone.now()
         return super(FactorAccParafiscales, self).save(*args, **kwargs)
+
+
+class CostosAccAdicionales(models.Model):
+    accidente = models.ForeignKey(Accidente, on_delete=models.CASCADE)
+    actividad = models.CharField(max_length=200)
+    valor = models.DecimalField(decimal_places=2, max_digits=10, validators=[MinValueValidator(Decimal('0.01'))])
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Costos adicionales'
+        verbose_name_plural = 'Lista de costos adicionales'
+
+    def __str__(self):
+        return str(self.id)
+
+    def save(self, *args, **kwargs):
+        ''' On save, update timestamps '''
+        if not self.id:
+            self.created = timezone.now()
+        self.modified = timezone.now()
+        return super(CostosAccAdicionales, self).save(*args, **kwargs)
+
 
 
