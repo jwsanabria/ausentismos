@@ -64,6 +64,7 @@ admin.site.register(ExpectativaVida, AuditAdmin)
 admin.site.register(FactorIPC, AuditAdmin)
 admin.site.register(FactorTiemposAcompanamiento, AuditAdmin)
 admin.site.register(TipoAcompanamiento, AuditAdmin)
+admin.site.register(FactorAccParafiscales, AuditAdmin)
 
 
 

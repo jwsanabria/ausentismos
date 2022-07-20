@@ -1,6 +1,8 @@
 from django_tables2 import SingleTableView, LazyPaginator
 from django_tables2.export import ExportMixin
+from django.db.models import Count, Sum
 from django_tables2.config import RequestConfig
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, HttpResponse
 from .models import *
 from .forms import *
@@ -454,11 +456,50 @@ class AprociacionesView(View):
         f_tiempos_acompanamiento = TiemposAccAcompanamientoForm()
         accidente = get_object_or_404(Accidente, id= pk)
 
+        matrix = []
+
+        result = TiemposAccAcompanamiento.objects.filter(accidente=pk).values('tipo_acompanamiento').order_by('tipo_acompanamiento').annotate(dTotal=Sum('total'))
+        tipos_acompanamiento = TipoAcompanamiento.objects.all().order_by('id')
+        factor_parafiscales = FactorAccParafiscales.objects.all().order_by('id')
+        for parafiscal in factor_parafiscales:
+            fila = []
+            fila.append(parafiscal.descripcion)
+            for tipo in tipos_acompanamiento:
+                valor = 0;
+                for r in result.iterator():
+                    if tipo.id == r['tipo_acompanamiento']:
+                        valor = parafiscal.factor*r['dTotal']
+                fila.append(valor)
+            matrix.append(fila)
+
+
+
+
         context_data = {"accidente": accidente,
                         'f_tiempos_acompanamiento': f_tiempos_acompanamiento,
-                        'list_acompanamientos': TiemposAccAcompanamiento.objects.filter(accidente=pk)}
+                        'list_acompanamientos': TiemposAccAcompanamiento.objects.filter(accidente=pk),
+                        'matrix': matrix, 'factor_parafiscal': factor_parafiscales, 'tipos_acompanamiento': tipos_acompanamiento}
 
         return render(request, 'accidentes/apropiaciones.html', context_data)
+
+    def post(selft, request, *args, **kwargs):
+        accidente = get_object_or_404(Accidente, id=kwargs['pk'])
+        form = TiemposAccAcompanamientoForm(request.POST)
+        acompanante = get_object_or_404(Persona, id=request.POST["empleado"])
+        factor = get_object_or_404(FactorTiemposAcompanamiento, id=request.POST["factor"])
+        form.instance.salario = acompanante.salario
+        form.instance.valor_diario = acompanante.salario / 30
+        form.instance.valor_factor = factor.factor
+        form.instance.total = ((acompanante.salario / 30) * factor.factor) * 1
+
+        form.instance.accidente = accidente
+        # save the data and after fetch the object in instance
+        if form.is_valid():
+            instance = form.save()
+            return HttpResponseRedirect(reverse('apropiaciones_nomina', kwargs={'pk':instance.accidente.id}) )
+
+        # some error occured
+        return HttpResponseRedirect(reverse('apropiaciones_nomina', kwargs={'pk':kwargs['pk']}))
 
 
 class CostosNuevosView(CreateView):

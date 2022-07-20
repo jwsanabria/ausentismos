@@ -880,3 +880,24 @@ class TiemposAccAcompanamiento(models.Model):
         return super(TiemposAccAcompanamiento, self).save(*args, **kwargs)
 
 
+class FactorAccParafiscales(models.Model):
+    descripcion = models.CharField(max_length=80, unique=True)
+    factor = models.DecimalField(decimal_places=2, max_digits=4)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Factor de accidentalidad por Parafiscales'
+        verbose_name_plural = 'Factores de accidentalidad por parafiscales'
+
+    def __str__(self):
+        return str(self.id)
+
+    def save(self, *args, **kwargs):
+        ''' On save, update timestamps '''
+        if not self.id:
+            self.created = timezone.now()
+        self.modified = timezone.now()
+        return super(FactorAccParafiscales, self).save(*args, **kwargs)
+
+

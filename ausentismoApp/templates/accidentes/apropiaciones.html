@@ -73,6 +73,33 @@
         </div>
         <h3>Daño material a titulo de daño emergente</h3>
         <div class="card">
+            <div class="panel-body">
+                <table width="100%" class="table table-striped table-bordered table-hover table-sm" id="acompanamientos_table">
+                    <thead>
+                        <tr>
+                            <th>-</th>
+                            {% for item in tipos_acompanamiento %}
+                                <th>{{ item.descripcion }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for fila in matrix %}
+                        <tr>
+                            {% for columna in fila %}
+                                {% if forloop.first %}
+                                    <td>{{ columna }}</td>
+                                {% else %}
+                                    <td>{{ columna|prepend_dollars }}</td>
+                                {% endif %}
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+
         </div>
     </div>
 {% endblock content%}
@@ -87,7 +114,7 @@
 
 
 
-    $ ("#form_acompanamiento"). submit (function (e) {
+    $ ("#form_acompanamientos"). submit (function (e) {
         // preventing from page reload and default actions
         e.preventDefault ();
         // serialize the data for sending the form data.
