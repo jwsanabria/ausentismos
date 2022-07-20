@@ -19,6 +19,7 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from django.db.models import ObjectDoesNotExist
 from django.core import serializers
+from django.db.models import F
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
 
 
@@ -588,7 +589,76 @@ class BalanceView(View):
     def get(self, request, pk):
         accidente = get_object_or_404(Accidente, id=pk)
 
+        valor_1 = 0;
+        valor_2 = 0;
+        valor_3 = 0;
+        valor_4 = 0;
+        valor_5 = 0;
+        valor_6 = 0;
+        valor_7 = 0;
+        valor_8 = 0;
+        valor_9 = 0;
+        valor_10 = 0;
+        valor_11 = 0;
+        valor_12 = 0;
+        valor_13 = 0;
+        valor_14 = 0;
+        valor_15 = 0;
+        valor_16 = 0;
+
+
+
+
+        result = TiemposAccAcompanamiento.objects.filter(accidente=accidente.id).values('tipo_acompanamiento').order_by('tipo_acompanamiento').annotate(dTotal=Sum('total'))
+
+        for r in result.iterator():
+            if 1 == r['tipo_acompanamiento']:
+                valor_2 = r['dTotal']
+            elif 2 == r['tipo_acompanamiento']:
+                valor_9 = r['dTotal']
+            elif 3 == r['tipo_acompanamiento']:
+                valor_10 = r['dTotal']
+            elif 4 == r['tipo_acompanamiento']:
+                valor_11 = r['dTotal']
+            elif 5 == r['tipo_acompanamiento']:
+                valor_12 = r['dTotal']
+
+        result = CostosAccInsumosMedicos.objects.filter(accidente= accidente.id).aggregate(total = Sum(F('valor')*F('cantidad')))['total']
+        if result is not None: valor_3 = valor_3 + result
+        result = CostosAccTransporte.objects.filter(accidente= accidente.id).aggregate(total=Sum(F('valor')))['total']
+        if result is not None: valor_3 = valor_3 +  result
+        result = CostosAccOtros.objects.filter(accidente=accidente.id).aggregate(total=Sum(F('valor')))['total']
+        if result is not None: valor_3 = valor_3 + result
+
+        result = CostosAccDanoEmergente.objects.filter(accidente= accidente.id).aggregate(total=Sum(F('valor')))['total']
+        if result is not None: valor_4 = valor_4 + result
+
+        result = CostosAccMaquinaria.objects.filter(accidente= accidente.id).aggregate(total = Sum(F('valor')*F('cantidad')))['total']
+        if result is not None: valor_14 = valor_14 + result
+
+        result = CostosAccRepuestos.objects.filter(accidente=accidente.id).aggregate(total=Sum(F('valor') * F('cantidad')))['total']
+        if result is not None: valor_15 = valor_15 + result
+
+        result = CostosAccManoObra.objects.filter(accidente=accidente.id).aggregate(total=Sum(F('valor') * F('cantidad')))['total']
+        if result is not None: valor_16 = valor_16 + result
+
         context_data = {"accidente": accidente,
+                        'valor_1': valor_1,
+                        'valor_2': valor_2,
+                        'valor_3': valor_3,
+                        'valor_4': valor_4,
+                        'valor_5': valor_5,
+                        'valor_6': valor_6,
+                        'valor_7': valor_7,
+                        'valor_8': valor_8,
+                        'valor_9': valor_9,
+                        'valor_10': valor_10,
+                        'valor_11': valor_11,
+                        'valor_12': valor_12,
+                        'valor_13': valor_13,
+                        'valor_14': valor_14,
+                        'valor_15': valor_15,
+                        'valor_16': valor_16,
                      }
 
         return render(request, 'accidentes/balance.html', context_data)
