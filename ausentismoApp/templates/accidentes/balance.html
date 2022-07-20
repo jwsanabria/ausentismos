@@ -5,6 +5,33 @@
 {% load static %}
 {% load filters_web %}
 
+{% block estilos %}
+    <style>
+        table, td, th {
+          border: 1px solid #ddd;
+          text-align: left;
+        }
+
+        table {
+          border-collapse: collapse;
+          width: 100%;
+        }
+
+        th, td {
+          padding: 10px;
+        }
+
+        th {
+            color: white;
+        }
+
+        #encabezado {
+            display: table-header-group;
+            background-color: lightyellow;
+        }
+    </style>
+{% endblock estilos %}
+
 {% block content %}
     <div class="text-center bg-white font-weight-bold">
         <h1 class="card-title bg-white align-content-center font-weight-bold text-capitalize">Balance del accidente</h1>
@@ -13,10 +40,254 @@
         <h3>Datos del Accidente</h3>
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title">Datos del accidente</h4>
+                <h4 class="card-title">Método Elementos de Producción</h4>
             </div>
             <div class="card-body">
-
+                <table  class="border-dark table-responsive">
+                    <thead class="bg-primary text-center col-sm">
+                        <th colspan="2"></th>
+                        <th>Mano de obra</th>
+                        <th>Maquinaria y Herramientas</th>
+                        <th>Materia Prima</th>
+                        <th>Instalaciones y equipos</th>
+                        <th>Tiempos</th>
+                    </thead>
+                    <tbdody>
+                        <tr>
+                            <td width="20%">Tiempos de accidente</td>
+                            <td  width="30%">Personal que se enconraba en la actididad con el accidentado al momento del accidente</td>
+                            <td width="10%"  style="text-align:right">&&&</td>
+                            <td width="10%"></td>
+                            <td width="10%"></td>
+                            <td width="10%"></td>
+                            <td width="10%"></td>
+                        </tr>
+                        <tr>
+                            <td rowspan="3">Apropiaciones de nomina</td>
+                            <td>Personal que se encontraba en la actividad con el accidentado al momento del accidente</td>
+                            <td  style="text-align:right">&&&</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Costo atención prímaria accidentado</td>
+                            <td  style="text-align:right">&&&</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Costo invalidez o fallecimiento</td>
+                            <td  style="text-align:right">&&&</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td rowspan="4">Tiempos de accidente</td>
+                            <td>Personal que ayudó en el rescate o estabilización del accidentado</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td  style="text-align:right">&&&</td>
+                        </tr>
+                        <tr>
+                            <td>Personal que se encontraba en el área del accidente</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td  style="text-align:right">&&&</td>
+                        </tr>
+                        <tr>
+                            <td>Personal que ayuda a la investigación del accidente</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td  style="text-align:right">&&&</td>
+                        </tr>
+                        <tr>
+                            <td>Personal que ayuda a la implementación de acciones de corrección</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td  style="text-align:right">&&&</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="4">Apropiaciones de nómina</td>
+                            <td>Personal que ayudó en el rescate o estabilización del accidentado</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td  style="text-align:right">&&&</td>
+                        </tr>
+                        <tr>
+                            <td>Personal que se encontraba en el área del accidente</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td  style="text-align:right">&&&</td>
+                        </tr>
+                        <tr>
+                            <td>Personal que ayuda a la investigación del accidente</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td  style="text-align:right">&&&</td>
+                        </tr>
+                        <tr>
+                            <td>Personal que ayuda a la implementación de acciones de corrección</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td  style="text-align:right">&&&</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>Adaptación al cambio</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td  style="text-align:right">&&&</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>Adaptación al cambio</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td  style="text-align:right">&&&</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>Maquinas, vehiculos y equipos</td>
+                            <td></td>
+                            <td  style="text-align:right">&&&</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>Materia prima</td>
+                            <td></td>
+                            <td></td>
+                            <td  style="text-align:right">&&&</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>Instalaciones y equipos</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td  style="text-align:right">&&&</td>
+                            <td></td>
+                        </tr>
+                    </tbdody>
+                </table>
+                <hr/>
+                <table>
+                    <tr>
+                        <td rowspan="19" class="bg-secondary text-white">HENRICH</td>
+                        <td rowspan="2" class="bg-info">DIRECTOS</td>
+                        <td colspan="2">ATENCION MEDICA</td>
+                        <td width="15%" class="text-right"></td>
+                        <td rowspan="2" class="bg-info">ASEGURABLES</td>
+                        <td rowspan="19" class="bg-primary text-white">SIMMONDS</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">PRESTACIONES</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td colspan="5"></td>
+                    </tr>
+                    <tr>
+                        <td rowspan="16" class="bg-warning">INDIRECTOS</td>
+                        <td>TIEMPOS ACCIDENTE</td>
+                        <td>PERSONAL QUE SE ENCONTRABA EN LA ACTIVIDAD CON EL ACCIDENTADO AL MOMENTO DEL ACCIDENTE</td>
+                        <td class="text-right">&&&</td>
+                        <td rowspan="16" class="bg-warning">NO ASEGURADOS</td>
+                    </tr>
+                    <tr>
+                        <td>APROPIACIONES</td>
+                        <td>PERSONAL QUE SE ENCONTRABA EN LA ACTIVIDAD CON EL ACCIDENTADO AL MOMENTO DEL ACCIDENTE</td>
+                        <td class="text-right">&&&</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">COSTO ATENCION PRIMARIA ACCIDENTADO</td>
+                        <td class="text-right">&&&</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">COSTOS INVALIDEZ O FALLECIMIENTO</td>
+                        <td class="text-right">&&&</td>
+                    </tr>
+                    <tr>
+                        <td rowspan="4">TIEMPOS DE ACCIDENTE</td>
+                        <td>PERSONAL QUE AYUDO EN EL RESCATE O ESTABILIZACION DEL ACCIDENTADO</td>
+                        <td class="text-right">&&&</td>
+                    </tr>
+                    <tr>
+                        <td>PERSONAL QUE SE ENCONTRABA EN EL AREA DEL ACCIDENTE</td>
+                        <td class="text-right">&&&</td>
+                    </tr>
+                    <tr>
+                        <td>PERSONAL QUE AYUDA A LA INVESTIGACION DEL ACCIDENTE</td>
+                        <td class="text-right">&&&</td>
+                    </tr>
+                    <tr>
+                        <td>PERSONAL QUE AYUDA A LA IMPLEMENTACION DE ACCIONES DE CORRECCION</td>
+                        <td class="text-right">&&&</td>
+                    </tr>
+                    <tr>
+                        <td rowspan="4">APROPIACIONES DE NÓMINA</td>
+                        <td>PERSONAL QUE AYUDO EN EL RESCATE O ESTABILIZACION DEL ACCIDENTADO</td>
+                        <td class="text-right">&&&</td>
+                    </tr>
+                    <tr>
+                        <td>PERSONAL QUE SE ENCONTRABA EN EL AREA DEL ACCIDENTE</td>
+                        <td class="text-right">&&&</td>
+                    </tr>
+                    <tr>
+                        <td>PERSONAL QUE AYUDA A LA INVESTIGACION DEL ACCIDENTE</td>
+                        <td class="text-right">&&&</td>
+                    </tr>
+                    <tr>
+                        <td>PERSONAL QUE AYUDA A LA IMPLEMENTACION DE ACCIONES DE CORRECCION</td>
+                        <td class="text-right">&&&</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">ADAPTACIÓN AL CAMBIO</td>
+                        <td class="text-right">&&&</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">MAQUINAS, VEHICULOS Y EQUIPOS</td>
+                        <td class="text-right">&&&</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">MATERIA PRIMA</td>
+                        <td class="text-right">&&&</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">INSTALCIONES Y EQUIPOS</td>
+                        <td class="text-right">&&&</td>
+                    </tr>
+                </table>
             </div>
         </div>
     </div>
