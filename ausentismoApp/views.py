@@ -606,9 +606,6 @@ class BalanceView(View):
         valor_15 = 0;
         valor_16 = 0;
 
-
-
-
         result = TiemposAccAcompanamiento.objects.filter(accidente=accidente.id).values('tipo_acompanamiento').order_by('tipo_acompanamiento').annotate(dTotal=Sum('total'))
 
         for r in result.iterator():
