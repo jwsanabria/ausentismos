@@ -80,9 +80,15 @@
                 <li class="nav-item {% if request.path == '/app/informes' %} active {% endif %} px-lg-4">
                     <a class="nav-link text-uppercase text-expanded" href="{% url 'informes' %}">Informes</a>
                 </li>
+                {% if user.is_staff %}
+                    <li class="nav-item {% if request.path == '/app/informes' %} active {% endif %} px-lg-4">
+                        <a class="nav-link text-uppercase text-expanded" href="/admin">ADMIN</a>
+                    </li>
+                {% endif %}
                 <li class="nav-item {% if request.path == '/app/informes' %} active {% endif %} px-lg-4">
                     <a class="nav-link text-uppercase text-expanded" href="{% url 'logout' %}">SALIR</a>
                 </li>
+
 
             </ul>
         </div>
