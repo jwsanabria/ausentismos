@@ -10,3 +10,8 @@ def prepend_dollars(dollars):
         return "$%s%s" % (intcomma(int(dollars)), ("%0.2f" % dollars)[-3:])
     else:
         return ''
+
+@register.filter(name="placeholder")
+def placeholder(value, token):
+    value.field.widget.attrs["placeholder"] = token
+    return value

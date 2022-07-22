@@ -84,6 +84,9 @@ TEMPLATES = [
     },
 ]
 
+LOGIN_REDIRECT_URL= "/app"
+LOGOUT_REDIRECT_URL= "/accounts/login"
+
 WSGI_APPLICATION = 'ausentismos.wsgi.application'
 
 

@@ -27,3 +27,5 @@ class AccidenteFilter(django_filters.FilterSet):
         super(AccidenteFilter, self).__init__(*args, **kwargs)
         self.filters['empleado'].extra.update({'empty_label': 'Todos los empleados'})
 
+
+

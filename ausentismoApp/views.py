@@ -21,6 +21,7 @@ from django.db.models import ObjectDoesNotExist
 from django.core import serializers
 from django.db.models import F
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
+from django.contrib.auth.decorators import login_required
 
 
 interes_tecnico = 0.004867
@@ -399,7 +400,7 @@ class PersonaView(View):
         context_data = {"persona": Persona.objects.get(id=pk)}
         return render(request, 'personal/infoPersonal.html', context_data)
 
-
+@login_required()
 def home(request):
     return render(request, "index.html")
 
