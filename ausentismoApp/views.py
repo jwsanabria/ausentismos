@@ -620,6 +620,22 @@ class BalanceView(View):
             elif 5 == r['tipo_acompanamiento']:
                 valor_12 = r['dTotal']
 
+        tiempo_dic = {}
+        result = TiemposAccAcompanamiento.objects.filter(accidente=accidente.id).order_by('tipo_acompanamiento')
+
+        for r in result:
+            if tiempo_dic.get(r.tipo_acompanamiento.id) is None:
+                tiempo_dic[r.tipo_acompanamiento.id]= r.tiempo.hour * 60 + r.tiempo.minute
+            else:
+                tiempo_dic[r.tipo_acompanamiento.id] = tiempo_dic[r.tipo_acompanamiento.id] + (r.tiempo.hour * 60 + r.tiempo.minute)
+
+        valor_1 = calcular_tiempo(tiempo_dic, 1)
+        valor_5 = calcular_tiempo(tiempo_dic, 2)
+        valor_6 = calcular_tiempo(tiempo_dic, 3)
+        valor_7 = calcular_tiempo(tiempo_dic, 4)
+        valor_8 = calcular_tiempo(tiempo_dic, 5)
+
+
         result = CostosAccInsumosMedicos.objects.filter(accidente= accidente.id).aggregate(total = Sum(F('valor')*F('cantidad')))['total']
         if result is not None: valor_3 = valor_3 + result
         result = CostosAccTransporte.objects.filter(accidente= accidente.id).aggregate(total=Sum(F('valor')))['total']
@@ -659,3 +675,11 @@ class BalanceView(View):
                      }
 
         return render(request, 'accidentes/balance.html', context_data)
+
+
+
+def calcular_tiempo(dic, indice):
+    if dic.get(indice) is None:
+        return "00:00"
+    else:
+        return str(int(dic.get(indice) / 60)) + ":" + str(int(dic.get(indice) % 60))
