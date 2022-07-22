@@ -22,3 +22,6 @@ urlpatterns = [
     path('app/', include('ausentismoApp.urls')),
     path('accounts/', include('django.contrib.auth.urls'))
 ]
+
+
+handler404 = "ausentismoApp.views.page_not_found_view"

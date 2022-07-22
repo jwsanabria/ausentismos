@@ -27,6 +27,8 @@ from django.contrib.auth.decorators import login_required
 interes_tecnico = 0.004867
 
 
+def page_not_found_view(request, exception):
+    return render(request, '404.html', status=404)
 
 
 def postAdicionales (request, *args, **kwargs):
