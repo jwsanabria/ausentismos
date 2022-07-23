@@ -13,27 +13,60 @@
     <div id="accordion">
         <h3>Daño material futuro titulo lucro cesante</h3>
         <div class="card">
-            <h6><span style="font-weight: bold">Estado del accidentado:</span> {{ estado }}</h6>
-            <h6>Edad: {{ edad.years }} años</h6>
-            <h6>Expectativa: {{ expectativa }} años</h6>
-            <h6>Salario: {{ salario }}</h6>
-            <h6 id="ipc_inicial"></h6>
-            <h6 id="ipc_final"></h6>
-            <h6 id="liq_lcc"></h6>
-            <h6>Número de meses a liq lcf: {{ lcf }}</h6>
-            <h6 id="liq_lcf"></h6>
-            <h6>Interes técnico: {{ interes_tecnico }}</h6>
-            <div class="panel-heading">
-                <form method="post" class="form-inline">
-                    {% csrf_token %}
-                    {{ f_danomaterial.as_p }}
+            <table class="col-lg-8">
+                <tr>
+                    <td rowspan="11" class="align-text-top pl-3 pr-3">
+                        <form method="post" class="form">
+                            {% csrf_token %}
+                            {{ f_danomaterial.as_p }}
+                        </form>
+                    </td>
+                    <td colspan="2" class="border-left border-success">
+                        <h6><span style="font-weight: bold">Estado del accidentado:</span> {{ estado }}</h6>
+                    </td>
 
-
-                </form>
-            </div>
-
-            <h6 id="lucro_cesante_consolidado"></h6>
-            <h6 id="lucro_cesante_futuro"></h6>
+                </tr>
+                <tr class="p-3">
+                    <td class="text-lg-left text-capitalize bg-secondary text-white">Edad: </td>
+                    <td class="text-lg-left pl-2 bg-secondary text-white">{{ edad.years }} años </td>
+                </tr>
+                <tr>
+                    <td class="text-lg-left text-capitalize">Expectativa: </td>
+                    <td class="text-lg-left pl-2">{{ expectativa }} años </td>
+                </tr>
+                <tr>
+                    <td class="text-lg-left text-capitalize bg-secondary text-white">Salario: </td>
+                    <td class="text-lg-left pl-2 bg-secondary text-white">{{ salario|prepend_dollars }} </td>
+                </tr>
+                <tr>
+                    <td class="text-lg-left text-capitalize">IPC inicial: </td>
+                    <td class="text-lg-left pl-2"><span id="ipc_inicial"></span> </td>
+                </tr>
+                <tr>
+                    <td class="text-lg-left text-capitalize bg-secondary text-white">IPC final: </td>
+                    <td class="text-lg-left pl-2 bg-secondary text-white"><span id="ipc_final"></span> </td>
+                </tr>
+                <tr>
+                    <td class="text-lg-left">Número de meses a liq lcc: </td>
+                    <td class="text-lg-left pl-2"><span id="liq_lcc"></span> </td>
+                </tr>
+                <tr>
+                    <td class="text-lg-left bg-secondary text-white">Número de meses a liq lcf: </td>
+                    <td class="text-lg-left pl-2 bg-secondary text-white">{{ lcf }}</td>
+                </tr>
+                <tr>
+                    <td class="text-lg-left">Interes técnico: </td>
+                    <td class="text-lg-left pl-2">{{ interes_tecnico }}</td>
+                </tr>
+                <tr>
+                    <td class="text-lg-left bg-secondary text-white">Lucro cesante consolidado: </td>
+                    <td class="text-lg-left pl-2 bg-secondary text-white"><span id="lucro_cesante_consolidado"></span> </td>
+                </tr>
+                <tr>
+                    <td class="text-lg-left">Lucro cesante futuro:  </td>
+                    <td class="text-lg-left pl-2"><span id="lucro_cesante_futuro"></span> </td>
+                </tr>
+            </table>
         </div>
         <h3>Daños morales</h3>
         <div class="card">
@@ -112,11 +145,11 @@
                 }*/
                 if (response[0]){
                     console.log("Hay info")
-                    $("#ipc_inicial").text("IPC Inicial: " + response[0].ipc_inicial);
-                    $("#ipc_final").text("IPC Final: " + response[0].ipc_final);
-                    $("#liq_lcc").text("Número de meses a liq lcc: " + response[0].lcc);
-                    $("#lucro_cesante_consolidado").text("Lucro cesante consolidado: " + response[0].lucro_cesante_consolidado);
-                    $("#lucro_cesante_futuro").text("Lucro cesante futuro: " + response[0].lucro_cesante_futuro);
+                    $("#ipc_inicial").text( response[0].ipc_inicial);
+                    $("#ipc_final").text( response[0].ipc_final);
+                    $("#liq_lcc").text(response[0].lcc);
+                    $("#lucro_cesante_consolidado").text(response[0].lucro_cesante_consolidado);
+                    $("#lucro_cesante_futuro").text(response[0].lucro_cesante_futuro);
                 }
             },
             error: function (response) {
