@@ -13,6 +13,9 @@
     <div id="accordion">
         <h3>Daño material futuro titulo lucro cesante</h3>
         <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Daño material futuro lucro cesante</h4>
+            </div>
             <table class="col-lg-8">
                 <tr>
                     <td rowspan="12" class="align-text-top pl-3 pr-3">
@@ -28,7 +31,7 @@
                 </tr>
                 <tr class="p-3">
                     <td class="text-lg-left text-capitalize bg-secondary text-white">Fecha liquidación: </td>
-                    <td class="text-lg-left pl-2 bg-secondary text-white"><span id="fecha_liq">{{ accidente.fecha_liquidacion }}</span></td>
+                    <td class="text-lg-left pl-2 bg-secondary text-white"><span id="fecha_liq">{{ accidente.fecha_liquidacion|date:"d/m/Y" }}</span></td>
                 </tr>
                 <tr class="p-3">
                     <td class="text-lg-left text-capitalize">Edad: </td>
@@ -147,14 +150,24 @@
                     nickName.val ("")
                     nickName.focus ()
                 }*/
+                var formatter = new Intl.NumberFormat('en-US', {
+                        style: 'currency',
+                        currency: 'USD',
+                        // These options are needed to round to whole numbers if that's what you want.
+                        // minimumFractionDigits: 0, // (this suffices for whole numbers, but will print 2500.10 as $2,500.1)
+                        // maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
+                        });
                 if (response[0]){
                     console.log("Hay info")
-                    $("#fecha_liq").text( response[0].fecha_liq);
+                    var lcc = formatter.format(response[0].lucro_cesante_consolidado)
+                    var lcf = formatter.format(response[0].lucro_cesante_futuro)
+                    fecha_liq = new Date(response[0].fecha_liq);
+                    $("#fecha_liq").text( fecha_liq.getDate() +"/"+ (fecha_liq.getMonth()+1) + "/" + fecha_liq.getFullYear());
                     $("#ipc_inicial").text( response[0].ipc_inicial);
                     $("#ipc_final").text( response[0].ipc_final);
                     $("#liq_lcc").text(response[0].lcc);
-                    $("#lucro_cesante_consolidado").text(response[0].lucro_cesante_consolidado);
-                    $("#lucro_cesante_futuro").text(response[0].lucro_cesante_futuro);
+                    $("#lucro_cesante_consolidado").text(lcc);
+                    $("#lucro_cesante_futuro").text(lcf);
                 }
             },
             error: function (response) {
