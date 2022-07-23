@@ -574,6 +574,7 @@ class Accidente(models.Model):
     factor_laboral = models.ForeignKey(Csst_ba_laboral, on_delete=models.CASCADE)
     acto_subestandar = models.ForeignKey(Csst_inm_subestandar, on_delete=models.CASCADE)
     cond_ambientales_subestandar = models.ForeignKey(Csst_inm_amb_subestandar, on_delete=models.CASCADE)
+    fecha_liquidacion = models.DateField(blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now_add=True)
 

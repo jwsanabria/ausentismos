@@ -320,12 +320,16 @@ class LiquidacionView(View):
 
             lucro_cesante_futuro = renta_actualizada * ((Decimal(1.0) + Decimal(interes_tecnico)) ** Decimal(num_meses_exp) - Decimal(1.0)) / (Decimal(interes_tecnico) * (Decimal(1.0) + Decimal(interes_tecnico)) ** Decimal(num_meses_exp))
 
+            accidente.fecha_liquidacion = fecha_liquidacion
+            accidente.save()
+
             item = {}
             item['ipc_final'] = factor_ipc_final
             item['ipc_inicial'] = factor_ipc_inicial
             item['lcc']= num_meses_liq
             item['lucro_cesante_consolidado']= lucro_cesante_consolidado
             item['lucro_cesante_futuro']= lucro_cesante_futuro
+            item['fecha_liq']=fecha_liquidacion
 
             data.append(item)
         except Exception as e:

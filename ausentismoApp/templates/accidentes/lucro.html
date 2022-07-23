@@ -15,7 +15,7 @@
         <div class="card">
             <table class="col-lg-8">
                 <tr>
-                    <td rowspan="11" class="align-text-top pl-3 pr-3">
+                    <td rowspan="12" class="align-text-top pl-3 pr-3">
                         <form method="post" class="form">
                             {% csrf_token %}
                             {{ f_danomaterial.as_p }}
@@ -27,44 +27,48 @@
 
                 </tr>
                 <tr class="p-3">
-                    <td class="text-lg-left text-capitalize bg-secondary text-white">Edad: </td>
-                    <td class="text-lg-left pl-2 bg-secondary text-white">{{ edad.years }} años </td>
+                    <td class="text-lg-left text-capitalize bg-secondary text-white">Fecha liquidación: </td>
+                    <td class="text-lg-left pl-2 bg-secondary text-white"><span id="fecha_liq">{{ accidente.fecha_liquidacion }}</span></td>
+                </tr>
+                <tr class="p-3">
+                    <td class="text-lg-left text-capitalize">Edad: </td>
+                    <td class="text-lg-left pl-2">{{ edad.years }} años </td>
                 </tr>
                 <tr>
-                    <td class="text-lg-left text-capitalize">Expectativa: </td>
-                    <td class="text-lg-left pl-2">{{ expectativa }} años </td>
+                    <td class="text-lg-left text-capitalize bg-secondary text-white">Expectativa: </td>
+                    <td class="text-lg-left pl-2 bg-secondary text-white">{{ expectativa }} años </td>
                 </tr>
                 <tr>
-                    <td class="text-lg-left text-capitalize bg-secondary text-white">Salario: </td>
-                    <td class="text-lg-left pl-2 bg-secondary text-white">{{ salario|prepend_dollars }} </td>
+                    <td class="text-lg-left text-capitalize">Salario: </td>
+                    <td class="text-lg-left pl-2">{{ salario|prepend_dollars }} </td>
                 </tr>
                 <tr>
-                    <td class="text-lg-left text-capitalize">IPC inicial: </td>
-                    <td class="text-lg-left pl-2"><span id="ipc_inicial"></span> </td>
+                    <td class="text-lg-left text-capitalize bg-secondary text-white">IPC inicial: </td>
+                    <td class="text-lg-left pl-2 bg-secondary text-white"><span id="ipc_inicial"></span> </td>
                 </tr>
                 <tr>
-                    <td class="text-lg-left text-capitalize bg-secondary text-white">IPC final: </td>
-                    <td class="text-lg-left pl-2 bg-secondary text-white"><span id="ipc_final"></span> </td>
+                    <td class="text-lg-left text-capitalize">IPC final: </td>
+                    <td class="text-lg-left pl-2"><span id="ipc_final"></span> </td>
                 </tr>
                 <tr>
-                    <td class="text-lg-left">Número de meses a liq lcc: </td>
-                    <td class="text-lg-left pl-2"><span id="liq_lcc"></span> </td>
+                    <td class="text-lg-left bg-secondary text-white">Número de meses a liq lcc: </td>
+                    <td class="text-lg-left pl-2 bg-secondary text-white"><span id="liq_lcc"></span> </td>
                 </tr>
                 <tr>
-                    <td class="text-lg-left bg-secondary text-white">Número de meses a liq lcf: </td>
-                    <td class="text-lg-left pl-2 bg-secondary text-white">{{ lcf }}</td>
+                    <td class="text-lg-left">Número de meses a liq lcf: </td>
+                    <td class="text-lg-left pl-2">{{ lcf }}</td>
                 </tr>
                 <tr>
-                    <td class="text-lg-left">Interes técnico: </td>
-                    <td class="text-lg-left pl-2">{{ interes_tecnico }}</td>
+                    <td class="text-lg-left bg-secondary text-white">Interes técnico: </td>
+                    <td class="text-lg-left pl-2 bg-secondary text-white">{{ interes_tecnico }}</td>
                 </tr>
                 <tr>
-                    <td class="text-lg-left bg-secondary text-white">Lucro cesante consolidado: </td>
-                    <td class="text-lg-left pl-2 bg-secondary text-white"><span id="lucro_cesante_consolidado"></span> </td>
+                    <td class="text-lg-left">Lucro cesante consolidado: </td>
+                    <td class="text-lg-left pl-2"><span id="lucro_cesante_consolidado"></span> </td>
                 </tr>
                 <tr>
-                    <td class="text-lg-left">Lucro cesante futuro:  </td>
-                    <td class="text-lg-left pl-2"><span id="lucro_cesante_futuro"></span> </td>
+                    <td class="text-lg-left bg-secondary text-white">Lucro cesante futuro:  </td>
+                    <td class="text-lg-left pl-2 bg-secondary text-white"><span id="lucro_cesante_futuro"></span> </td>
                 </tr>
             </table>
         </div>
@@ -145,6 +149,7 @@
                 }*/
                 if (response[0]){
                     console.log("Hay info")
+                    $("#fecha_liq").text( response[0].fecha_liq);
                     $("#ipc_inicial").text( response[0].ipc_inicial);
                     $("#ipc_final").text( response[0].ipc_final);
                     $("#liq_lcc").text(response[0].lcc);
