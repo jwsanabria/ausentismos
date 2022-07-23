@@ -575,6 +575,11 @@ class Accidente(models.Model):
     acto_subestandar = models.ForeignKey(Csst_inm_subestandar, on_delete=models.CASCADE)
     cond_ambientales_subestandar = models.ForeignKey(Csst_inm_amb_subestandar, on_delete=models.CASCADE)
     fecha_liquidacion = models.DateField(blank=True, null=True)
+    lucro_consolidado = models.DecimalField(decimal_places=2, max_digits=18, blank=True, null=True)
+    lucro_futuro = models.DecimalField(decimal_places=2, max_digits=18, blank=True, null=True)
+    ipc_inicial = models.DecimalField(decimal_places=2, max_digits=8, blank=True, null=True)
+    ipc_final = models.DecimalField(decimal_places=2, max_digits=8, blank=True, null=True)
+    num_mes_lcc = models.PositiveIntegerField(blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now_add=True)
 

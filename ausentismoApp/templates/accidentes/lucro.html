@@ -44,15 +44,15 @@
                 </tr>
                 <tr>
                     <td class="text-lg-left text-capitalize bg-secondary text-white">IPC inicial: </td>
-                    <td class="text-lg-left pl-2 bg-secondary text-white"><span id="ipc_inicial"></span> </td>
+                    <td class="text-lg-left pl-2 bg-secondary text-white"><span id="ipc_inicial">{{ accidente.ipc_inicial }}</span> </td>
                 </tr>
                 <tr>
                     <td class="text-lg-left text-capitalize">IPC final: </td>
-                    <td class="text-lg-left pl-2"><span id="ipc_final"></span> </td>
+                    <td class="text-lg-left pl-2"><span id="ipc_final">{{ accidente.ipc_final }}</span> </td>
                 </tr>
                 <tr>
                     <td class="text-lg-left bg-secondary text-white">Número de meses a liq lcc: </td>
-                    <td class="text-lg-left pl-2 bg-secondary text-white"><span id="liq_lcc"></span> </td>
+                    <td class="text-lg-left pl-2 bg-secondary text-white"><span id="liq_lcc">{{ accidente.num_mes_lcc }}</span> </td>
                 </tr>
                 <tr>
                     <td class="text-lg-left">Número de meses a liq lcf: </td>
@@ -64,11 +64,11 @@
                 </tr>
                 <tr>
                     <td class="text-lg-left">Lucro cesante consolidado: </td>
-                    <td class="text-lg-left pl-2"><span id="lucro_cesante_consolidado"></span> </td>
+                    <td class="text-lg-left pl-2"><span id="lucro_cesante_consolidado">{{ accidente.lucro_consolidado|prepend_dollars }}</span> </td>
                 </tr>
                 <tr>
                     <td class="text-lg-left bg-secondary text-white">Lucro cesante futuro:  </td>
-                    <td class="text-lg-left pl-2 bg-secondary text-white"><span id="lucro_cesante_futuro"></span> </td>
+                    <td class="text-lg-left pl-2 bg-secondary text-white"><span id="lucro_cesante_futuro">{{ accidente.lucro_futuro|prepend_dollars }}</span> </td>
                 </tr>
             </table>
         </div>
