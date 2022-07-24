@@ -580,6 +580,25 @@ class Accidente(models.Model):
     ipc_inicial = models.DecimalField(decimal_places=2, max_digits=8, blank=True, null=True)
     ipc_final = models.DecimalField(decimal_places=2, max_digits=8, blank=True, null=True)
     num_mes_lcc = models.PositiveIntegerField(blank=True, null=True)
+    salario_accidentado = models.DecimalField(decimal_places=2, max_digits=10, blank=True, null=True)
+    salario_minimo = models.DecimalField(decimal_places=2, max_digits=10, blank=True, null=True)
+    factor_moral_n1 = models.PositiveIntegerField(validators=[MinValueValidator(0), MaxValueValidator(100)], blank=True, null=True)
+    factor_moral_n2 = models.PositiveIntegerField(validators=[MinValueValidator(0), MaxValueValidator(100)], blank=True, null=True)
+    factor_moral_n3 = models.PositiveIntegerField(validators=[MinValueValidator(0), MaxValueValidator(100)], blank=True, null=True)
+    factor_moral_n4 = models.PositiveIntegerField(validators=[MinValueValidator(0), MaxValueValidator(100)], blank=True,
+                                                  null=True)
+    factor_moral_n5 = models.PositiveIntegerField(validators=[MinValueValidator(0), MaxValueValidator(100)], blank=True,
+                                                  null=True)
+    valor_moral_n1 = models.DecimalField(decimal_places=2, max_digits=6, validators=[MinValueValidator(Decimal('0.01'))], blank=True, null=True)
+    valor_moral_n2 = models.DecimalField(decimal_places=2, max_digits=6,
+                                         validators=[MinValueValidator(Decimal('0.01'))], blank=True, null=True)
+    valor_moral_n3 = models.DecimalField(decimal_places=2, max_digits=6,
+                                         validators=[MinValueValidator(Decimal('0.01'))], blank=True, null=True)
+    valor_moral_n4 = models.DecimalField(decimal_places=2, max_digits=6,
+                                         validators=[MinValueValidator(Decimal('0.01'))], blank=True, null=True)
+    valor_moral_n5 = models.DecimalField(decimal_places=2, max_digits=6,
+                                         validators=[MinValueValidator(Decimal('0.01'))], blank=True, null=True)
+    valor_dano_moral = models.DecimalField(decimal_places=2, max_digits=18, blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now_add=True)
 
@@ -983,6 +1002,35 @@ class CostosAccAdicionales(models.Model):
             self.created = timezone.now()
         self.modified = timezone.now()
         return super(CostosAccAdicionales, self).save(*args, **kwargs)
+
+
+
+class NivDanoMoral(models.Model):
+    TIPO_DANO = (
+        ('M', 'Muerte'),
+        ('I', 'Invalidez')
+    )
+    tipo_dano = models.CharField(max_length=1, choices=TIPO_DANO)
+    rango_inf = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(100)])
+    rango_sup = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(100)])
+    nivel = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(15)])
+    valor = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(100)])
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Niveles de daño moral'
+        verbose_name_plural = 'Lista de niveles de daño moral'
+
+    def __str__(self):
+        return str(self.id)
+
+    def save(self, *args, **kwargs):
+        ''' On save, update timestamps '''
+        if not self.id:
+            self.created = timezone.now()
+        self.modified = timezone.now()
+        return super(NivDanoMoral, self).save(*args, **kwargs)
 
 
 

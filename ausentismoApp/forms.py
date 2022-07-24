@@ -148,6 +148,27 @@ class DanoMaterialForm(forms.Form):
     fecha_liquidacion = DateField(input_formats=settings.DATE_INPUT_FORMATS, widget=DatePickerInput(format='%d-%m-%Y'))
 
 
+class DanoMoralForm(forms.Form):
+    NIVEL = (
+        ('N1', 'Nivel 1'),
+        ('N2', 'Nivel 2'),
+        ('N3', 'Nivel 3'),
+        ('N4', 'Nivel 4'),
+        ('N5', 'Nivel 5'),
+    )
+    nivel = forms.CharField(widget=forms.Select(choices=NIVEL))
+    cantidad = forms.DecimalField(validators=[validador_valor_positivo])
+
+    def __init__(self, *args, **kwargs):
+        super(DanoMoralForm, self).__init__(*args, **kwargs)
+
+        for name in self.fields.keys():
+            self.fields[name].widget.attrs.update({
+                'class': 'form-control',
+            })
+
+
+
 class CostosAccDanoEmergenteForm(ModelForm):
     valor = forms.DecimalField(validators=[validador_valor_positivo])
 

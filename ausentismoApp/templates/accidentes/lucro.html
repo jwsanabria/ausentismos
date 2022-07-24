@@ -77,6 +77,64 @@
         </div>
         <h3>Daños morales</h3>
         <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Daños morales</h4>
+            </div>
+            <table class="col-lg-8">
+                <tr>
+                    <td rowspan="9" class="align-text-top pl-3 pr-3">
+                        <form method="post" class="form"  id="form_dano_moral">
+                            {% csrf_token %}
+                            {{ f_dano_moral.as_p }}
+                            <button type="submit" class="btn btn-primary mb-2"><span class="fa fa-save"></span> Guardar</button>
+                        </form>
+                    </td>
+                    <td colspan="3" class="border-left border-success">
+                        <h6><span style="font-weight: bold">SMLV:</span> {{ estado }}</h6>
+                    </td>
+
+                </tr>
+                <tr class="p-3">
+                    <td class="text-lg-left text-capitalize bg-primary text-white">Nivel </td>
+                    <td class="text-lg-left text-capitalize bg-primary text-white">Cantidad </td>
+                    <td class="text-lg-left text-capitalize bg-primary text-white">SMLV </td>
+                </tr>
+                <tr class="p-3">
+                    <td class="text-lg-left text-capitalize">Nivel1. Víctima directa y relaciones afectivas conyugales y paternofiliales </td>
+                    <td class="text-lg-left pl-2"><span id="cant_n1">{{ accidente.valor_moral_n1 }}</span> </td>
+                    <td class="text-lg-left pl-2"><span id="factor_n1">{{ accidente.factor_moral_n1 }}</span></td>
+                </tr>
+                <tr>
+                    <td class="text-lg-left text-capitalize bg-secondary text-white">Nivel 2. Relación afectiva de 2 grado de consanguinidad o civil </td>
+                    <td class="text-lg-left pl-2 bg-secondary text-white"><span id="cant_n2">{{ accidente.valor_moral_n2 }}</span></td>
+                    <td class="text-lg-left pl-2 bg-secondary text-white"><span id="factor_n2">{{ accidente.factor_moral_n2 }}</span></td>
+                </tr>
+                <tr>
+                    <td class="text-lg-left text-capitalize">Nivel 3. Relación afectiva del 3 grado de consanguinidad o civil</td>
+                    <td class="text-lg-left pl-2"><span id="cant_n3">{{ accidente.valor_moral_n3 }}</span></td>
+                    <td class="text-lg-left pl-2"><span id="factor_n3">{{ accidente.factor_moral_n3 }}</span></td>
+                </tr>
+                <tr>
+                    <td class="text-lg-left text-capitalize bg-secondary text-white">Nivel 4. Relación afectiva del 4 grado de consanguinidad o civil </td>
+                    <td class="text-lg-left pl-2 bg-secondary text-white"><span id="cant_n4">{{ accidente.valor_moral_n4 }}</span></td>
+                    <td class="text-lg-left pl-2 bg-secondary text-white"><span id="factor_n4">{{ accidente.factor_moral_n4 }}</span></td>
+                </tr>
+                <tr>
+                    <td class="text-lg-left text-capitalize">Nivel 5. Relaciones afectivas no familiares de terceros damnificados </td>
+                    <td class="text-lg-left pl-2"><span id="cant_n5">{{ accidente.valor_moral_n5 }}</span></td>
+                    <td class="text-lg-left pl-2"><span id="factor_n5">{{ accidente.factor_moral_n5 }}</span></td>
+                </tr>
+                <tr>
+                    <td colspan="3" class="border-left border-success bg-success text-right text-white">
+                        <h6><b><span class="text-right">Total:</span> <span id="valor_total">{{ accidente.valor_dano_moral }}</span></b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" class="border-left border-success">
+
+                    </td>
+                </tr>
+            </table>
         </div>
         <h3>Daño material a titulo de daño emergente</h3>
         <div class="card">

@@ -472,9 +472,29 @@ class CostosView(View):
 class LucroView(View):
     def get(self, request, pk):
         f_dano_emergente = CostosAccDanoEmergenteForm()
+        f_dano_moral = DanoMoralForm()
         accidente = get_object_or_404(Accidente, id= pk)
 
         salario = accidente.empleado.salario
+        if(accidente.salario_accidentado is None):
+            accidente.salario_accidentado= salario
+            accidente.salario_minimo= 1000000.00
+            accidente.factor_moral_n1 = 0
+            accidente.factor_moral_n2 = 0
+            accidente.factor_moral_n3 = 0
+            accidente.factor_moral_n4 = 0
+            accidente.factor_moral_n5 = 0
+            accidente.valor_moral_n1 = 0
+            accidente.valor_moral_n2 = 0
+            accidente.valor_moral_n3 = 0
+            accidente.valor_moral_n4 = 0
+            accidente.valor_moral_n5 = 0
+            accidente.valor_dano_moral = 0
+
+            accidente.save()
+
+
+
         edad = relativedelta(datetime.now(), accidente.empleado.fecha_nacimiento)
         tiempo_expectativa = 0
         try:
@@ -495,6 +515,7 @@ class LucroView(View):
                         'interes_tecnico': interes_tecnico,
                         'expectativa': tiempo_expectativa + edad.years,
                         'f_dano_emergente': f_dano_emergente,
+                        'f_dano_moral': f_dano_moral,
                         'f_danomaterial': DanoMaterialForm(),
                         'list_dano_emergente': CostosAccDanoEmergente.objects.filter(accidente=pk)}
 
