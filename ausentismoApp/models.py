@@ -1023,7 +1023,7 @@ class NivDanoMoral(models.Model):
         verbose_name_plural = 'Lista de niveles de daño moral'
 
     def __str__(self):
-        return str(self.id)
+        return '%s (%s : %s) - %s => %s' % (self.tipo_dano, self.rango_inf, self.rango_sup, self.nivel, self.valor)
 
     def save(self, *args, **kwargs):
         ''' On save, update timestamps '''
