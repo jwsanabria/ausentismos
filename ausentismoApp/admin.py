@@ -65,6 +65,7 @@ admin.site.register(FactorIPC, AuditAdmin)
 admin.site.register(FactorTiemposAcompanamiento, AuditAdmin)
 admin.site.register(TipoAcompanamiento, AuditAdmin)
 admin.site.register(FactorAccParafiscales, AuditAdmin)
+admin.site.register(NivDanoMoral, AuditAdmin)
 
 
 
