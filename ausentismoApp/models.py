@@ -1032,5 +1032,25 @@ class NivDanoMoral(models.Model):
         self.modified = timezone.now()
         return super(NivDanoMoral, self).save(*args, **kwargs)
 
+class ParametrosApp(models.Model):
+    parametro = models.CharField(max_length=100)
+    valor = models.CharField(max_length=500)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Parámetro de la aplicación'
+        verbose_name_plural = 'Lista de parametros'
+
+    def __str__(self):
+        return '%s => %s' % (self.parametro, self.valor)
+
+    def save(self, *args, **kwargs):
+        ''' On save, update timestamps '''
+        if not self.id:
+            self.created = timezone.now()
+        self.modified = timezone.now()
+        return super(ParametrosApp, self).save(*args, **kwargs)
+
 
 
