@@ -31,6 +31,41 @@ def page_not_found_view(request, exception):
     return render(request, '404.html', status=404)
 
 
+def postRemoveRow (request, *args, **kwargs):
+    # request should be ajax and method should be POST.
+    if request.is_ajax and request.method == "POST":
+        # get the form data
+        try:
+            tipo = request.POST['tipo']
+            if tipo == 'I':
+                model = get_object_or_404(CostosAccInsumosMedicos, id=request.POST['id'])
+
+            elif tipo=='T':
+                model = get_object_or_404(CostosAccTransporte, id=request.POST['id'])
+
+            elif tipo=='O':
+                model = get_object_or_404(CostosAccOtros, id=request.POST['id'])
+
+            elif tipo=='M':
+                model = get_object_or_404(CostosAccMaquinaria, id=request.POST['id'])
+
+            elif tipo=='R':
+                model = get_object_or_404(CostosAccRepuestos, id=request.POST['id'])
+
+            elif tipo=='B':
+                model = get_object_or_404(CostosAccManoObra, id=request.POST['id'])
+
+            model.delete()
+            # send to client side.
+            ser_instance = serializers.serialize('json', [model, ])
+            return JsonResponse({"instance": ser_instance}, status=200)
+        except:
+            # some form errors occured.
+            return JsonResponse({"error": "Se presento un error al eliminar la fila"}, status=400)
+
+    # some error occured
+    return JsonResponse({"error": ""}, status=400)
+
 def postDanoMoral (request, *args, **kwargs):
     accidente = get_object_or_404(Accidente, id=kwargs['pk'])
     # request should be ajax and method should be POST.

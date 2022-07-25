@@ -43,14 +43,14 @@
                             </thead>
                             <tbody>
                             {% for item in listInsumosMed %}
-                                <tr>
+                                <tr id="row_insumo_{{ item.id }}">
                                     <td>{{ item.id }}</td>
                                     <td>{{ item.insumo }}</td>
                                     <td>{{ item.valor|prepend_dollars }}</td>
                                     <td>{{ item.cantidad }}</td>
 
                                     <td>
-                                        <a onclick="return abrir_modal ('{% url 'costos_edit' item.id %}')"
+                                        <a onclick="delete_row({{ item.id }}, 'I')"
                                            class="btn btn-danger btn-circle" href="#">
                                                 <span class="fa fa-remove"></span>
                                         </a>
@@ -95,12 +95,12 @@
                             </thead>
                             <tbody>
                                 {% for item in listTransporte %}
-                                    <tr>
+                                    <tr id="row_transporte_{{ item.id }}">
                                         <td>{{ item.id }}</td>
                                         <td>{{ item.elemento }}</td>
                                         <td>{{ item.valor|prepend_dollars }}</td>
                                         <td>
-                                            <a onclick="return abrir_modal ('{% url 'costos_edit' item.id %}')"
+                                            <a onclick="delete_row({{ item.id }}, 'T')"
                                                class="btn btn-danger btn-circle" href="#">
                                                 <span class="fa fa-remove"></span>
                                             </a>
@@ -142,12 +142,12 @@
                             </thead>
                             <tbody>
                                 {% for item in listOtros %}
-                                    <tr>
+                                    <tr id="row_otro_{{ item.id }}">
                                         <td>{{ item.id }}</td>
                                         <td>{{ item.elemento }}</td>
                                         <td>{{ item.valor|prepend_dollars }}</td>
                                         <td>
-                                            <a onclick="return abrir_modal ('{% url 'costos_edit' item.id %}')"
+                                            <a onclick="delete_row({{ item.id }}, 'O')"
                                                class="btn btn-danger btn-circle" href="#">
                                                 <span class="fa fa-remove"></span>
                                             </a>
@@ -191,13 +191,13 @@
                             </thead>
                             <tbody>
                                 {% for item in listMaquinaria %}
-                                    <tr>
+                                    <tr id="row_maquinaria_{{ item.id }}">
                                         <td>{{ item.id }}</td>
                                         <td>{{ item.elemento }}</td>
                                         <td>{{ item.valor|prepend_dollars }}</td>
                                         <td>{{ item.cantidad }}</td>
                                         <td>
-                                            <a onclick="return abrir_modal ('{% url 'costos_edit' item.id %}')"
+                                            <a onclick="delete_row({{ item.id }}, 'M')"
                                                class="btn btn-danger btn-circle" href="#">
                                                 <span class="fa fa-remove"></span>
                                             </a>
@@ -240,13 +240,13 @@
                             </thead>
                             <tbody>
                                 {% for item in listRepuestos %}
-                                    <tr>
+                                    <tr id="row_repuesto_{{ item.id }}">
                                         <td>{{ item.id }}</td>
                                         <td>{{ item.elemento }}</td>
                                         <td>{{ item.valor|prepend_dollars }}</td>
                                         <td>{{ item.cantidad }}</td>
                                         <td>
-                                            <a onclick="return abrir_modal ('{% url 'costos_edit' item.id %}')"
+                                            <a onclick="delete_row({{ item.id }}, 'R')"
                                                class="btn btn-danger btn-circle" href="#">
                                                 <span class="fa fa-remove"></span>
                                             </a>
@@ -289,13 +289,13 @@
                             </thead>
                             <tbody>
                                 {% for item in listManoObra %}
-                                    <tr>
+                                    <tr id="row_mano_{{ item.id }}">
                                         <td>{{ item.id }}</td>
                                         <td>{{ item.descripcion }}</td>
                                         <td>{{ item.valor|prepend_dollars }}</td>
                                         <td>{{ item.cantidad }}</td>
                                         <td>
-                                            <a onclick="return abrir_modal ('{% url 'costos_edit' item.id %}')"
+                                            <a onclick="delete_row({{ item.id }}, 'B')"
                                                class="btn btn-danger btn-circle" href="#">
                                                 <span class="fa fa-remove"></span>
                                             </a>
@@ -354,13 +354,13 @@
 
                     var valor = formatter.format(fields["valor"])
                     $ ("#mano_obra_table tbody"). prepend (
-                        `<tr>
+                        `<tr id="row_mano_${instance[0]['pk']}">
                         <td>${instance[0]['pk']}</td>
                         <td> ${fields["descripcion"] || ""} </td>
                         <td> ${valor || ""} </td>
                         <td> ${fields["cantidad"] || ""} </td>
                         <td>
-                            <a onclick=" ${instance[0]['pk']})" class="btn btn-danger btn-circle" href="#">
+                            <a onclick="delete_row( ${instance[0]['pk']}, 'B')" class="btn btn-danger btn-circle" href="#">
                                <span class="fa fa-remove"></span>
                             </a>
                         </td>
@@ -406,13 +406,13 @@
 
                     var valor = formatter.format(fields["valor"])
                     $ ("#repuesto_table tbody"). prepend (
-                        `<tr>
+                        `<tr id="row_repuesto_${instance[0]['pk']}">
                         <td>${instance[0]['pk']}</td>
                         <td> ${fields["elemento"] || ""} </td>
                         <td> ${valor || ""} </td>
                         <td> ${fields["cantidad"] || ""} </td>
                         <td>
-                            <a onclick=" ${instance[0]['pk']})" class="btn btn-danger btn-circle" href="#">
+                            <a onclick="delete_row( ${instance[0]['pk']}, 'R')" class="btn btn-danger btn-circle" href="#">
                                <span class="fa fa-remove"></span>
                             </a>
                         </td>
@@ -458,13 +458,13 @@
 
                     var valor = formatter.format(fields["valor"])
                     $ ("#maquinaria_table tbody"). prepend (
-                        `<tr>
+                        `<tr id="row_maquinaria_${instance[0]['pk']}">
                         <td>${instance[0]['pk']}</td>
                         <td> ${fields["elemento"] || ""} </td>
                         <td> ${valor || ""} </td>
                         <td> ${fields["cantidad"] || ""} </td>
                         <td>
-                            <a onclick=" ${instance[0]['pk']})" class="btn btn-danger btn-circle" href="#">
+                            <a onclick="delete_row( ${instance[0]['pk']}, 'M')" class="btn btn-danger btn-circle" href="#">
                                <span class="fa fa-remove"></span>
                             </a>
                         </td>
@@ -510,12 +510,12 @@
 
                     var valor = formatter.format(fields["valor"])
                     $ ("#otros_table tbody"). prepend (
-                        `<tr>
+                        `<tr id="row_otro_${instance[0]['pk']}">
                         <td>${instance[0]['pk']}</td>
                         <td> ${fields["elemento"] || ""} </td>
                         <td> ${valor || ""} </td>
                         <td>
-                            <a onclick=" ${instance[0]['pk']})" class="btn btn-danger btn-circle" href="#">
+                            <a onclick="delete_row( ${instance[0]['pk']}, 'O')" class="btn btn-danger btn-circle" href="#">
                                <span class="fa fa-remove"></span>
                             </a>
                         </td>
@@ -561,12 +561,12 @@
 
                     var valor = formatter.format(fields["valor"])
                     $ ("#transporte_table tbody"). prepend (
-                        `<tr>
+                        `<tr id="row_transporte_${instance[0]['pk']}">
                         <td>${instance[0]['pk']}</td>
                         <td> ${fields["elemento"] || ""} </td>
                         <td> ${valor || ""} </td>
                         <td>
-                            <a onclick=" ${instance[0]['pk']})" class="btn btn-danger btn-circle" href="#">
+                            <a onclick="delete_row(${instance[0]['pk']}, 'T')" class="btn btn-danger btn-circle" href="#">
                                <span class="fa fa-remove"></span>
                             </a>
                         </td>
@@ -612,13 +612,13 @@
 
                     var valor = formatter.format(fields["valor"])
                     $ ("#insumo_table tbody"). prepend (
-                        `<tr>
+                        `<tr id="row_insumo_${instance[0]['pk']}">
                         <td>${instance[0]['pk']}</td>
                         <td> ${fields["insumo"] || ""} </td>
                         <td> ${valor || ""} </td>
                         <td> ${fields["cantidad"] || ""} </td>
                         <td>
-                            <a onclick=" ${instance[0]['pk']})" class="btn btn-danger btn-circle" href="#">
+                            <a onclick="delete_row( ${instance[0]['pk']}, 'I')" class="btn btn-danger btn-circle" href="#">
                                <span class="fa fa-remove"></span>
                             </a>
                         </td>
@@ -631,5 +631,38 @@
                 }
             })
         })
+
+        $.ajaxSetup({
+            data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+        });
+
+
+        function delete_row(id, model){
+            url = "{% url 'ajax_remove_row' accidente.id %}"
+            $ .ajax ({
+                type: 'POST',
+                url: url,
+                data: { id: id, tipo: model},
+                success: function (response) {
+                    if(model == 'I')
+                        $("#row_insumo_" + id).remove();
+                    if(model == 'T')
+                        $("#row_transporte_" + id).remove();
+                    if(model == 'M')
+                        $("#row_maquinaria_" + id).remove();
+                    if(model == 'O')
+                        $("#row_otro_" + id).remove();
+                    if(model == 'B')
+                        $("#row_mano_" + id).remove();
+                    if(model == 'R')
+                        $("#row_repuesto_" + id).remove();
+
+                },
+                error: function (response) {
+                    // alert the error if any error occured
+                    alert (response["responseJSON"] ["error"]["valor"]);
+                }
+            })
+        }
     </script>
 {% endblock javascript %}
