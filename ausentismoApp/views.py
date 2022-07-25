@@ -31,6 +31,44 @@ def page_not_found_view(request, exception):
     return render(request, '404.html', status=404)
 
 
+def postDanoMoral (request, *args, **kwargs):
+    accidente = get_object_or_404(Accidente, id=kwargs['pk'])
+    # request should be ajax and method should be POST.
+    if request.is_ajax and request.method == "POST":
+        # get the form data
+        form = DanoMoralForm(request.POST)
+        # save the data and after fetch the object in instance
+        if form.is_valid():
+            if request.POST['nivel'] == 'N1':
+                accidente.valor_moral_n1 = request.POST['cantidad']
+            elif request.POST['nivel']  == 'N2':
+                accidente.valor_moral_n2 = request.POST['cantidad']
+            elif request.POST['nivel'] == 'N3':
+                accidente.valor_moral_n3 = request.POST['cantidad']
+            elif request.POST['nivel'] == 'N4':
+                accidente.valor_moral_n4 = request.POST['cantidad']
+            elif request.POST['nivel']  == 'N5':
+                accidente.valor_moral_n5 = request.POST['cantidad']
+
+            valor_dano = Decimal(0.0)
+            valor_dano = valor_dano + (Decimal(accidente.valor_moral_n1) *  Decimal(accidente.salario_minimo) * Decimal(accidente.factor_moral_n1))
+            valor_dano = valor_dano + (Decimal(accidente.valor_moral_n2) * Decimal(accidente.salario_minimo) * Decimal(accidente.factor_moral_n2))
+            valor_dano = valor_dano + (Decimal(accidente.valor_moral_n3) * Decimal(accidente.salario_minimo) * Decimal(accidente.factor_moral_n3))
+            valor_dano = valor_dano + (Decimal(accidente.valor_moral_n4) * Decimal(accidente.salario_minimo) * Decimal(accidente.factor_moral_n4))
+            valor_dano = valor_dano + (Decimal(accidente.valor_moral_n5) * Decimal(accidente.salario_minimo) * Decimal(accidente.factor_moral_n5))
+            accidente.valor_dano_moral = valor_dano
+            accidente.save()
+            # serialize an object in json
+            ser_instance = serializers.serialize('json', [accidente,])
+            # send to client side.
+            return JsonResponse({"instance": ser_instance}, status=200)
+        else:
+            # some form errors occured.
+            return JsonResponse({"error": form.errors}, status=400)
+
+    # some error occured
+    return JsonResponse({"error": ""}, status=400)
+
 def postAdicionales (request, *args, **kwargs):
     accidente = get_object_or_404(Accidente, id=kwargs['pk'])
     # request should be ajax and method should be POST.
@@ -355,6 +393,46 @@ class RegistrarAccidenteView(CreateView):
     success_message = "Accdiente creado exitosamente"
     success_url = reverse_lazy("accidentes")
 
+    def form_valid(self, form):
+        if (form.salario_accidentado is None):
+            empleado = get_object_or_404(Persona, id=form.empleado)
+            parametro = get_object_or_404(ParametrosApp, parametro='SMLV')
+            niveles = None
+            if (form.fallecido == True):
+                niveles = NivDanoMoral.objects.filter(tipo_dano='M')
+            elif form.invalidez == True:
+                niveles = NivDanoMoral.objects.filter(tipo_dano='I', rango_inf__lte=form.grado_invalidez,
+                                                      rango_sup__gte=form.grado_invalidez)
+
+            if niveles is not None:
+                for niv in niveles:
+                    if niv.nivel == 1:
+                        form.factor_moral_n1 = niv.valor
+                    elif niv.nivel == 2:
+                        form.factor_moral_n2 = niv.valor
+                    elif niv.nivel == 3:
+                        form.factor_moral_n3 = niv.valor
+                    elif niv.nivel == 4:
+                        form.factor_moral_n4 = niv.valor
+                    elif niv.nivel == 5:
+                        form.factor_moral_n5 = niv.valor
+            else:
+                form.factor_moral_n1 = 0
+                form.factor_moral_n2 = 0
+                form.factor_moral_n3 = 0
+                form.factor_moral_n4 = 0
+                form.factor_moral_n5 = 0
+
+            form.salario_accidentado = empleado.salario
+            form.salario_minimo = float(parametro.valor)
+            form.valor_moral_n1 = 0
+            form.valor_moral_n2 = 0
+            form.valor_moral_n3 = 0
+            form.valor_moral_n4 = 0
+            form.valor_moral_n5 = 0
+            form.valor_dano_moral = 0
+        return super().form_valid(form)
+
 
 
 # Create your views here.
@@ -474,16 +552,40 @@ class LucroView(View):
         f_dano_emergente = CostosAccDanoEmergenteForm()
         f_dano_moral = DanoMoralForm()
         accidente = get_object_or_404(Accidente, id= pk)
+        parametro = get_object_or_404(ParametrosApp, parametro='SMLV')
+        niveles = None
+        if(accidente.fallecido == True):
+            niveles = NivDanoMoral.objects.filter(tipo_dano='M')
+        elif accidente.invalidez == True:
+            niveles = NivDanoMoral.objects.filter(tipo_dano='I', rango_inf__lte=accidente.grado_invalidez, rango_sup__gte=accidente.grado_invalidez)
+
+
+        smlv = float(parametro.valor)
 
         salario = accidente.empleado.salario
         if(accidente.salario_accidentado is None):
+
             accidente.salario_accidentado= salario
-            accidente.salario_minimo= 1000000.00
-            accidente.factor_moral_n1 = 0
-            accidente.factor_moral_n2 = 0
-            accidente.factor_moral_n3 = 0
-            accidente.factor_moral_n4 = 0
-            accidente.factor_moral_n5 = 0
+            accidente.salario_minimo= smlv
+
+            if niveles is not None:
+                for niv in niveles:
+                    if niv.nivel == 1:
+                        accidente.factor_moral_n1 = niv.valor
+                    elif niv.nivel == 2:
+                        accidente.factor_moral_n2 = niv.valor
+                    elif niv.nivel == 3:
+                        accidente.factor_moral_n3 = niv.valor
+                    elif niv.nivel == 4:
+                        accidente.factor_moral_n4 = niv.valor
+                    elif niv.nivel == 5:
+                        accidente.factor_moral_n5 = niv.valor
+            else:
+                accidente.factor_moral_n1 = 0
+                accidente.factor_moral_n2 = 0
+                accidente.factor_moral_n3 = 0
+                accidente.factor_moral_n4 = 0
+                accidente.factor_moral_n5 = 0
             accidente.valor_moral_n1 = 0
             accidente.valor_moral_n2 = 0
             accidente.valor_moral_n3 = 0
@@ -514,6 +616,7 @@ class LucroView(View):
                         'lcf': tiempo_expectativa * 12,
                         'interes_tecnico': interes_tecnico,
                         'expectativa': tiempo_expectativa + edad.years,
+                        'smlv': smlv,
                         'f_dano_emergente': f_dano_emergente,
                         'f_dano_moral': f_dano_moral,
                         'f_danomaterial': DanoMaterialForm(),

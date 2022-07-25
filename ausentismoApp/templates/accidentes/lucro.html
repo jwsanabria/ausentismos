@@ -80,7 +80,7 @@
             <div class="card-header">
                 <h4 class="card-title">Daños morales</h4>
             </div>
-            <table class="col-lg-8">
+            <table class="col-lg-8" id="dano_moral_table">
                 <tr>
                     <td rowspan="9" class="align-text-top pl-3 pr-3">
                         <form method="post" class="form"  id="form_dano_moral">
@@ -90,7 +90,7 @@
                         </form>
                     </td>
                     <td colspan="3" class="border-left border-success">
-                        <h6><span style="font-weight: bold">SMLV:</span> {{ estado }}</h6>
+                        <h6><span style="font-weight: bold">SMLV:</span> {{ smlv|prepend_dollars }}</h6>
                     </td>
 
                 </tr>
@@ -126,7 +126,7 @@
                 </tr>
                 <tr>
                     <td colspan="3" class="border-left border-success bg-success text-right text-white">
-                        <h6><b><span class="text-right">Total:</span> <span id="valor_total">{{ accidente.valor_dano_moral }}</span></b></h6>
+                        <h6><b><span class="text-right">Total:</span> <span id="valor_total">{{ accidente.valor_dano_moral|prepend_dollars }}</span></b></h6>
                     </td>
                 </tr>
                 <tr>
@@ -281,6 +281,53 @@
                     </td>
                     </tr> `
                 )
+            },
+            error: function (response) {
+                // alert the error if any error occured
+                alert (response["responseJSON"] ["error"]["valor"]);
+            }
+        })
+    })
+
+
+    $ ("#form_dano_moral"). submit (function (e) {
+        // preventing from page reload and default actions
+        e.preventDefault ();
+        // serialize the data for sending the form data.
+        var serializedData = $ (this) .serialize ();
+        // make POST ajax call
+        $ .ajax ({
+            type: 'POST',
+            url: "{% url 'ajax_dano_moral' accidente.id %}",
+            data: serializedData,
+            success: function (response) {
+                // on successfull creating object
+                // first\. clear the form.
+                $ ("#form_dano_moral"). trigger ('reset');
+                // 2\. focus to nickname input
+                $ ("#id_cantidad"). focus ();
+
+                // display the newly friend to table.
+                var instance = JSON.parse (response ["instance"]);
+                console.log(instance)
+                var fields = instance [0] ["fields"];
+
+                var formatter = new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'USD',
+                    // These options are needed to round to whole numbers if that's what you want.
+                    // minimumFractionDigits: 0, // (this suffices for whole numbers, but will print 2500.10 as $2,500.1)
+                    // maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
+                    });
+
+                var valor = formatter.format(fields['valor_dano_moral'])
+                console.log("Hay info")
+                $("#cant_n1").text( fields['valor_moral_n1']);
+                $("#cant_n2").text( fields['valor_moral_n2']);
+                $("#cant_n3").text( fields['valor_moral_n3']);
+                $("#cant_n4").text( fields['valor_moral_n4']);
+                $("#cant_n5").text( fields['valor_moral_n5']);
+                $("#valor_total").text( valor);
             },
             error: function (response) {
                 // alert the error if any error occured
