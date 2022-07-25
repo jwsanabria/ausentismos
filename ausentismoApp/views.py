@@ -394,43 +394,43 @@ class RegistrarAccidenteView(CreateView):
     success_url = reverse_lazy("accidentes")
 
     def form_valid(self, form):
-        if (form.salario_accidentado is None):
-            empleado = get_object_or_404(Persona, id=form.empleado)
-            parametro = get_object_or_404(ParametrosApp, parametro='SMLV')
-            niveles = None
-            if (form.fallecido == True):
-                niveles = NivDanoMoral.objects.filter(tipo_dano='M')
-            elif form.invalidez == True:
-                niveles = NivDanoMoral.objects.filter(tipo_dano='I', rango_inf__lte=form.grado_invalidez,
-                                                      rango_sup__gte=form.grado_invalidez)
+        empleado = get_object_or_404(Persona, id=form.instance.empleado.id)
+        parametro = get_object_or_404(ParametrosApp, parametro='SMLV')
+        niveles = None
+        if (form.instance.fallecido == True):
+            niveles = NivDanoMoral.objects.filter(tipo_dano='M')
+        elif form.instance.invalidez == True:
+            niveles = NivDanoMoral.objects.filter(tipo_dano='I', rango_inf__lte=form.instance.grado_invalidez,
+                                                      rango_sup__gte=form.instance.grado_invalidez)
 
-            if niveles is not None:
-                for niv in niveles:
-                    if niv.nivel == 1:
-                        form.factor_moral_n1 = niv.valor
-                    elif niv.nivel == 2:
-                        form.factor_moral_n2 = niv.valor
-                    elif niv.nivel == 3:
-                        form.factor_moral_n3 = niv.valor
-                    elif niv.nivel == 4:
-                        form.factor_moral_n4 = niv.valor
-                    elif niv.nivel == 5:
-                        form.factor_moral_n5 = niv.valor
-            else:
-                form.factor_moral_n1 = 0
-                form.factor_moral_n2 = 0
-                form.factor_moral_n3 = 0
-                form.factor_moral_n4 = 0
-                form.factor_moral_n5 = 0
+        if niveles.count() > 0:
+            for niv in niveles:
+                if niv.nivel == 1:
+                    form.instance.factor_moral_n1 = niv.valor
+                elif niv.nivel == 2:
+                    form.instance.factor_moral_n2 = niv.valor
+                elif niv.nivel == 3:
+                    form.instance.factor_moral_n3 = niv.valor
+                elif niv.nivel == 4:
+                    form.instance.factor_moral_n4 = niv.valor
+                elif niv.nivel == 5:
+                    form.instance.factor_moral_n5 = niv.valor
+        else:
+            form.instance.factor_moral_n1 = 0
+            form.instance.factor_moral_n2 = 0
+            form.instance.factor_moral_n3 = 0
+            form.instance.factor_moral_n4 = 0
+            form.instance.factor_moral_n5 = 0
 
-            form.salario_accidentado = empleado.salario
-            form.salario_minimo = float(parametro.valor)
-            form.valor_moral_n1 = 0
-            form.valor_moral_n2 = 0
-            form.valor_moral_n3 = 0
-            form.valor_moral_n4 = 0
-            form.valor_moral_n5 = 0
-            form.valor_dano_moral = 0
+        form.instance.salario_accidentado = empleado.salario
+        form.instance.salario_minimo = float(parametro.valor)
+        form.instance.valor_moral_n1 = 0
+        form.instance.valor_moral_n2 = 0
+        form.instance.valor_moral_n3 = 0
+        form.instance.valor_moral_n4 = 0
+        form.instance.valor_moral_n5 = 0
+        form.instance.valor_dano_moral = 0
+
         return super().form_valid(form)
 
 
@@ -568,7 +568,7 @@ class LucroView(View):
             accidente.salario_accidentado= salario
             accidente.salario_minimo= smlv
 
-            if niveles is not None:
+            if niveles.count() > 0:
                 for niv in niveles:
                     if niv.nivel == 1:
                         accidente.factor_moral_n1 = niv.valor
@@ -608,6 +608,7 @@ class LucroView(View):
         estado = "LESIONADO"
         if accidente.fallecido :
             estado = "FALLECIDO"
+
 
         context_data = {"accidente": accidente,
                         'salario': salario,
