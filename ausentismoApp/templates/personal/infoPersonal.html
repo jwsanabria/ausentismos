@@ -2,10 +2,12 @@
 {% load django_tables2 %}
 {% load i18n %}
 {% block content %}
+
     <div class="container p-5 bg-white">
-        <div class="float-none">
-            <h1>{{ persona.nombre  }}</h1>
+        <div class="text-center bg-white font-weight-bold">
+            <h1 class="card-title bg-white align-content-center font-weight-bold text-capitalize">{{ persona.nombre  }}</h1>
         </div>
+
         <div class="row">
 
         <div class="d-flex justify-content-center flex-column">

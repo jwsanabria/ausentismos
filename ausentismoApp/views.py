@@ -925,4 +925,9 @@ def calcular_tiempo(dic, indice):
     if dic.get(indice) is None:
         return "00:00"
     else:
-        return str(int(dic.get(indice) / 60)) + ":" + str(int(dic.get(indice) % 60))
+        minutos = int(dic.get(indice) % 60)
+        if minutos < 10:
+            s_minutos = "0" + str(int(dic.get(indice) % 60))
+        else:
+            s_minutos = str(int(dic.get(indice) % 60))
+        return str(int(dic.get(indice) / 60)) + ":" + s_minutos
