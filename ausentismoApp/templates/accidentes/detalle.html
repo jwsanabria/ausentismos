@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load django_tables2 %}
+{% load i18n %}
+{% block content %}
+    <div class="container p-5 bg-white">
+        <div class="float-none">
+            <h1>{{ persona.nombre  }}</h1>
+        </div>
+        <div class="row">
+
+        <div class="d-flex justify-content-center flex-column">
+
+                <div class="pl-4"> <b><span class="text-dark">Accidentado: </span></b>{{ accidente.empleado }} </div>
+                <div class="pl-4"> <b><span>Fecha accidente: </span></b>{{ accidente.fecha_accidente }} </div>
+                <div class="pl-4"> <b><span>Hora del accidente: </span></b>{{ accidente.hora_accidente }} </div>
+                <div class="pl-4"> <b><span>Tipo jornada: </span></b>{{ accidente.tipo_jornada }} </div>
+                <div class="pl-4"> <b><span>Fallecido: </span></b>{{ accidente.fallecido }} </div>
+                <div class="pl-4"> <b><span>Invalidez: </span></b> {{ accidente.invalidez }} </div>
+                <div class="pl-4"> <b><span>Incapacidad: </span></b>{{ accidente.incapacidad }} </div>
+                <div class="pl-4"> <b><span>Días incapacidad: </span></b>{{ accidente.dias_incapacidad}} </div>
+                <div class="pl-4"> <b><span>Grado invalidez: </span></b>{{ accidente.grado_invalidez}} </div>
+                <div class="pl-4"> <b><span>Descripción: </span></b>{{ accidente.descripcion_accidente }} </div>
+
+
+                <div class="float-none pt-3">
+                    <h4>Información adicional</h4>
+                </div>
+                <div class="pl-4"> <b><span>CIE10: </span></b>{{ accidente.codigo_cie10 }} </div>
+                <div class="pl-4"> <b><span>Factor personal: </span></b>{{ accidente.factor_personal }} </div>
+                <div class="pl-4"> <b><span>Factor laboral: </span></b>{{ accidente.factor_laboral }} </div>
+                <div class="pl-4"> <b><span>Acto subestandar: </span></b>{{ accidente.acto_subestandar }} </div>
+                <div class="pl-4"> <b><span>Condiciones Amb subestandar: </span></b>{{ accidente.cond_ambientales_subestandar }} </div>
+                <div class="pl-4"> <b><span>Salario: </span></b>{{ accidente.empleado.display_salario}}</div>
+
+                <div class="float-none pt-3">
+                    <h4>Acciones</h4>
+                    <a href="{{accidente.get_documentar_url}}" class="btn btn-outline-info  btn-sm">Documentar</a>
+                    <a href="{{accidente.get_lucro_url}}" class="btn btn-outline-info  btn-sm">Lucro</a>
+                    <a href="{{accidente.get_cambio_url}}"   class="btn btn-outline-info btn-sm">Adaptación al cambio</a>
+                    <a href="{{accidente.get_nomina_url}}" class="btn btn-secondary  btn-sm">Apropiaciones Nómina</a>
+                    <a href="{{accidente.get_balance_url}}" class="btn btn-primary  btn-sm">Balance</a>
+                </div>
+
+        </div>
+        </div>
+    </div>
+{% endblock content %}

@@ -633,6 +633,9 @@ class Accidente(models.Model):
     def get_balance_url(self):
         return reverse("balance", kwargs={'pk': self.id})
 
+    def get_detalle_url(self):
+        return reverse("detalle_accidente", kwargs={'pk': self.id})
+
 
 class CostosAccInsumosMedicos(models.Model):
     accidente = models.ForeignKey(Accidente, on_delete=models.CASCADE)

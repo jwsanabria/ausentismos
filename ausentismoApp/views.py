@@ -585,6 +585,11 @@ class FilteredAusentismoListView(ExportMixin, SingleTableMixin, FilterView):
         return context
 '''
 
+class DetalleAccidenteView(View):
+    def get(self, request, pk):
+        context_data = {"accidente": Accidente.objects.get(id=pk)}
+        return render(request, 'accidentes/detalle.html', context_data)
+
 class PersonaView(View):
     def get(self, request, pk):
         context_data = {"persona": Persona.objects.get(id=pk)}

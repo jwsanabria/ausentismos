@@ -9,6 +9,9 @@
 {% block content %}
     <div class="text-center bg-white font-weight-bold">
         <h1 class="card-title bg-white align-content-center font-weight-bold text-capitalize">Documentación de lucro</h1>
+        <div class="pl-4"> <b><span class="text-dark">Accidentado: </span></b>{{ accidente.empleado }} </div>
+        <div class="pl-4"> <b><span>Fecha accidente: </span></b>{{ accidente.fecha_accidente }} </div>
+        <a href="{% url 'detalle_accidente' accidente.id %}" class="btn btn-success  btn-sm">ir a Accidente</a>
     </div>
     <div id="accordion">
         <h3>Daño material futuro titulo lucro cesante</h3>
