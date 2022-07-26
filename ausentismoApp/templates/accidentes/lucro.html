@@ -165,12 +165,12 @@
                             </thead>
                             <tbody>
                                 {% for item in list_dano_emergente %}
-                                    <tr>
+                                    <tr id="row_emergente_{{ item.id }}">
                                         <td>{{ item.id }}</td>
                                         <td>{{ item.descripcion }}</td>
                                         <td>{{ item.valor|prepend_dollars }}</td>
                                         <td>
-                                            <a onclick="return abrir_modal ('{% url 'costos_edit' item.id %}')"
+                                            <a onclick="delete_row( {{item.id}}, 'E')"
                                                class="btn btn-danger btn-circle" href="#">
                                                 <span class="fa fa-remove"></span>
                                             </a>
@@ -270,12 +270,12 @@
 
                 var valor = formatter.format(fields["valor"])
                 $ ("#dano_emergente_table tbody"). prepend (
-                    `<tr>
+                    `<tr id="row_emergente_${instance[0]['pk']}">
                     <td>${instance[0]['pk']}</td>
                     <td> ${fields["descripcion"] || ""} </td>
                     <td> ${valor || ""} </td>
                     <td>
-                        <a onclick=" ${instance[0]['pk']})" class="btn btn-danger btn-circle" href="#">
+                        <a onclick="delete_row( ${instance[0]['pk']}, 'E')" class="btn btn-danger btn-circle" href="#">
                            <span class="fa fa-remove"></span>
                         </a>
                     </td>
@@ -335,5 +335,27 @@
             }
         })
     })
+
+    $.ajaxSetup({
+        data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+    });
+
+
+    function delete_row(id, model){
+        url = "{% url 'ajax_remove_row' accidente.id %}"
+        $ .ajax ({
+            type: 'POST',
+            url: url,
+            data: { id: id, tipo: model},
+            success: function (response) {
+                if(model == 'E')
+                    $("#row_emergente_" + id).remove();
+                },
+                error: function (response) {
+                    // alert the error if any error occured
+                    alert (response["responseJSON"] ["error"]["valor"]);
+                }
+        })
+    }
 </script>
 {% endblock javascript%}

@@ -33,5 +33,6 @@ urlpatterns = [
     path('accidentes/adaptacion/capacitador/<int:pk>', views.postCapacitador, name='ajax_capacitador'),
     path('accidentes/balance/<int:pk>', BalanceView.as_view(), name='balance'),
     path('accidentes/lucro/dano_moral/<int:pk>', views.postDanoMoral, name='ajax_dano_moral'),
-    path('accidentes/costos/remove/<int:pk>', views.postRemoveRow, name='ajax_remove_row')
+    path('accidentes/costos/remove/<int:pk>', views.postRemoveRow, name='ajax_remove_row'),
+    path('accidentes/apropiaciones/remove/<int:pk>', views.postRemoveAcompanamiento, name='ajax_remove_apropiacion')
 ]

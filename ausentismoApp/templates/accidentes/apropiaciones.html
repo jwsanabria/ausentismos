@@ -47,7 +47,7 @@
                             </thead>
                             <tbody>
                                 {% for item in list_acompanamientos %}
-                                    <tr>
+                                    <tr id="row_apropiacion_{{ item.id }}">
                                         <td>{{ item.id }}</td>
                                         <td>{{ item.empleado }}</td>
                                         <td>{{ item.tipo_acompanamiento }}</td>
@@ -58,7 +58,7 @@
                                         <td>{{ item.valor_factor }}</td>
                                         <td>{{ item.total|prepend_dollars }}</td>
                                         <td>
-                                            <a onclick="return abrir_modal ('{% url 'costos_edit' item.id %}')"
+                                            <a onclick="delete_row( {{item.id}})"
                                                class="btn btn-danger btn-circle" href="#">
                                                 <span class="fa fa-remove"></span>
                                             </a>
@@ -84,16 +84,21 @@
                         </tr>
                     </thead>
                     <tbody>
+
                         {% for fila in matrix %}
                         <tr>
+
                             {% for columna in fila %}
+
                                 {% if forloop.first %}
                                     <td>{{ columna }}</td>
                                 {% else %}
-                                    <td>{{ columna|prepend_dollars }}</td>
+                                    <td><span id="f{{ forloop.parentloop.counter0 }}_c{{ forloop.counter0 }}">{{ columna|prepend_dollars }}</span></td>
                                 {% endif %}
+
                             {% endfor %}
                         </tr>
+
                         {% endfor %}
                     </tbody>
                 </table>
@@ -147,5 +152,31 @@
         placeholder: 'Ingrese el nombre del empleado',
         minimumInputLength: 3,
     });
+
+    function delete_row(id){
+        url = "{% url 'ajax_remove_apropiacion' accidente.id %}"
+        $ .ajax ({
+            type: 'POST',
+            url: url,
+            data: { id: id},
+            success: function (response) {
+                $("#row_apropiacion_" + id).remove();
+                var instance = JSON.parse (response ["instance"]);
+                console.log(instance)
+                for(indice in instance){
+                    for(elem in instance[indice]) {
+                        if (elem > 0) {
+                            id_html = "f" + indice + "_c" + elem;
+                            $("#"+id_html).text(instance[indice][elem]);
+                        }
+                    }
+                }
+            },
+            error: function (response) {
+                // alert the error if any error occured
+                alert (response["responseJSON"] ["error"]["valor"]);
+            }
+        })
+    }
 </script>
 {% endblock javascript%}

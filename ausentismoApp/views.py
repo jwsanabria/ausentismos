@@ -22,6 +22,7 @@ from django.core import serializers
 from django.db.models import F
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.contrib.auth.decorators import login_required
+import json
 
 
 interes_tecnico = 0.004867
@@ -55,6 +56,22 @@ def postRemoveRow (request, *args, **kwargs):
             elif tipo=='B':
                 model = get_object_or_404(CostosAccManoObra, id=request.POST['id'])
 
+            elif tipo=='E':
+                model = get_object_or_404(CostosAccDanoEmergente, id=request.POST['id'])
+
+            elif tipo=='S':
+                model = get_object_or_404(ReemplazoAccidente, id=request.POST['id'])
+
+            elif tipo=='C':
+                model = get_object_or_404(CapacitadorAccidente, id=request.POST['id'])
+
+            elif tipo=='A':
+                model = get_object_or_404(CostosAccAdicionales, id=request.POST['id'])
+
+            elif tipo == 'P':
+                model = get_object_or_404(TiemposAccAcompanamiento, id=request.POST['id'])
+
+
             model.delete()
             # send to client side.
             ser_instance = serializers.serialize('json', [model, ])
@@ -65,6 +82,55 @@ def postRemoveRow (request, *args, **kwargs):
 
     # some error occured
     return JsonResponse({"error": ""}, status=400)
+
+
+def postRemoveAcompanamiento(request, *args, **kwargs):
+    accidente = get_object_or_404(Accidente, id=kwargs['pk'])
+    # request should be ajax and method should be POST.
+    if request.is_ajax and request.method == "POST":
+        # get the form data
+        try:
+            model = get_object_or_404(TiemposAccAcompanamiento, id=request.POST['id'])
+
+            model.delete()
+
+            matrix = []
+
+            result = TiemposAccAcompanamiento.objects.filter(accidente=accidente.id).values('tipo_acompanamiento').order_by(
+                'tipo_acompanamiento').annotate(dTotal=Sum('total'))
+            tipos_acompanamiento = TipoAcompanamiento.objects.all().order_by('id')
+            factor_parafiscales = FactorAccParafiscales.objects.all().order_by('id')
+            for parafiscal in factor_parafiscales:
+                fila = []
+                fila.append(parafiscal.descripcion)
+                for tipo in tipos_acompanamiento:
+                    valor = 0;
+                    for r in result.iterator():
+                        if tipo.id == r['tipo_acompanamiento']:
+                            valor = parafiscal.factor * r['dTotal']
+                    fila.append(valor)
+                matrix.append(fila)
+
+            # send to client side.
+            ser_instance = json.dumps(matrix, cls=DecimalEncoder)
+            return JsonResponse({"instance": ser_instance}, status=200)
+        except Exception:
+            # some form errors occured.
+            return JsonResponse({"error": "Se presento un error al eliminar la fila"}, status=400)
+
+    # some error occured
+    return JsonResponse({"error": ""}, status=400)
+
+
+class DecimalEncoder(json.JSONEncoder):
+    def default(self, obj):
+        # 👇️ if passed in object is instance of Decimal
+        # convert it to a string
+        if isinstance(obj, Decimal):
+            return str(obj)
+        # 👇️ otherwise use the default behavior
+        return json.JSONEncoder.default(self, obj)
+
 
 def postDanoMoral (request, *args, **kwargs):
     accidente = get_object_or_404(Accidente, id=kwargs['pk'])

@@ -42,13 +42,13 @@
                             </thead>
                             <tbody>
                                 {% for item in list_reemplazos %}
-                                    <tr>
+                                    <tr id="row_reemplazo_{{ item.id }}">
                                         <td>{{ item.id }}</td>
                                         <td>{{ item.reemplazo }}</td>
                                         <td>{{ item.tipo_reemplazo }}</td>
                                         <td>{{ item.dias }}</td>
                                         <td>
-                                            <a onclick="return abrir_modal ('{% url 'costos_edit' item.id %}')"
+                                            <a onclick="delete_row( {{item.id}}, 'S')"
                                                class="btn btn-danger btn-circle" href="#">
                                                 <span class="fa fa-remove"></span>
                                             </a>
@@ -92,12 +92,12 @@
                             </thead>
                             <tbody>
                                 {% for item in list_capacitadores %}
-                                    <tr>
+                                    <tr id="row_capacitador_{{ item.id }}">
                                         <td>{{ item.id }}</td>
                                         <td>{{ item.capacitador }}</td>
                                         <td>{{ item.dias }}</td>
                                         <td>
-                                            <a onclick="return abrir_modal ('{% url 'costos_edit' item.id %}')"
+                                            <a onclick="delete_row( {{item.id}}, 'C')"
                                                class="btn btn-danger btn-circle" href="#">
                                                 <span class="fa fa-remove"></span>
                                             </a>
@@ -135,12 +135,12 @@
                             </thead>
                             <tbody>
                                 {% for item in list_costos %}
-                                    <tr>
+                                    <tr id="row_adicional_{{ item.id }}">
                                         <td>{{ item.id }}</td>
                                         <td>{{ item.actividad }}</td>
                                         <td>{{ item.valor|prepend_dollars }}</td>
                                         <td>
-                                            <a onclick="return abrir_modal ('{% url 'costos_edit' item.id %}')"
+                                            <a onclick="delete_row( {{item.id}}, 'A')"
                                                class="btn btn-danger btn-circle" href="#">
                                                 <span class="fa fa-remove"></span>
                                             </a>
@@ -196,13 +196,13 @@
 
                 var valor = formatter.format(fields["valor"])
                 $ ("#reemplazo_table tbody"). prepend (
-                    `<tr>
+                    `<tr id="row_reemplazo_${instance[0]['pk']}">
                     <td>${instance[0]['pk']}</td>
                     <td> ${fields["reemplazo"] || ""} </td>
                     <td> ${fields["tipo_reemplazo"] || ""} </td>
                     <td> ${fields["dias"] || ""} </td>
                     <td>
-                        <a onclick=" ${instance[0]['pk']})" class="btn btn-danger btn-circle" href="#">
+                        <a onclick="delete_row( ${instance[0]['pk']}, 'S')" class="btn btn-danger btn-circle" href="#">
                            <span class="fa fa-remove"></span>
                         </a>
                     </td>
@@ -247,12 +247,12 @@
                     });
 
                 $ ("#capacitador_table tbody"). prepend (
-                    `<tr>
+                    `<tr id="row_capacitador_${instance[0]['pk'] }">
                     <td>${instance[0]['pk']}</td>
                     <td> ${fields["capacitador"] || ""} </td>
                     <td> ${fields["dias"] || ""} </td>
                     <td>
-                        <a onclick=" ${instance[0]['pk']})" class="btn btn-danger btn-circle" href="#">
+                        <a onclick="delete_row( ${instance[0]['pk']}, 'C')" class="btn btn-danger btn-circle" href="#">
                            <span class="fa fa-remove"></span>
                         </a>
                     </td>
@@ -298,12 +298,12 @@
 
                 var valor = formatter.format(fields["valor"])
                 $ ("#adicionales_table tbody"). prepend (
-                    `<tr>
+                    `<tr id="row_adicional_${instance[0]['pk']}">
                     <td>${instance[0]['pk']}</td>
                     <td> ${fields["actividad"] || ""} </td>
                     <td> ${valor || ""} </td>
                     <td>
-                        <a onclick=" ${instance[0]['pk']})" class="btn btn-danger btn-circle" href="#">
+                        <a onclick="delete_row( ${instance[0]['pk']}, 'A')" class="btn btn-danger btn-circle" href="#">
                            <span class="fa fa-remove"></span>
                         </a>
                     </td>
@@ -377,5 +377,29 @@
         placeholder: 'Ingrese el nombre del empleado',
         minimumInputLength: 3,
     });
+
+
+    function delete_row(id, model){
+        url = "{% url 'ajax_remove_row' accidente.id %}"
+        $ .ajax ({
+            type: 'POST',
+            url: url,
+            data: { id: id, tipo: model},
+            success: function (response) {
+                if(model == 'S')
+                    $("#row_reemplazo_" + id).remove();
+
+                if(model == 'C')
+                    $("#row_capacitador_" + id).remove();
+
+                if(model == 'A')
+                    $("#row_adicional_" + id).remove();
+            },
+            error: function (response) {
+                // alert the error if any error occured
+                alert (response["responseJSON"] ["error"]["valor"]);
+            }
+        })
+    }
 </script>
 {% endblock javascript%}
