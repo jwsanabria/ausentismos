@@ -419,19 +419,21 @@ class BuscarPersonaView(View):
 
 class LiquidacionView(View):
     def get(self, request):
-        data = {}
+        data = []
         try:
-            fecha_liquidacion = request.GET['fecha_liquidacion']
+            fecha_liquidacion = datetime.strptime(request.GET['fecha_liquidacion'], "%d-%m-%Y")
             id_accidente = request.GET['id_accidente']
             num_meses_exp = request.GET['lcf']
             accidente = get_object_or_404(Accidente, id=id_accidente)
 
-            data = []
-            fecha_liquidacion = datetime.strptime(fecha_liquidacion, "%d-%m-%Y")
+
             factor_ipc_final = 0.0
             factor_ipc_inicial = 0.0
             diferencia = relativedelta(fecha_liquidacion, accidente.fecha_accidente)
             num_meses_liq = diferencia.years * 12 + diferencia.months
+
+            if num_meses_liq < 0:
+                raise Exception("La fecha de liquidación es inferior a la fecha del accidente")
 
             if num_meses_liq == 0:
                 num_meses_liq = 1.0
