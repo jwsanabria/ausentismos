@@ -483,11 +483,12 @@ class LiquidacionView(View):
 
             logger.info(item)
             data.append(item)
+            return JsonResponse(data, safe=False, status=200)
         except Exception as e:
             logger.error(e)
             data.append({'error': str(e)})
 
-        return JsonResponse(data, safe=False)
+        return JsonResponse(data, safe=False, status=400)
 
 class RegistrarAusentismoView(CreateView):
     model = Ausentismo
