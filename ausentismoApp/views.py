@@ -444,7 +444,7 @@ class LiquidacionView(View):
                 factor_ipc_inicial = f_ipc_inicial.factor
             except ObjectDoesNotExist as e:
                 logger.error(e)
-                data['error']: str(e)
+                data.append({'error': str(e)})
 
             ingreso_base = accidente.salario_accidentado + (accidente.salario_accidentado * 25 / 100)
             valor_actualizado = ingreso_base - (ingreso_base * 25 / 100)
@@ -488,7 +488,7 @@ class LiquidacionView(View):
             data.append(item)
         except Exception as e:
             logger.error(e)
-            data['error']: str(e)
+            data.append({'error': str(e)})
 
         return JsonResponse(data, safe=False)
 
