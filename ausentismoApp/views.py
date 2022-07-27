@@ -436,8 +436,8 @@ class LiquidacionView(View):
                 factor_ipc_final = f_ipc_final.factor
                 f_ipc_inicial = FactorIPC.objects.filter(anio=accidente.fecha_accidente.year).filter(mes=accidente.fecha_accidente.month).get()
                 factor_ipc_inicial = f_ipc_inicial.factor
-            except ObjectDoesNotExist:
-                pass
+            except ObjectDoesNotExist as e:
+                data['error']: str(e)
 
             ingreso_base = accidente.empleado.salario + (accidente.empleado.salario * 25 / 100)
             valor_actualizado = ingreso_base - (ingreso_base * 25 / 100)

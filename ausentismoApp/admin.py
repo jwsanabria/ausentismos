@@ -67,6 +67,7 @@ admin.site.register(TipoAcompanamiento, AuditAdmin)
 admin.site.register(FactorAccParafiscales, AuditAdmin)
 admin.site.register(NivDanoMoral, AuditAdmin)
 admin.site.register(ParametrosApp, AuditAdmin)
+admin.site.register(Accidente, AuditAdmin)
 
 
 
