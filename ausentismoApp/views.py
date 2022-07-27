@@ -439,7 +439,7 @@ class LiquidacionView(View):
             except ObjectDoesNotExist as e:
                 data['error']: str(e)
 
-            ingreso_base = accidente.empleado.salario + (accidente.empleado.salario * 25 / 100)
+            ingreso_base = accidente.salario_accidentado + (accidente.salario_accidentado * 25 / 100)
             valor_actualizado = ingreso_base - (ingreso_base * 25 / 100)
             valor_presente = 0
             renta_actualizada = 0
