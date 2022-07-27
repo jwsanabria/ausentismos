@@ -462,12 +462,13 @@ class LiquidacionView(View):
             else:
                 renta_actualizada = valor_presente * accidente.grado_invalidez
 
+            logger.info('Numero de meses a liquidar %s' % (num_meses_exp))
 
             lucro_cesante_consolidado = renta_actualizada * ((Decimal(1.0) + Decimal(interes_tecnico)) ** (Decimal(num_meses_liq) - Decimal(1.0)) / Decimal(interes_tecnico))
 
             lucro_cesante_futuro = renta_actualizada * ((Decimal(1.0) + Decimal(interes_tecnico)) ** Decimal(num_meses_exp) - Decimal(1.0)) / (Decimal(interes_tecnico) * (Decimal(1.0) + Decimal(interes_tecnico)) ** Decimal(num_meses_exp))
 
-            logger.info('Numero de meses a liquidar %s' % (num_meses_exp))
+
             accidente.fecha_liquidacion = fecha_liquidacion
             accidente.lucro_consolidado = lucro_cesante_consolidado
             accidente.lucro_futuro = lucro_cesante_futuro
