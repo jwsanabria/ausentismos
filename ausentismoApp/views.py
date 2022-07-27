@@ -483,6 +483,7 @@ class LiquidacionView(View):
             item['lucro_cesante_futuro']= lucro_cesante_futuro
             item['fecha_liq']=fecha_liquidacion
 
+            logger.info(item)
             data.append(item)
         except Exception as e:
             logger.error(e)
