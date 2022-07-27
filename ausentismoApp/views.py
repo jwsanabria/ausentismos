@@ -443,6 +443,7 @@ class LiquidacionView(View):
                 f_ipc_inicial = FactorIPC.objects.filter(anio=accidente.fecha_accidente.year).filter(mes=accidente.fecha_accidente.month).get()
                 factor_ipc_inicial = f_ipc_inicial.factor
             except ObjectDoesNotExist as e:
+                logger.error(e)
                 data['error']: str(e)
 
             ingreso_base = accidente.salario_accidentado + (accidente.salario_accidentado * 25 / 100)
@@ -453,7 +454,7 @@ class LiquidacionView(View):
             lucro_cesante_futuro = 0
 
 
-
+            logger.info('Valor factor ipc inicial {}' % (factor_ipc_inicial))
 
             valor_presente = valor_actualizado * (factor_ipc_final / factor_ipc_inicial)
 
