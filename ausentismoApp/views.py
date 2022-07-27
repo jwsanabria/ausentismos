@@ -486,6 +486,7 @@ class LiquidacionView(View):
 
             data.append(item)
         except Exception as e:
+            logger.error(e)
             data['error']: str(e)
 
         return JsonResponse(data, safe=False)
