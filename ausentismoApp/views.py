@@ -425,7 +425,6 @@ class LiquidacionView(View):
             id_accidente = request.GET['id_accidente']
             num_meses_exp = request.GET['lcf']
             accidente = get_object_or_404(Accidente, id=id_accidente)
-            logger.info("Accidente")
 
             data = []
             fecha_liquidacion = datetime.strptime(fecha_liquidacion, "%d-%m-%Y")
@@ -436,6 +435,8 @@ class LiquidacionView(View):
 
             if num_meses_liq == 0:
                 num_meses_liq = 1.0
+
+            logger.info('Numero de meses a liquidar %s' % (num_meses_liq))
 
             try:
                 f_ipc_final = FactorIPC.objects.filter(anio=fecha_liquidacion.year).filter(mes=fecha_liquidacion.month).get()
