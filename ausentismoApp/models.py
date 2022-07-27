@@ -785,7 +785,7 @@ class FactorIPC(models.Model):
         verbose_name_plural = 'Lista de factores IPC'
 
     def __str__(self):
-        return str(self.id)
+        return '%s - %s => %s' % (self.anio, self.mes, self.factor)
 
     def save(self, *args, **kwargs):
         ''' On save, update timestamps '''
