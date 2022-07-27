@@ -975,7 +975,7 @@ class FactorAccParafiscales(models.Model):
         verbose_name_plural = 'Factores de accidentalidad por parafiscales'
 
     def __str__(self):
-        return str(self.id)
+        return '%s - %s' % (self.descripcion, self.factor)
 
     def save(self, *args, **kwargs):
         ''' On save, update timestamps '''
