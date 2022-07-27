@@ -26,6 +26,7 @@
                             {% csrf_token %}
                             {{ f_danomaterial.as_p }}
                         </form>
+
                     </td>
                     <td colspan="2" class="border-left border-success">
                         <h6><span style="font-weight: bold">Estado del accidentado:</span> {{ estado }}</h6>
@@ -336,6 +337,7 @@
             error: function (response) {
                 // alert the error if any error occured
                 alert (response["responseJSON"] ["error"]["valor"]);
+
             }
         })
     })
