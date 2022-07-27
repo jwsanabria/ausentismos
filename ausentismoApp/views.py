@@ -674,7 +674,7 @@ class LucroView(View):
             accidente.salario_accidentado= salario
             accidente.salario_minimo= smlv
 
-            if niveles.count() > 0:
+            if niveles is not None and niveles.count() > 0:
                 for niv in niveles:
                     if niv.nivel == 1:
                         accidente.factor_moral_n1 = niv.valor
