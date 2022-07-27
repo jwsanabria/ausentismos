@@ -23,6 +23,11 @@ from django.db.models import F
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.contrib.auth.decorators import login_required
 import json
+import logging
+
+
+logger = logging.getLogger(__name__)
+
 
 
 interes_tecnico = 0.004867
@@ -420,6 +425,7 @@ class LiquidacionView(View):
             id_accidente = request.GET['id_accidente']
             num_meses_exp = request.GET['lcf']
             accidente = get_object_or_404(Accidente, id=id_accidente)
+            logger.info("Accidente")
 
             data = []
             fecha_liquidacion = datetime.strptime(fecha_liquidacion, "%d-%m-%Y")

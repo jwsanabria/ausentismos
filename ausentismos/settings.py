@@ -87,6 +87,20 @@ TEMPLATES = [
 LOGIN_REDIRECT_URL= "/app"
 LOGOUT_REDIRECT_URL= "/accounts/login"
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'INFO',
+    },
+}
+
 WSGI_APPLICATION = 'ausentismos.wsgi.application'
 
 
