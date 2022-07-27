@@ -453,7 +453,7 @@ class LiquidacionView(View):
             lucro_cesante_futuro = 0
 
 
-            logger.info('Numero de meses a liquidar %s' % (ingreso_base))
+
 
             valor_presente = valor_actualizado * (factor_ipc_final / factor_ipc_inicial)
 
@@ -467,6 +467,7 @@ class LiquidacionView(View):
 
             lucro_cesante_futuro = renta_actualizada * ((Decimal(1.0) + Decimal(interes_tecnico)) ** Decimal(num_meses_exp) - Decimal(1.0)) / (Decimal(interes_tecnico) * (Decimal(1.0) + Decimal(interes_tecnico)) ** Decimal(num_meses_exp))
 
+            logger.info('Numero de meses a liquidar %s' % (lucro_cesante_futuro))
             accidente.fecha_liquidacion = fecha_liquidacion
             accidente.lucro_consolidado = lucro_cesante_consolidado
             accidente.lucro_futuro = lucro_cesante_futuro
