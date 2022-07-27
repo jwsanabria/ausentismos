@@ -232,7 +232,7 @@
                 }
             },
             error: function (response) {
-                alert (response[0].error);
+                alert (response.responseJSON[0].error);
                 console.log (response)
             }
         })

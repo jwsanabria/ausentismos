@@ -444,7 +444,7 @@ class LiquidacionView(View):
                 factor_ipc_inicial = f_ipc_inicial.factor
             except ObjectDoesNotExist as e:
                 logger.error(e)
-                data.append({'error': str(e)})
+                data.append({'error': str("Falta información de IPC para las fechas seleccionadas")})
 
             ingreso_base = accidente.salario_accidentado + (accidente.salario_accidentado * 25 / 100)
             valor_actualizado = ingreso_base - (ingreso_base * 25 / 100)
