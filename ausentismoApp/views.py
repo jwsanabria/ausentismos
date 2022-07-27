@@ -436,7 +436,6 @@ class LiquidacionView(View):
             if num_meses_liq == 0:
                 num_meses_liq = 1.0
 
-            logger.info('Numero de meses a liquidar %s' % (num_meses_liq))
 
             try:
                 f_ipc_final = FactorIPC.objects.filter(anio=fecha_liquidacion.year).filter(mes=fecha_liquidacion.month).get()
@@ -453,6 +452,8 @@ class LiquidacionView(View):
             lucro_cesante_consolidado = 0
             lucro_cesante_futuro = 0
 
+
+            logger.info('Numero de meses a liquidar %s' % (ingreso_base))
 
             valor_presente = valor_actualizado * (factor_ipc_final / factor_ipc_inicial)
 
