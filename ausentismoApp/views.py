@@ -453,9 +453,6 @@ class LiquidacionView(View):
             lucro_cesante_consolidado = 0
             lucro_cesante_futuro = 0
 
-
-            logger.info('Valor factor ipc inicial {}' % (factor_ipc_inicial))
-
             valor_presente = valor_actualizado * (factor_ipc_final / factor_ipc_inicial)
 
             if accidente.fallecido:
