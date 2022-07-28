@@ -10,6 +10,7 @@
         <h1 class="card-title bg-white align-content-center font-weight-bold text-capitalize">Apropiaciones de Nómina</h1>
         <div class="pl-4"> <b><span class="text-dark">Accidentado: </span></b>{{ accidente.empleado }} </div>
         <div class="pl-4"> <b><span>Fecha accidente: </span></b>{{ accidente.fecha_accidente }} </div>
+        <div class="pl-4"> <b><span>Estado: </span></b>{%  if accidente.fallecido %} FALLECIDO {% elif accidente.invalidez %} INVALIDEZ {% else %} LESIONADO {% endif %}</div>
         <a href="{% url 'detalle_accidente' accidente.id %}" class="btn btn-success  btn-sm">ir a Accidente</a>
     </div>
     <div id="accordion">
