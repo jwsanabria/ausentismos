@@ -12,11 +12,11 @@ class AusentismoForm(ModelForm):
     fecha_ausentismo = DateField(input_formats=settings.DATE_INPUT_FORMATS, widget=DatePickerInput(format='%d-%m-%Y'))
     class Meta:
         model = Ausentismo
-        fields = ('empleado', 'motivo', 'fecha_solicitud', 'fecha_ausentismo',  'tiempo_ausentismo', 'periodo_ausentismo', )
+        fields = ('empleado', 'motivo', 'fecha_solicitud', 'fecha_ausentismo',  'periodo_ausentismo', )
         widgets = {
             'motivo': forms.Select(attrs={'class': 'form-control'}),
             'periodo_ausentismo': forms.Select(attrs={'class': 'form-control'}),
-            'tiempo_ausentismo': forms.TextInput(attrs={'class': 'form-control', }),
+
         }
 
 class AccidenteForm(ModelForm):
