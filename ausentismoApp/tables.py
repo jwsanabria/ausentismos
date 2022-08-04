@@ -43,8 +43,8 @@ class AusentismoTable(tables.Table):
         }
         attrs = {'id': 'history_table', 'class': 'table table-striped table-hover'}
         template_name = "django_tables2/bootstrap4.html"
-        fields = ("id", "empleado", "motivo", "fecha_ausentismo", "horas_ausentismo", "salario_ausentismo", "valor_ausentismo", "area", "seccion", "cargo" )
-        sequence = ('id', 'empleado', 'area', 'seccion', 'cargo', 'salario_ausentismo', 'fecha_ausentismo', 'horas_ausentismo',  'motivo', 'valor_ausentismo')
+        fields = ("id", "empleado", "motivo", "fecha_ausentismo", "horas_ausentismo", "salario_ausentismo", "valor_ausentismo", "area", "seccion", "cargo", "sede" )
+        sequence = ('id', 'empleado', 'sede', 'area', 'seccion', 'cargo', 'salario_ausentismo', 'fecha_ausentismo', 'horas_ausentismo',  'motivo', 'valor_ausentismo')
 
 
 class AccidenteTable(tables.Table):
