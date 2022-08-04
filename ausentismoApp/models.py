@@ -410,6 +410,9 @@ class Ausentismo(models.Model):
     horas_ausentismo = models.PositiveIntegerField(validators=[MinValueValidator(1)], blank=True, null=True)
     salario_ausentismo = models.DecimalField(decimal_places=2, max_digits=10, blank=True, null=True)
     valor_ausentismo = models.DecimalField(decimal_places=2, max_digits=18, blank=True, null=True)
+    area = models.CharField(max_length=50, blank=True, null=True)
+    seccion = models.CharField(max_length=50, blank=True, null=True)
+    cargo = models.CharField(max_length=50, blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now_add=True)
 
