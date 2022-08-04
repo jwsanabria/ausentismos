@@ -29,6 +29,7 @@ class PersonaTable(tables.Table):
 class AusentismoTable(tables.Table):
     #salario = CurrencyColumn(accessor='empleado.salario')
     #costo = tables.Column(verbose_name='Costo', empty_values=())
+    fecha_ausentismo = tables.DateColumn(format='d-m-Y')
 
     def render_valor_ausentismo(self, record):
         return '${:,.2f}'.format(record.valor_ausentismo)

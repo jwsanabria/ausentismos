@@ -41,6 +41,12 @@ class AusentismoAdmin(admin.ModelAdmin):
     list_filter = ('motivo',)
 
 
+class AccidenteAdmin(admin.ModelAdmin):
+    readonly_fields = ('created', 'updated')
+    list_display = ('empleado', 'fecha_accidente',  'fallecido', 'incapacidad', 'invalidez')
+    list_filter = ('fecha_accidente',)
+
+
 admin.site.register(Persona, PersonaAdmin)
 admin.site.register(Pais, AuditAdmin)
 admin.site.register(Departamento, AuditAdmin)
@@ -67,7 +73,7 @@ admin.site.register(TipoAcompanamiento, AuditAdmin)
 admin.site.register(FactorAccParafiscales, AuditAdmin)
 admin.site.register(NivDanoMoral, AuditAdmin)
 admin.site.register(ParametrosApp, AuditAdmin)
-admin.site.register(Accidente, AuditAdmin)
+admin.site.register(Accidente, AccidenteAdmin)
 
 
 

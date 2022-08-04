@@ -382,8 +382,8 @@ class MotivoAusentismo(models.Model):
     updated = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = 'motivo'
-        verbose_name_plural = 'motivos'
+        verbose_name = 'motivo ausentismo'
+        verbose_name_plural = 'motivos ausentismo'
 
     def __str__(self):
         return self.descripcion
@@ -792,7 +792,7 @@ class FactorIPC(models.Model):
 
     class Meta:
         verbose_name = 'Factor IPC'
-        verbose_name_plural = 'Lista de factores IPC'
+        verbose_name_plural = 'Factores IPC'
 
     def __str__(self):
         return '%s - %s => %s' % (self.anio, self.mes, self.factor)
@@ -822,7 +822,7 @@ class ExpectativaVida(models.Model):
         verbose_name_plural = 'Expectativas de vida'
 
     def __str__(self):
-        return str(self.id)
+        return '%s - %s => %s' % (self.edad, self.tipo, self.expectativa)
 
     def save(self, *args, **kwargs):
         ''' On save, update timestamps '''
@@ -863,7 +863,7 @@ class FactorTiemposAcompanamiento(models.Model):
 
     class Meta:
         verbose_name = 'Factor tiempo acompañamiento'
-        verbose_name_plural = 'Lista de factores'
+        verbose_name_plural = 'Factores acompañamiento'
 
     def __str__(self):
         return str(self.tipo_acompanamiento)
@@ -884,7 +884,7 @@ class TipoAcompanamiento(models.Model):
 
     class Meta:
         verbose_name = 'Tipo acompañamiento'
-        verbose_name_plural = 'Lista de tipos de acompañamiento'
+        verbose_name_plural = 'Tipos de acompañamiento'
 
     def __str__(self):
         return str(self.descripcion)
@@ -1033,7 +1033,7 @@ class NivDanoMoral(models.Model):
 
     class Meta:
         verbose_name = 'Niveles de daño moral'
-        verbose_name_plural = 'Lista de niveles de daño moral'
+        verbose_name_plural = 'Niveles de daño moral'
 
     def __str__(self):
         return '%s (%s : %s) - %s => %s' % (self.tipo_dano, self.rango_inf, self.rango_sup, self.nivel, self.valor)
@@ -1053,7 +1053,7 @@ class ParametrosApp(models.Model):
 
     class Meta:
         verbose_name = 'Parámetro de la aplicación'
-        verbose_name_plural = 'Lista de parametros'
+        verbose_name_plural = 'Parámetros de la aplicación'
 
     def __str__(self):
         return '%s => %s' % (self.parametro, self.valor)
