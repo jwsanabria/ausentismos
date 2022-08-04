@@ -9,6 +9,9 @@
     <div class="card card-default">
         <div class="card-header">
             <h1 class="card-title">Ausentismos</h1>
+            <p>
+                <a href="{% url 'ausentismo_add_view' %}" class="btn btn-primary">Registrar Ausentismo</a>
+            </p>
         </div>
         <div class="card-body">
             <div class="d-flex justify-content-center">
@@ -26,7 +29,6 @@
         </div>
         {% load querystring from django_tables2 %}
         <div class="card-footer">
-            <a href="{% url 'ausentismo_add_view' %}" class="btn btn-primary">Registrar Ausentismo</a>
             <a href="{% querystring '_export'='xlsx' %}" class="btn btn-secondary">Descargar Reporte</a>
         </div>
     </div>

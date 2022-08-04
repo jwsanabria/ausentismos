@@ -413,6 +413,7 @@ class Ausentismo(models.Model):
     area = models.CharField(max_length=50, blank=True, null=True)
     seccion = models.CharField(max_length=50, blank=True, null=True)
     cargo = models.CharField(max_length=50, blank=True, null=True)
+    sede = models.CharField(max_length=50, blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now_add=True)
 

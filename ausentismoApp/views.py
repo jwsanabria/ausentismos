@@ -54,6 +54,11 @@ def postGuardarAusentismo(request, *args, **kwargs):
                 form.instance.horas_ausentismo = int(tiempo)
 
             form.instance.valor_ausentismo = empleado.salario/240 * Decimal(form.instance.horas_ausentismo)
+            form.instance.salario_ausentismo = empleado.salario
+            form.instance.cargo = empleado.cargo.descripcion
+            form.instance.seccion = empleado.seccion.descripcion
+            form.instance.area = empleado.area.descripcion
+            form.instance.sede = empleado.sede.descripcion
             instance = form.save()
             instance.nombre_empleado = empleado.nombre
 

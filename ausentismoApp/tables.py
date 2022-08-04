@@ -27,14 +27,14 @@ class PersonaTable(tables.Table):
 
 
 class AusentismoTable(tables.Table):
-    salario = CurrencyColumn(accessor='empleado.salario')
-    area = tables.Column(accessor='empleado.area')
-    seccion = tables.Column(accessor='empleado.seccion')
-    cargo = tables.Column(accessor='empleado.cargo')
-    costo = tables.Column(verbose_name='Costo', empty_values=())
+    #salario = CurrencyColumn(accessor='empleado.salario')
+    #costo = tables.Column(verbose_name='Costo', empty_values=())
 
-    def render_costo(self, record):
-        return '${:,.2f}'.format(record.empleado.salario/240 * Decimal(record.tiempo_ausentismo/1.0))
+    def render_valor_ausentismo(self, record):
+        return '${:,.2f}'.format(record.valor_ausentismo)
+
+    def render_salario_ausentismo(self, record):
+        return '${:,.2f}'.format(record.salario_ausentismo)
 
     class Meta:
         model = Ausentismo
@@ -43,8 +43,8 @@ class AusentismoTable(tables.Table):
         }
         attrs = {'id': 'history_table', 'class': 'table table-striped table-hover'}
         template_name = "django_tables2/bootstrap4.html"
-        fields = ("id", "empleado", "motivo", "fecha_ausentismo", "tiempo_ausentismo", "salario_ausentismo", "valor_ausentismo" )
-        sequence = ('id', 'empleado', 'area', 'seccion', 'cargo', 'salario_ausentismo', 'fecha_ausentismo', 'tiempo_ausentismo',  'motivo', 'valor_ausentismo')
+        fields = ("id", "empleado", "motivo", "fecha_ausentismo", "horas_ausentismo", "salario_ausentismo", "valor_ausentismo", "area", "seccion", "cargo" )
+        sequence = ('id', 'empleado', 'area', 'seccion', 'cargo', 'salario_ausentismo', 'fecha_ausentismo', 'horas_ausentismo',  'motivo', 'valor_ausentismo')
 
 
 class AccidenteTable(tables.Table):
