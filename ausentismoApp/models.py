@@ -397,13 +397,19 @@ class MotivoAusentismo(models.Model):
 
 
 class Ausentismo(models.Model):
+    PERIODO_AUSENTISMO = (
+        ('D', 'Día'),
+        ('H', 'Hora')
+    )
     empleado = models.ForeignKey(Persona, on_delete=models.CASCADE)
     motivo = models.ForeignKey(MotivoAusentismo, on_delete=models.CASCADE)
     fecha_solicitud = models.DateField()
     fecha_ausentismo = models.DateField()
-    hora_inicial = models.TimeField()
-    hora_final = models.TimeField()
-    tiempo_ausentismo = models.TimeField()
+    tiempo_ausentismo = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+    periodo_ausentismo = models.CharField(max_length=2, choices=PERIODO_AUSENTISMO, blank=True, null=True)
+    horas_ausentismo = models.PositiveIntegerField(validators=[MinValueValidator(1)], blank=True, null=True)
+    salario_ausentismo = models.DecimalField(decimal_places=2, max_digits=10, blank=True, null=True)
+    valor_ausentismo = models.DecimalField(decimal_places=2, max_digits=18, blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now_add=True)
 

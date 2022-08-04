@@ -7,13 +7,14 @@
         <div class="float-none">
             <h1>Registrar ausentismo</h1>
         </div>
-        <form name="ausentismo" method="post">
+        <span id="message_div"></span>
+        <form id="form_ausentismo" method="post">
             {% csrf_token %}
             <table class="text-left p-2 m-2">
                 {{ form.as_table }}
             </table>
-            <input type="submit" value="Aceptar" class="btn btn-primary">
-            <a href="{% url "ausentismo" %}" class="btn btn-danger">Cancelar</a>
+            <button type="submit" class="btn btn-primary mb-2"><span class="fa fa-save"></span> Guardar</button>
+            <a href="{% url "ausentismo" %}" class="btn btn-danger mb-2"><span class="fa fa-refresh"></span> Cancelar</a>
         </form>
 
     </div>
@@ -93,6 +94,68 @@
           placeholder: 'Ingrese el nombre del empleado',
             minimumInputLength: 3,
         });
+
+        $ ("#form_ausentismo"). submit (function (e) {
+            // preventing from page reload and default actions
+            e.preventDefault ();
+            // serialize the data for sending the form data.
+            var serializedData = $ (this) .serialize ();
+            // make POST ajax call
+            $ .ajax ({
+                type: 'POST',
+                url: "{% url 'ajax_guardar_ausentismo' %}",
+                data: serializedData,
+                success: function (response) {
+                    // on successfull creating object
+                    // first\. clear the form.
+                    $ ("#form_ausentismo"). trigger ('reset');
+
+                    // display the newly friend to table.
+                    var instance = JSON.parse (response ["instance"]);
+                    console.log(instance)
+                    var fields = instance [0] ["fields"];
+                    var empleado =instance [1] ["fields"];
+
+                    var formatter = new Intl.NumberFormat('en-US', {
+                        style: 'currency',
+                        currency: 'USD',
+                        // These options are needed to round to whole numbers if that's what you want.
+                        // minimumFractionDigits: 0, // (this suffices for whole numbers, but will print 2500.10 as $2,500.1)
+                        // maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
+                        });
+
+                    var valor = formatter.format(fields["valor_ausentismo"])
+                    $ ("#message_div"). prepend (
+
+                        `<div class="alert alert-warning"><table id="table_ausentismo" class="m-3">
+                        <tr>
+                            <td colspan="2" class="font-weight-bold">Ausentismo registrado con exito</td>
+                        </tr>
+                        <tr>
+                        <td>Id ausentismo: </td>
+                        <td>${instance[0]['pk']}</td>
+                        </tr>
+                        <tr>
+                        <td> Empleado: </td>
+                        <td> ${empleado["nombre"] || ""} </td>
+                        </tr>
+                        <tr>
+                        <td> Costo ausentismo: </td>
+                        <td> ${valor || ""} </td>
+                        </tr>
+                        <tr>
+                        <td> Horas de ausentismo: </td>
+                        <td> ${fields["horas_ausentismo"] || ""} horas</td>
+                        </tr>
+                        </table></div>`
+                    )
+                },
+                error: function (response) {
+                    // alert the error if any error occured
+                    alert (response["responseJSON"] ["error"]);
+                }
+            })
+        })
     </script>
 
 

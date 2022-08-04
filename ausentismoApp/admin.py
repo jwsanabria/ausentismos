@@ -37,7 +37,7 @@ class PersonaAdmin(admin.ModelAdmin):
 
 class AusentismoAdmin(admin.ModelAdmin):
     readonly_fields = ('created', 'updated')
-    list_display = ('empleado', 'motivo',  'fecha_solicitud', 'fecha_ausentismo', 'hora_inicial', 'hora_final')
+    list_display = ('empleado', 'motivo',  'fecha_solicitud', 'fecha_ausentismo', 'tiempo_ausentismo')
     list_filter = ('motivo',)
 
 

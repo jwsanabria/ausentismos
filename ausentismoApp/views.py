@@ -37,6 +37,38 @@ def page_not_found_view(request, exception):
     return render(request, '404.html', status=404)
 
 
+def postGuardarAusentismo(request, *args, **kwargs):
+    # request should be ajax and method should be POST.
+    if request.is_ajax and request.method == "POST":
+        form = AusentismoForm(request.POST)
+        # get the form data
+        try:
+            empleado = get_object_or_404(Persona, id=request.POST['empleado'])
+            tiempo = request.POST['tiempo_ausentismo']
+            periodo = request.POST['periodo_ausentismo']
+            form.instance.horas_ausentismo = 0
+
+            if periodo == 'D':
+                form.instance.horas_ausentismo = int(tiempo) * 8
+            else:
+                form.instance.horas_ausentismo = int(tiempo)
+
+            form.instance.valor_ausentismo = empleado.salario/240 * Decimal(form.instance.horas_ausentismo)
+            instance = form.save()
+            instance.nombre_empleado = empleado.nombre
+
+            ser_instance = serializers.serialize('json', [instance, empleado,])
+            # send to client side.
+            return JsonResponse({"instance": ser_instance}, status=200)
+
+        except Exception as e:
+            # some form errors occured.
+            return JsonResponse({"error": e.__str__()}, status=400)
+
+    # some error occured
+    return JsonResponse({"error": "Se presento un error al calcular el valor del ausentismo"}, status=400)
+
+
 def postRemoveRow (request, *args, **kwargs):
     # request should be ajax and method should be POST.
     if request.is_ajax and request.method == "POST":
@@ -493,11 +525,11 @@ class LiquidacionView(View):
 
         return JsonResponse(data, safe=False, status=400)
 
-class RegistrarAusentismoView(CreateView):
-    model = Ausentismo
-    form_class = AusentismoForm
-    template_name = "ausentismos/add.html"
-    success_url = reverse_lazy("ausentismo")
+class RegistrarAusentismoView(View):
+    def get(self, request):
+        context_data = {'form': AusentismoForm()}
+        return render(request, 'ausentismos/add.html', context_data)
+
 
 class RegistrarAccidenteView(CreateView):
     model = Accidente
