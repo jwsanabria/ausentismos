@@ -530,10 +530,12 @@ class LiquidacionView(View):
 
         return JsonResponse(data, safe=False, status=400)
 
+
 class RegistrarAusentismoView(View):
     def get(self, request):
         context_data = {'form': AusentismoForm()}
         return render(request, 'ausentismos/add.html', context_data)
+
 
 
 class RegistrarAccidenteView(CreateView):
@@ -599,6 +601,8 @@ class FilteredAccidenteListView(ExportMixin, SingleTableMixin, FilterView):
     paginate_by = 20
     filterset_class = AccidenteFilter
 
+
+
 class FilteredAusentismoListView(ExportMixin, SingleTableMixin, FilterView):
     table_class = AusentismoTable
     model = Ausentismo
@@ -634,10 +638,12 @@ class FilteredAusentismoListView(ExportMixin, SingleTableMixin, FilterView):
         return context
 '''
 
+
 class DetalleAccidenteView(View):
     def get(self, request, pk):
         context_data = {"accidente": Accidente.objects.get(id=pk)}
         return render(request, 'accidentes/detalle.html', context_data)
+
 
 class PersonaView(View):
     def get(self, request, pk):
@@ -656,7 +662,7 @@ def ausentismos(request):
     table.paginate(page=request.GET.get("page", 1), per_page=5)
     return render(request, "ausentismos/index.html", {"ausentismos": table})
 
-
+@login_required()
 def informes(request):
     return render(request, "informes/index.html")
 
@@ -665,6 +671,7 @@ def accidentes(request):
     return render(request, "accidentes/index.html")
 
 
+@login_required()
 def personal(request):
     personas = PersonaTable(Persona.objects.all())
     personas.paginate(page=request.GET.get("page", 1), per_page=5)
