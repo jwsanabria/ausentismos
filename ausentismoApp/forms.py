@@ -10,14 +10,20 @@ class AusentismoForm(ModelForm):
     empleado = forms.ModelChoiceField(queryset=Persona.objects.all(), widget=Select(attrs={'class': 'form-control'}))
     fecha_solicitud = DateField(input_formats=settings.DATE_INPUT_FORMATS, widget=DatePickerInput(format='%d-%m-%Y'))
     fecha_ausentismo = DateField(input_formats=settings.DATE_INPUT_FORMATS, widget=DatePickerInput(format='%d-%m-%Y'))
+    tiempo_ausentismo = forms.IntegerField(required=True)
+
+    def __init__(self, *args, **kwargs):
+        super(AusentismoForm, self).__init__(*args, **kwargs)
+
+        for name in self.fields.keys():
+            self.fields[name].widget.attrs.update({
+                'class': 'form-control',
+            })
+
     class Meta:
         model = Ausentismo
         fields = ('empleado', 'motivo', 'fecha_solicitud', 'fecha_ausentismo',  'tiempo_ausentismo', 'periodo_ausentismo', )
-        widgets = {
-            'motivo': forms.Select(attrs={'class': 'form-control'}),
-            'periodo_ausentismo': forms.Select(attrs={'class': 'form-control'}),
-            'tiempo_ausentismo': forms.TextInput(attrs={'class': 'form-control', }),
-        }
+
 
 class AccidenteForm(ModelForm):
     empleado = forms.ModelChoiceField(queryset=Persona.objects.all(), widget=Select(attrs={'class': 'form-control'}))

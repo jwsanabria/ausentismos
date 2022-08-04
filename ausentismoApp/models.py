@@ -406,7 +406,7 @@ class Ausentismo(models.Model):
     fecha_solicitud = models.DateField()
     fecha_ausentismo = models.DateField()
     tiempo_ausentismo = models.PositiveIntegerField(validators=[MinValueValidator(1)], blank=True, null=True)
-    periodo_ausentismo = models.CharField(max_length=2, choices=PERIODO_AUSENTISMO, blank=True, null=True)
+    periodo_ausentismo = models.CharField(max_length=2, choices=PERIODO_AUSENTISMO)
     horas_ausentismo = models.PositiveIntegerField(validators=[MinValueValidator(1)], blank=True, null=True)
     salario_ausentismo = models.DecimalField(decimal_places=2, max_digits=10, blank=True, null=True)
     valor_ausentismo = models.DecimalField(decimal_places=2, max_digits=18, blank=True, null=True)
