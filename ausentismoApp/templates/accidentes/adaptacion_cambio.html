@@ -8,7 +8,7 @@
 {% block content %}
     <div class="text-center bg-white">
         <h1 class="card-title bg-white align-content-center font-weight-bold text-capitalize">Adaptación al Cambio</h1>
-        <div class="pl-4"> <b><span class="text-dark">Accidentado: </span></b>{{ accidente.empleado }} </div>
+        <div class="pl-4"> <b><span class="text-dark">Accidentado: </span></b>{{ accidente.empleado }} ({{ accidente.salario_accidentado|prepend_dollars }})</div>
         <div class="pl-4"> <b><span>Fecha accidente: </span></b>{{ accidente.fecha_accidente }} </div>
         <div class="pl-4"> <b><span>Estado: </span></b>{%  if accidente.fallecido %} FALLECIDO {% elif accidente.invalidez %} INVALIDEZ {% else %} LESIONADO {% endif %}</div>
         <a href="{% url 'detalle_accidente' accidente.id %}" class="btn btn-success  btn-sm">ir a Accidente</a>
@@ -41,6 +41,8 @@
                                     <th>Empleado</th>
                                     <th>Tipo Reemplazo</th>
                                     <th>Días</th>
+                                    <th>Salario</th>
+                                    <th>Costo</th>
                                     <th class="all">Acciones</th>
                                 </tr>
                             </thead>
@@ -51,6 +53,8 @@
                                         <td>{{ item.reemplazo }}</td>
                                         <td>{{ item.tipo_reemplazo }}</td>
                                         <td>{{ item.dias }}</td>
+                                        <td>{{ item.salario|prepend_dollars }}</td>
+                                        <td>{{ item.costo|prepend_dollars }}</td>
                                         <td>
                                             <a onclick="delete_row( {{item.id}}, 'S')"
                                                class="btn btn-danger btn-circle" href="#">
@@ -91,6 +95,8 @@
                                     <th>Id</th>
                                     <th>Empleado</th>
                                     <th>Días</th>
+                                    <th>Salario</th>
+                                    <th>Costo</th>
                                     <th class="all">Acciones</th>
                                 </tr>
                             </thead>
@@ -98,8 +104,10 @@
                                 {% for item in list_capacitadores %}
                                     <tr id="row_capacitador_{{ item.id }}">
                                         <td>{{ item.id }}</td>
-                                        <td>{{ item.capacitador }}</td>
+                                        <td>{{ item.capacitador.nombre }}</td>
                                         <td>{{ item.dias }}</td>
+                                        <td>{{ item.salario|prepend_dollars }}</td>
+                                        <td>{{ item.costo|prepend_dollars }}</td>
                                         <td>
                                             <a onclick="delete_row( {{item.id}}, 'C')"
                                                class="btn btn-danger btn-circle" href="#">
@@ -187,8 +195,10 @@
 
                 // display the newly friend to table.
                 var instance = JSON.parse (response ["instance"]);
+                var reemplazo =instance [1] ["fields"];
                 console.log(instance)
                 var fields = instance [0] ["fields"];
+
 
                 var formatter = new Intl.NumberFormat('en-US', {
                     style: 'currency',
@@ -199,12 +209,16 @@
                     });
 
                 var valor = formatter.format(fields["valor"])
+                var salario = formatter.format(fields["salario"])
+                var costo = formatter.format(fields["costo"])
                 $ ("#reemplazo_table tbody"). prepend (
                     `<tr id="row_reemplazo_${instance[0]['pk']}">
                     <td>${instance[0]['pk']}</td>
-                    <td> ${fields["reemplazo"] || ""} </td>
+                    <td> ${reemplazo["nombre"] || ""} </td>
                     <td> ${fields["tipo_reemplazo"] || ""} </td>
                     <td> ${fields["dias"] || ""} </td>
+                    <td> ${salario || ""} </td>
+                    <td> ${costo || ""} </td>
                     <td>
                         <a onclick="delete_row( ${instance[0]['pk']}, 'S')" class="btn btn-danger btn-circle" href="#">
                            <span class="fa fa-remove"></span>
@@ -239,6 +253,7 @@
 
                 // display the newly friend to table.
                 var instance = JSON.parse (response ["instance"]);
+                var capacitador =instance [1] ["fields"];
                 console.log(instance)
                 var fields = instance [0] ["fields"];
 
@@ -249,12 +264,16 @@
                     // minimumFractionDigits: 0, // (this suffices for whole numbers, but will print 2500.10 as $2,500.1)
                     // maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
                     });
+                var salario = formatter.format(fields["salario"])
+                var costo = formatter.format(fields["costo"])
 
                 $ ("#capacitador_table tbody"). prepend (
                     `<tr id="row_capacitador_${instance[0]['pk'] }">
                     <td>${instance[0]['pk']}</td>
-                    <td> ${fields["capacitador"] || ""} </td>
+                    <td> ${capacitador["nombre"] || ""} </td>
                     <td> ${fields["dias"] || ""} </td>
+                    <td> ${salario || ""} </td>
+                    <td> ${costo || ""} </td>
                     <td>
                         <a onclick="delete_row( ${instance[0]['pk']}, 'C')" class="btn btn-danger btn-circle" href="#">
                            <span class="fa fa-remove"></span>

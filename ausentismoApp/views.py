@@ -243,11 +243,15 @@ def postCapacitador(request, *args, **kwargs):
         form = CapacitacionAccForm(request.POST)
         form.instance.accidente = accidente
         form.instance.salario = capacitador.salario
+        valor_salarial = 0
+        valor_salarial = (abs(capacitador.salario)) / 30
+        valor_salarial = (valor_salarial * Decimal(55.68 / 100) + valor_salarial) * Decimal(form.instance.dias)
+        form.instance.costo = valor_salarial
         # save the data and after fetch the object in instance
         if form.is_valid():
             instance = form.save()
             # serialize an object in json
-            ser_instance = serializers.serialize('json', [instance,])
+            ser_instance = serializers.serialize('json', [instance, capacitador,])
             # send to client side.
             return JsonResponse({"instance": ser_instance}, status=200)
         else:
@@ -267,11 +271,20 @@ def postReemplazo(request, *args, **kwargs):
         form = ReemplazosAccForm(request.POST)
         form.instance.accidente = accidente
         form.instance.salario = reemplazo.salario
+        valor_salarial = 0
+        if form.instance.tipo_reemplazo.__eq__("INTERNO"):
+            valor_salarial = (abs(accidente.salario_accidentado-reemplazo.salario))/30
+            valor_salarial = (valor_salarial * Decimal(55.68/100) + valor_salarial) * Decimal(form.instance.dias)
+        else:
+            valor_salarial = 1
+
+        form.instance.costo = valor_salarial
+
         # save the data and after fetch the object in instance
         if form.is_valid():
             instance = form.save()
             # serialize an object in json
-            ser_instance = serializers.serialize('json', [instance,])
+            ser_instance = serializers.serialize('json', [instance, reemplazo, ])
             # send to client side.
             return JsonResponse({"instance": ser_instance}, status=200)
         else:
@@ -938,9 +951,21 @@ class BalanceView(View):
         result = CostosAccInsumosMedicos.objects.filter(accidente= accidente.id).aggregate(total = Sum(F('valor')*F('cantidad')))['total']
         if result is not None: valor_3 = valor_3 + result
         result = CostosAccTransporte.objects.filter(accidente= accidente.id).aggregate(total=Sum(F('valor')))['total']
-        if result is not None: valor_3 = valor_3 +  result
+        if result is not None: valor_3 = valor_3 + result
         result = CostosAccOtros.objects.filter(accidente=accidente.id).aggregate(total=Sum(F('valor')))['total']
         if result is not None: valor_3 = valor_3 + result
+
+
+        #Reemplazos
+        result = ReemplazoAccidente.objects.filter(accidente= accidente.id).aggregate(total=Sum(F('costo')))['total']
+        if result is not None: valor_13 = result
+
+        # Capacitaciones
+        result = CapacitadorAccidente.objects.filter(accidente=accidente.id).aggregate(total=Sum(F('costo')))['total']
+        if result is not None: valor_13 = valor_13 + result
+
+        result = CostosAccAdicionales.objects.filter(accidente= accidente.id).aggregate(total=Sum(F('valor')))['total']
+        if result is not None: valor_13 = valor_13 + result
 
         result = CostosAccDanoEmergente.objects.filter(accidente= accidente.id).aggregate(total=Sum(F('valor')))['total']
         if result is not None: valor_4 = valor_4 + result

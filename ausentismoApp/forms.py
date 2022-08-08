@@ -47,12 +47,16 @@ class AccidenteForm(ModelForm):
             'factor_laboral': Select(attrs={'class': 'form-control'}),
             'acto_subestandar': Select(attrs={'class': 'form-control'}),
             'cond_ambientales_subestandar': Select(attrs={'class': 'form-control'}),
-            'descripcion_accidente': forms.Textarea(attrs={'class': 'form-control', 'rows':"5", 'cols':"50"}),
+            'descripcion_accidente': forms.Textarea(attrs={'class': 'form-control', 'rows':"5", 'cols':"50", 'value':"Cuando, Quién"}),
             'invalidez': forms.CheckboxInput(),
             'incapacidad': forms.CheckboxInput(),
             'fallecido': forms.CheckboxInput(attrs={ 'onclick': 'accidenteMortal()'})
 
         }
+
+    def __init__(self, *args, **kargs):
+        super(AccidenteForm, self).__init__(*args, **kargs)
+        self.initial['descripcion_accidente'] = 'Cuando, Quién, Donde, Se encontraba, Sucede que, Actividad ordenada por, Se encontraba con'
 
 
 

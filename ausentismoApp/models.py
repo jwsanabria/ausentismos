@@ -933,6 +933,7 @@ class ReemplazoAccidente(models.Model):
     tipo_reemplazo = models.CharField(max_length=7, choices=TIPO_REEMPLAZO)
     dias = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(150)])
     salario = models.DecimalField(decimal_places=2, max_digits=10)
+    costo = models.DecimalField(decimal_places=2, max_digits=10, blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now_add=True)
 
@@ -956,6 +957,7 @@ class CapacitadorAccidente(models.Model):
     capacitador = models.ForeignKey(Persona, on_delete=models.CASCADE)
     dias = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(150)])
     salario = models.DecimalField(decimal_places=2, max_digits=10)
+    costo = models.DecimalField(decimal_places=2, max_digits=10, blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now_add=True)
 
