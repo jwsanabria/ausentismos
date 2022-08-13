@@ -264,25 +264,33 @@ def postCapacitador(request, *args, **kwargs):
 
 def postReemplazo(request, *args, **kwargs):
     accidente = get_object_or_404(Accidente, id=kwargs['pk'])
-    reemplazo = get_object_or_404(Persona, id=request.POST["reemplazo"])
+    reemplazo = Persona()
     # request should be ajax and method should be POST.
     if request.is_ajax and request.method == "POST":
         # get the form data
         form = ReemplazosAccForm(request.POST)
         form.instance.accidente = accidente
-        form.instance.salario = reemplazo.salario
         valor_salarial = 0
-        if form.instance.tipo_reemplazo.__eq__("INTERNO"):
+        if form.instance.tipo_reemplazo == 'INTERNO':
+            reemplazo = get_object_or_404(Persona, id=request.POST["reemplazo"])
+            form.instance.salario = reemplazo.salario
+            form.salario = reemplazo.salario
+            form.instance.nombre_reemplazo = reemplazo.nombre
             valor_salarial = (abs(accidente.salario_accidentado-reemplazo.salario))/30
             valor_salarial = (valor_salarial * Decimal(55.68/100) + valor_salarial) * Decimal(form.instance.dias)
         else:
-            valor_salarial = 1
+            reemplazo.nombre = form.instance.nombre_reemplazo
+            if form.instance.salario is not None:
+                valor_salarial = (abs(accidente.salario_accidentado - form.instance.salario)) / 30
+                valor_salarial = (valor_salarial * Decimal(55.68 / 100) + valor_salarial) * Decimal(form.instance.dias)
 
         form.instance.costo = valor_salarial
 
         # save the data and after fetch the object in instance
         if form.is_valid():
-            instance = form.save()
+            instance = form.save(commit=False)
+            instance.nombre_reemplazo = form.instance.nombre_reemplazo
+            instance.save()
             # serialize an object in json
             ser_instance = serializers.serialize('json', [instance, reemplazo, ])
             # send to client side.

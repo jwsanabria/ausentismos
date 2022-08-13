@@ -50,7 +50,7 @@
                                 {% for item in list_reemplazos %}
                                     <tr id="row_reemplazo_{{ item.id }}">
                                         <td>{{ item.id }}</td>
-                                        <td>{{ item.reemplazo }}</td>
+                                        <td>{{ item.nombre_reemplazo }}</td>
                                         <td>{{ item.tipo_reemplazo }}</td>
                                         <td>{{ item.dias }}</td>
                                         <td>{{ item.salario|prepend_dollars }}</td>
@@ -229,7 +229,8 @@
             },
             error: function (response) {
                 // alert the error if any error occured
-                alert (response["responseJSON"] ["error"]["valor"]);
+                console.log(response["responseJSON"] ["error"])
+                alert (response["responseJSON"] ["error"]);
             }
         })
     })
@@ -284,7 +285,7 @@
             },
             error: function (response) {
                 // alert the error if any error occured
-                alert (response["responseJSON"] ["error"]["valor"]);
+                alert (response["responseJSON"] ["error"]);
             }
         })
     })
@@ -424,5 +425,20 @@
             }
         })
     }
+
+    $("#id_tipo_reemplazo").on('change', function() {
+        if($(this).find(":selected").val() == "EXTERNO"){
+            $("#id_salario").attr("disabled",false);
+            $("#id_nombre_reemplazo").attr("disabled",false);
+            $("#id_reemplazo").val("");
+            $("#id_reemplazo").attr("disabled",true);
+        }else{
+            $("#id_salario").val("");
+            $("#id_salario").attr("disabled",true);
+            $("#id_nombre_reemplazo").val("");
+            $("#id_nombre_reemplazo").attr("disabled",true);
+            $("#id_reemplazo").attr("disabled",false);
+        }
+    });
 </script>
 {% endblock javascript%}

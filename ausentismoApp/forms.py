@@ -211,7 +211,7 @@ class TiemposAccAcompanamientoForm(ModelForm):
         }
 
 class ReemplazosAccForm(ModelForm):
-    reemplazo = forms.ModelChoiceField(queryset=Persona.objects.all(), widget=Select(attrs={'class': 'form-control'}))
+    reemplazo = forms.ModelChoiceField(queryset=Persona.objects.all(), widget=Select(attrs={'class': 'form-control'}), required=False)
 
     def __init__(self, *args, **kwargs):
         super(ReemplazosAccForm, self).__init__(*args, **kwargs)
@@ -220,13 +220,18 @@ class ReemplazosAccForm(ModelForm):
             self.fields[name].widget.attrs.update({
                 'class': 'form-control',
             })
+            if name == 'reemplazo':
+                self.fields[name].widget.attrs.update({
+                    'disabled': True,
+                })
 
     class Meta:
         model = ReemplazoAccidente
-        exclude = ('salario',)
-        fields = ('reemplazo', 'tipo_reemplazo', 'dias')
+        fields = ( 'tipo_reemplazo', 'dias', 'reemplazo', 'salario','nombre_reemplazo')
         widgets = {
             'dias': forms.NumberInput(attrs={'class': 'form-control'}),
+            'salario': forms.NumberInput(attrs={'disabled': True}),
+            'nombre_reemplazo': forms.TextInput(attrs={'disabled': True})
         }
 
 
