@@ -950,6 +950,15 @@ class ReemplazoAccidente(models.Model):
         if not self.id:
             self.created = timezone.now()
         self.modified = timezone.now()
+
+        if self.tipo_reemplazo == 'INTERNO':
+            self.salario = self.reemplazo.salario
+            self.nombre_reemplazo = self.reemplazo.nombre
+            valor_salarial = (abs(self.accidente.salario_accidentado-self.reemplazo.salario))/30
+            self.costo = (valor_salarial * Decimal(55.68/100) + valor_salarial) * Decimal(self.dias)
+        else:
+            valor_salarial = (abs(self.accidente.salario_accidentado - self.salario)) / 30
+            self.costo = (valor_salarial * Decimal(55.68 / 100) + valor_salarial) * Decimal(self.dias)
         return super(ReemplazoAccidente, self).save(*args, **kwargs)
 
 

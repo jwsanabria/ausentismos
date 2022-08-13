@@ -270,27 +270,13 @@ def postReemplazo(request, *args, **kwargs):
         # get the form data
         form = ReemplazosAccForm(request.POST)
         form.instance.accidente = accidente
-        valor_salarial = 0
-        if form.instance.tipo_reemplazo == 'INTERNO':
-            reemplazo = get_object_or_404(Persona, id=request.POST["reemplazo"])
-            form.instance.salario = reemplazo.salario
-            form.salario = reemplazo.salario
-            form.instance.nombre_reemplazo = reemplazo.nombre
-            valor_salarial = (abs(accidente.salario_accidentado-reemplazo.salario))/30
-            valor_salarial = (valor_salarial * Decimal(55.68/100) + valor_salarial) * Decimal(form.instance.dias)
-        else:
-            reemplazo.nombre = form.instance.nombre_reemplazo
-            if form.instance.salario is not None:
-                valor_salarial = (abs(accidente.salario_accidentado - form.instance.salario)) / 30
-                valor_salarial = (valor_salarial * Decimal(55.68 / 100) + valor_salarial) * Decimal(form.instance.dias)
-
-        form.instance.costo = valor_salarial
 
         # save the data and after fetch the object in instance
         if form.is_valid():
             instance = form.save(commit=False)
             instance.nombre_reemplazo = form.instance.nombre_reemplazo
             instance.save()
+            reemplazo.nombre = instance.nombre_reemplazo
             # serialize an object in json
             ser_instance = serializers.serialize('json', [instance, reemplazo, ])
             # send to client side.
