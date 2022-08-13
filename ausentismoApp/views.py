@@ -277,6 +277,7 @@ def postReemplazo(request, *args, **kwargs):
             instance.nombre_reemplazo = form.instance.nombre_reemplazo
             instance.save()
             reemplazo.nombre = instance.nombre_reemplazo
+            form.cleaned_data['reemplazo']
             # serialize an object in json
             ser_instance = serializers.serialize('json', [instance, reemplazo, ])
             # send to client side.
