@@ -957,7 +957,7 @@ class ReemplazoAccidente(models.Model):
             valor_salarial = (abs(self.accidente.salario_accidentado-self.reemplazo.salario))/30
             self.costo = (valor_salarial * Decimal(55.68/100) + valor_salarial) * Decimal(self.dias)
         else:
-            valor_salarial = (abs(self.accidente.salario_accidentado - self.salario)) / 30
+            valor_salarial = (abs(self.salario)) / 30
             self.costo = (valor_salarial * Decimal(55.68 / 100) + valor_salarial) * Decimal(self.dias)
         return super(ReemplazoAccidente, self).save(*args, **kwargs)
 
