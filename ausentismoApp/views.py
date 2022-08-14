@@ -28,8 +28,6 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-
-
 interes_tecnico = 0.004867
 
 
@@ -37,7 +35,7 @@ def page_not_found_view(request, exception):
     return render(request, '404.html', status=404)
 
 
-def postGuardarAusentismo(request, *args, **kwargs):
+def post_guardar_ausentismo(request, *args, **kwargs):
     # request should be ajax and method should be POST.
     if request.is_ajax and request.method == "POST":
         form = AusentismoForm(request.POST)
@@ -74,7 +72,7 @@ def postGuardarAusentismo(request, *args, **kwargs):
     return JsonResponse({"error": "Se presento un error al calcular el valor del ausentismo"}, status=400)
 
 
-def postRemoveRow (request, *args, **kwargs):
+def post_remove_row (request, *args, **kwargs):
     # request should be ajax and method should be POST.
     if request.is_ajax and request.method == "POST":
         # get the form data
@@ -126,7 +124,7 @@ def postRemoveRow (request, *args, **kwargs):
     return JsonResponse({"error": ""}, status=400)
 
 
-def postRemoveAcompanamiento(request, *args, **kwargs):
+def post_remove_acompanamiento(request, *args, **kwargs):
     accidente = get_object_or_404(Accidente, id=kwargs['pk'])
     # request should be ajax and method should be POST.
     if request.is_ajax and request.method == "POST":
@@ -174,7 +172,7 @@ class DecimalEncoder(json.JSONEncoder):
         return json.JSONEncoder.default(self, obj)
 
 
-def postDanoMoral (request, *args, **kwargs):
+def post_dano_moral (request, *args, **kwargs):
     accidente = get_object_or_404(Accidente, id=kwargs['pk'])
     # request should be ajax and method should be POST.
     if request.is_ajax and request.method == "POST":
@@ -212,7 +210,8 @@ def postDanoMoral (request, *args, **kwargs):
     # some error occured
     return JsonResponse({"error": ""}, status=400)
 
-def postAdicionales (request, *args, **kwargs):
+
+def post_adicionales (request, *args, **kwargs):
     accidente = get_object_or_404(Accidente, id=kwargs['pk'])
     # request should be ajax and method should be POST.
     if request.is_ajax and request.method == "POST":
@@ -234,7 +233,7 @@ def postAdicionales (request, *args, **kwargs):
     return JsonResponse({"error": ""}, status=400)
 
 
-def postCapacitador(request, *args, **kwargs):
+def post_capacitador(request, *args, **kwargs):
     accidente = get_object_or_404(Accidente, id=kwargs['pk'])
     capacitador = get_object_or_404(Persona, id=request.POST["capacitador"])
     # request should be ajax and method should be POST.
@@ -286,7 +285,8 @@ def postReemplazo(request, *args, **kwargs):
     # some error occured
     return JsonResponse({"error": ""}, status=400)
 
-def postInsumo (request, *args, **kwargs):
+
+def post_insumo (request, *args, **kwargs):
     accidente = get_object_or_404(Accidente, id=kwargs['pk'])
     # request should be ajax and method should be POST.
     if request.is_ajax and request.method == "POST":
@@ -308,8 +308,7 @@ def postInsumo (request, *args, **kwargs):
     return JsonResponse({"error": ""}, status=400)
 
 
-
-def postOtros (request, *args, **kwargs):
+def post_otros (request, *args, **kwargs):
     accidente = get_object_or_404(Accidente, id=kwargs['pk'])
     # request should be ajax and method should be POST.
     if request.is_ajax and request.method == "POST":
@@ -463,9 +462,11 @@ class LiquidacionView(View):
     def get(self, request):
         data = []
         try:
+            parametro = get_object_or_404(ParametrosApp, parametro='SMLV')
+            smlv = float(parametro.valor)
             fecha_liquidacion = datetime.strptime(request.GET['fecha_liquidacion'], "%d-%m-%Y")
             id_accidente = request.GET['id_accidente']
-            num_meses_exp = request.GET['lcf']
+            num_meses_exp = Decimal(request.GET['lcf'])
             accidente = get_object_or_404(Accidente, id=id_accidente)
 
 
@@ -480,6 +481,8 @@ class LiquidacionView(View):
             if num_meses_liq == 0:
                 num_meses_liq = 1.0
 
+            num_meses_exp -= num_meses_liq
+
 
             try:
                 f_ipc_final = FactorIPC.objects.filter(anio=fecha_liquidacion.year).filter(mes=fecha_liquidacion.month).get()
@@ -490,24 +493,28 @@ class LiquidacionView(View):
                 logger.error(e)
                 raise Exception("Falta información de IPC para las fechas seleccionadas")
 
-            ingreso_base = accidente.salario_accidentado + (accidente.salario_accidentado * 25 / 100)
-            valor_actualizado = ingreso_base - (ingreso_base * 25 / 100)
+            #ingreso_base = accidente.salario_accidentado + (accidente.salario_accidentado * 25 / 100)
+            try:
+                ingreso_base = accidente.salario_accidentado * (factor_ipc_final / factor_ipc_inicial)
+            except:
+                ingreso_base = smlv
+
+            if ingreso_base is None or ingreso_base < smlv:
+                ingreso_base = smlv
+
+            valor_actualizado = ingreso_base + (ingreso_base * 25 / 100)
             valor_presente = 0
-            renta_actualizada = 0
             lucro_cesante_consolidado = 0
             lucro_cesante_futuro = 0
 
-            valor_presente = valor_actualizado * (factor_ipc_final / factor_ipc_inicial)
+            valor_presente = ingreso_base
 
-            if accidente.invalidez and accidente.grado_invalidez is not None and accidente.grado_invalidez > 0:
-                renta_actualizada = valor_presente * accidente.grado_invalidez
-            else:
-                renta_actualizada = valor_presente
+            if accidente.invalidez and accidente.grado_invalidez is not None and accidente.grado_invalidez > 0 and accidente.grado_invalidez < 51:
+                valor_actualizado *= accidente.grado_invalidez
 
+            lucro_cesante_consolidado = valor_actualizado * ((((Decimal(1.0) + Decimal(interes_tecnico)) ** Decimal(num_meses_liq)) - Decimal(1.0)) / Decimal(interes_tecnico))
 
-            lucro_cesante_consolidado = renta_actualizada * ((Decimal(1.0) + Decimal(interes_tecnico)) ** (Decimal(num_meses_liq) - Decimal(1.0)) / Decimal(interes_tecnico))
-
-            lucro_cesante_futuro = renta_actualizada * ((Decimal(1.0) + Decimal(interes_tecnico)) ** Decimal(num_meses_exp) - Decimal(1.0)) / (Decimal(interes_tecnico) * (Decimal(1.0) + Decimal(interes_tecnico)) ** Decimal(num_meses_exp))
+            lucro_cesante_futuro = valor_actualizado * ((((Decimal(1.0) + Decimal(interes_tecnico)) ** Decimal(num_meses_exp)) - Decimal(1.0)) / (Decimal(interes_tecnico) * ((Decimal(1.0) + Decimal(interes_tecnico)) ** Decimal(num_meses_exp))))
 
 
             accidente.fecha_liquidacion = fecha_liquidacion
@@ -764,7 +771,7 @@ class LucroView(View):
 
 
 
-        edad = relativedelta(datetime.now(), accidente.empleado.fecha_nacimiento)
+        edad = relativedelta(accidente.fecha_accidente, accidente.empleado.fecha_nacimiento)
         tiempo_expectativa = 0
         try:
             expectativa = ExpectativaVida.objects.filter(edad = edad.years).filter(tipo = accidente.empleado.sexo).get()
@@ -783,7 +790,7 @@ class LucroView(View):
                         'estado': estado,
                         'lcf': tiempo_expectativa * 12,
                         'interes_tecnico': interes_tecnico,
-                        'expectativa': tiempo_expectativa + edad.years,
+                        'expectativa': tiempo_expectativa,
                         'smlv': smlv,
                         'f_dano_emergente': f_dano_emergente,
                         'f_dano_moral': f_dano_moral,
