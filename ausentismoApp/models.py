@@ -994,7 +994,7 @@ class CapacitadorAccidente(models.Model):
 
 class FactorAccParafiscales(models.Model):
     descripcion = models.CharField(max_length=80, unique=True)
-    factor = models.DecimalField(decimal_places=2, max_digits=4)
+    factor = models.DecimalField(decimal_places=4, max_digits=6)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now_add=True)
 

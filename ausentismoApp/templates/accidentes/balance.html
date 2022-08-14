@@ -47,18 +47,18 @@
                 <h4 class="card-title">Método Elementos de Producción</h4>
             </div>
             <div class="card-body">
-                <table  class="border-dark table-responsive">
+                <table  class="border-dark table-responsive font-size: small  table-striped table-hover table-sm">
                     <thead class="bg-primary text-center col-sm">
                         <th colspan="2"></th>
-                        <th>Mano de obra</th>
-                        <th>Maquinaria y Herramientas</th>
-                        <th>Materia Prima</th>
-                        <th>Instalaciones y equipos</th>
-                        <th>Tiempos</th>
+                        <th class="text-center">Mano de obra</th>
+                        <th class="text-center">Maquinaria y Herramientas</th>
+                        <th class="text-center">Materia Prima</th>
+                        <th class="text-center">Instalaciones y equipos</th>
+                        <th class="text-center">Tiempos</th>
                     </thead>
                     <tbdody>
                         <tr>
-                            <td width="20%">Tiempos de accidente</td>
+                            <td width="20%" class="bg-white">Tiempos de accidente</td>
                             <td  width="30%">Personal que se encontraba en la actividad con el accidentado al momento del accidente</td>
                             <td width="10%"  style="text-align:right">{{valor_1}}</td>
                             <td width="10%"></td>
@@ -76,7 +76,7 @@
                             <td></td>
                         </tr>
                         <tr>
-                            <td rowspan="2"></td>
+                            <td rowspan="2" class="bg-white"></td>
                             <td>Costo atención prímaria accidentado</td>
                             <td  style="text-align:right">{{valor_3|prepend_dollars}}</td>
                             <td></td>
@@ -93,7 +93,7 @@
                             <td></td>
                         </tr>
                         <tr>
-                            <td rowspan="4">Tiempos de accidente</td>
+                            <td rowspan="4" class="bg-white">Tiempos de accidente</td>
                             <td>Personal que ayudó en el rescate o estabilización del accidentado</td>
                             <td></td>
                             <td></td>
@@ -126,7 +126,7 @@
                             <td  style="text-align:right">{{valor_8}}</td>
                         </tr>
                         <tr>
-                            <td rowspan="4">Apropiaciones de nómina</td>
+                            <td rowspan="4" class="bg-white">Apropiaciones de nómina</td>
                             <td>Personal que ayudó en el rescate o estabilización del accidentado</td>
                             <td></td>
                             <td></td>
@@ -159,7 +159,7 @@
                             <td  style="text-align:right">{{valor_12|prepend_dollars}}</td>
                         </tr>
                         <tr>
-                            <td></td>
+                            <td rowspan="4" class="bg-white"></td>
                             <td>Adaptación al cambio</td>
                             <td></td>
                             <td></td>
@@ -168,7 +168,6 @@
                             <td  style="text-align:right">{{valor_13|prepend_dollars}}</td>
                         </tr>
                         <tr>
-                            <td></td>
                             <td>Maquinas, vehiculos y equipos</td>
                             <td></td>
                             <td  style="text-align:right">{{valor_14|prepend_dollars}}</td>
@@ -177,7 +176,6 @@
                             <td></td>
                         </tr>
                         <tr>
-                            <td></td>
                             <td>Materia prima</td>
                             <td></td>
                             <td></td>
@@ -186,7 +184,6 @@
                             <td></td>
                         </tr>
                         <tr>
-                            <td></td>
                             <td>Instalaciones y equipos</td>
                             <td></td>
                             <td></td>
@@ -197,7 +194,7 @@
                     </tbdody>
                 </table>
                 <hr/>
-                <table>
+                <table class="font-size: small">
                     <tr>
                         <td rowspan="19" class="bg-secondary text-white">HENRICH</td>
                         <td rowspan="2" class="bg-info">DIRECTOS</td>
@@ -217,71 +214,71 @@
                         <td rowspan="16" class="bg-warning">INDIRECTOS</td>
                         <td>TIEMPOS ACCIDENTE</td>
                         <td>PERSONAL QUE SE ENCONTRABA EN LA ACTIVIDAD CON EL ACCIDENTADO AL MOMENTO DEL ACCIDENTE</td>
-                        <td class="text-right">&&&</td>
+                        <td class="text-right">{{valor_1}}</td>
                         <td rowspan="16" class="bg-warning">NO ASEGURADOS</td>
                     </tr>
                     <tr>
                         <td>APROPIACIONES</td>
                         <td>PERSONAL QUE SE ENCONTRABA EN LA ACTIVIDAD CON EL ACCIDENTADO AL MOMENTO DEL ACCIDENTE</td>
-                        <td class="text-right">&&&</td>
+                        <td class="text-right">{{valor_2 | prepend_dollars}}</td>
                     </tr>
                     <tr>
                         <td colspan="2">COSTO ATENCION PRIMARIA ACCIDENTADO</td>
-                        <td class="text-right">&&&</td>
+                        <td class="text-right">{{valor_3|prepend_dollars}}</td>
                     </tr>
                     <tr>
                         <td colspan="2">COSTOS INVALIDEZ O FALLECIMIENTO</td>
-                        <td class="text-right">&&&</td>
+                        <td class="text-right">{{valor_4|prepend_dollars}}</td>
                     </tr>
                     <tr>
                         <td rowspan="4">TIEMPOS DE ACCIDENTE</td>
                         <td>PERSONAL QUE AYUDO EN EL RESCATE O ESTABILIZACION DEL ACCIDENTADO</td>
-                        <td class="text-right">&&&</td>
+                        <td class="text-right">{{valor_5}}</td>
                     </tr>
                     <tr>
                         <td>PERSONAL QUE SE ENCONTRABA EN EL AREA DEL ACCIDENTE</td>
-                        <td class="text-right">&&&</td>
+                        <td class="text-right">{{valor_6}}</td>
                     </tr>
                     <tr>
                         <td>PERSONAL QUE AYUDA A LA INVESTIGACION DEL ACCIDENTE</td>
-                        <td class="text-right">&&&</td>
+                        <td class="text-right">{{valor_7}}</td>
                     </tr>
                     <tr>
                         <td>PERSONAL QUE AYUDA A LA IMPLEMENTACION DE ACCIONES DE CORRECCION</td>
-                        <td class="text-right">&&&</td>
+                        <td class="text-right">{{valor_8}}</td>
                     </tr>
                     <tr>
                         <td rowspan="4">APROPIACIONES DE NÓMINA</td>
                         <td>PERSONAL QUE AYUDO EN EL RESCATE O ESTABILIZACION DEL ACCIDENTADO</td>
-                        <td class="text-right">&&&</td>
+                        <td class="text-right">{{valor_9|prepend_dollars}}</td>
                     </tr>
                     <tr>
                         <td>PERSONAL QUE SE ENCONTRABA EN EL AREA DEL ACCIDENTE</td>
-                        <td class="text-right">&&&</td>
+                        <td class="text-right">{{valor_10|prepend_dollars}}</td>
                     </tr>
                     <tr>
                         <td>PERSONAL QUE AYUDA A LA INVESTIGACION DEL ACCIDENTE</td>
-                        <td class="text-right">&&&</td>
+                        <td class="text-right">{{valor_11|prepend_dollars}}</td>
                     </tr>
                     <tr>
                         <td>PERSONAL QUE AYUDA A LA IMPLEMENTACION DE ACCIONES DE CORRECCION</td>
-                        <td class="text-right">&&&</td>
+                        <td class="text-right">{{valor_12|prepend_dollars}}</td>
                     </tr>
                     <tr>
                         <td colspan="2">ADAPTACIÓN AL CAMBIO</td>
-                        <td class="text-right">&&&</td>
+                        <td class="text-right">{{valor_13|prepend_dollars}}</td>
                     </tr>
                     <tr>
                         <td colspan="2">MAQUINAS, VEHICULOS Y EQUIPOS</td>
-                        <td class="text-right">&&&</td>
+                        <td class="text-right">{{valor_14|prepend_dollars}}</td>
                     </tr>
                     <tr>
                         <td colspan="2">MATERIA PRIMA</td>
-                        <td class="text-right">&&&</td>
+                        <td class="text-right">{{valor_15|prepend_dollars}}</td>
                     </tr>
                     <tr>
                         <td colspan="2">INSTALCIONES Y EQUIPOS</td>
-                        <td class="text-right">&&&</td>
+                        <td class="text-right">{{valor_16|prepend_dollars}}</td>
                     </tr>
                 </table>
             </div>

@@ -848,9 +848,10 @@ class AprociacionesView(View):
         acompanante = get_object_or_404(Persona, id=request.POST["empleado"])
         factor = get_object_or_404(FactorTiemposAcompanamiento, id=request.POST["factor"])
         form.instance.salario = acompanante.salario
-        form.instance.valor_diario = acompanante.salario / 30
+        form.instance.valor_diario = acompanante.salario / 240
         form.instance.valor_factor = factor.factor
-        form.instance.total = ((acompanante.salario / 30) * factor.factor) * 1
+        tiempo = form.instance.tiempo.hour + form.instance.tiempo.minute/60
+        form.instance.total = ((acompanante.salario / 240) * Decimal(tiempo)) + ((acompanante.salario / 240) * Decimal(tiempo) * factor.factor)
 
         form.instance.accidente = accidente
         # save the data and after fetch the object in instance
@@ -928,17 +929,26 @@ class BalanceView(View):
 
         result = TiemposAccAcompanamiento.objects.filter(accidente=accidente.id).values('tipo_acompanamiento').order_by('tipo_acompanamiento').annotate(dTotal=Sum('total'))
 
+
         for r in result.iterator():
             if 1 == r['tipo_acompanamiento']:
-                valor_2 = r['dTotal']
+                valor_2 = calcular_valor_acompanamiento(Decimal(r['dTotal']))
             elif 2 == r['tipo_acompanamiento']:
-                valor_9 = r['dTotal']
+                valor_9 = calcular_valor_acompanamiento(Decimal(r['dTotal']))
             elif 3 == r['tipo_acompanamiento']:
-                valor_10 = r['dTotal']
+                valor_10 = calcular_valor_acompanamiento(Decimal(r['dTotal']))
             elif 4 == r['tipo_acompanamiento']:
-                valor_11 = r['dTotal']
+                valor_11 = calcular_valor_acompanamiento(Decimal(r['dTotal']))
             elif 5 == r['tipo_acompanamiento']:
-                valor_12 = r['dTotal']
+                valor_12 = calcular_valor_acompanamiento(Decimal(r['dTotal']))
+
+
+        v_reemplazos = ReemplazoAccidente.objects.filter(accidente=accidente.id).aggregate(total=Sum(F('costo')))[
+            'total']
+        v_capacitaciones = CapacitadorAccidente.objects.filter(accidente=accidente.id).aggregate(total=Sum(F('costo')))[
+            'total']
+        valor_12 += (0 if v_reemplazos is None else v_reemplazos)
+        valor_12 += (0 if v_capacitaciones is None else v_capacitaciones)
 
         tiempo_dic = {}
         result = TiemposAccAcompanamiento.objects.filter(accidente=accidente.id).order_by('tipo_acompanamiento')
@@ -949,11 +959,17 @@ class BalanceView(View):
             else:
                 tiempo_dic[r.tipo_acompanamiento.id] = tiempo_dic[r.tipo_acompanamiento.id] + (r.tiempo.hour * 60 + r.tiempo.minute)
 
-        valor_1 = calcular_tiempo(tiempo_dic, 1)
-        valor_5 = calcular_tiempo(tiempo_dic, 2)
-        valor_6 = calcular_tiempo(tiempo_dic, 3)
-        valor_7 = calcular_tiempo(tiempo_dic, 4)
-        valor_8 = calcular_tiempo(tiempo_dic, 5)
+        t_reemplazos = ReemplazoAccidente.objects.filter(accidente= accidente.id).aggregate(total= Sum(F('dias')))['total']
+        t_capacitaciones = CapacitadorAccidente.objects.filter(accidente=accidente.id).aggregate(total=Sum(F('dias')))[
+            'total']
+
+        dias_adicinales = (0 if t_reemplazos is None else t_reemplazos) + (0 if t_capacitaciones is None else t_capacitaciones)
+
+        valor_1 = calcular_tiempo(tiempo_dic, 1, 0)
+        valor_5 = calcular_tiempo(tiempo_dic, 2, 0)
+        valor_6 = calcular_tiempo(tiempo_dic, 3, 0)
+        valor_7 = calcular_tiempo(tiempo_dic, 4, 0)
+        valor_8 = calcular_tiempo(tiempo_dic, 5, dias_adicinales)
 
 
         result = CostosAccInsumosMedicos.objects.filter(accidente= accidente.id).aggregate(total = Sum(F('valor')*F('cantidad')))['total']
@@ -1010,13 +1026,18 @@ class BalanceView(View):
 
 
 
-def calcular_tiempo(dic, indice):
-    if dic.get(indice) is None:
+def calcular_tiempo(dic, indice, dias):
+    if dic.get(indice) is None and (dias is None or dias == 0) :
         return "00:00"
+    elif dias > 0:
+        return str(dias * 8) + ":00"
     else:
         minutos = int(dic.get(indice) % 60)
         if minutos < 10:
             s_minutos = "0" + str(int(dic.get(indice) % 60))
         else:
             s_minutos = str(int(dic.get(indice) % 60))
-        return str(int(dic.get(indice) / 60)) + ":" + s_minutos
+        return str(int(dic.get(indice) / 60) + (dias * 8)) + ":" + s_minutos
+
+def calcular_valor_acompanamiento(total):
+    return Decimal(total) * Decimal(0.5568)
