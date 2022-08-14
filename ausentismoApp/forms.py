@@ -227,6 +227,7 @@ class ReemplazosAccForm(ModelForm):
 
     class Meta:
         model = ReemplazoAccidente
+        exclude = ('valor_salarial_real',)
         fields = ( 'tipo_reemplazo', 'dias', 'reemplazo', 'salario','nombre_reemplazo')
         widgets = {
             'dias': forms.NumberInput(attrs={'class': 'form-control'}),

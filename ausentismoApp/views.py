@@ -243,10 +243,7 @@ def postCapacitador(request, *args, **kwargs):
         form = CapacitacionAccForm(request.POST)
         form.instance.accidente = accidente
         form.instance.salario = capacitador.salario
-        valor_salarial = 0
-        valor_salarial = (abs(capacitador.salario)) / 30
-        valor_salarial = (valor_salarial * Decimal(55.68 / 100) + valor_salarial) * Decimal(form.instance.dias)
-        form.instance.costo = valor_salarial
+
         # save the data and after fetch the object in instance
         if form.is_valid():
             instance = form.save()
@@ -805,6 +802,9 @@ class AprociacionesView(View):
 
         matrix = []
 
+        r_reemplazos = ReemplazoAccidente.objects.filter(accidente=pk).aggregate(total = Sum(F('valor_salarial_real')*F('dias')))['total']
+        r_capacitaciones = CapacitadorAccidente.objects.filter(accidente=pk).aggregate(total=Sum(F('salario') / 30 * F('dias')))['total']
+
         result = TiemposAccAcompanamiento.objects.filter(accidente=pk).values('tipo_acompanamiento').order_by('tipo_acompanamiento').annotate(dTotal=Sum('total'))
         tipos_acompanamiento = TipoAcompanamiento.objects.all().order_by('id')
         factor_parafiscales = FactorAccParafiscales.objects.all().order_by('id')
@@ -813,9 +813,22 @@ class AprociacionesView(View):
             fila.append(parafiscal.descripcion)
             for tipo in tipos_acompanamiento:
                 valor = 0;
+                if tipo.id == 5:
+                    result_5 = TiemposAccAcompanamiento.objects.filter(accidente=pk, tipo_acompanamiento=5).values('tipo_acompanamiento').annotate(dTotal=Sum('total'))
+                    valores_adicionales = 0
+                    if r_reemplazos is not None:
+                        valores_adicionales = r_reemplazos
+                    if r_capacitaciones is not None:
+                        valores_adicionales += r_capacitaciones
+
+                    for r5 in result_5.iterator():
+                        valores_adicionales += r5['dTotal']
+                    valor = parafiscal.factor * valores_adicionales
+
                 for r in result.iterator():
-                    if tipo.id == r['tipo_acompanamiento']:
+                    if tipo.id == r['tipo_acompanamiento'] and tipo.id != 5:
                         valor = parafiscal.factor*r['dTotal']
+
                 fila.append(valor)
             matrix.append(fila)
 

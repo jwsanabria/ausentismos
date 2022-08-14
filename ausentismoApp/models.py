@@ -935,6 +935,7 @@ class ReemplazoAccidente(models.Model):
     salario = models.DecimalField(decimal_places=2, max_digits=10, blank=True, null=True)
     costo = models.DecimalField(decimal_places=2, max_digits=10, blank=True, null=True)
     nombre_reemplazo = models.CharField(max_length=255, blank=True, null=True)
+    valor_salarial_real = models.DecimalField(decimal_places=2, max_digits=10, blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now_add=True)
 
@@ -954,11 +955,12 @@ class ReemplazoAccidente(models.Model):
         if self.tipo_reemplazo == 'INTERNO':
             self.salario = self.reemplazo.salario
             self.nombre_reemplazo = self.reemplazo.nombre
-            valor_salarial = (abs(self.accidente.salario_accidentado-self.reemplazo.salario))/30
-            self.costo = (valor_salarial * Decimal(55.68/100) + valor_salarial) * Decimal(self.dias)
+            valor_salarial = (self.accidente.salario_accidentado-self.reemplazo.salario)
+            self.valor_salarial_real = 0 if valor_salarial < 0 else valor_salarial/30
+            self.costo = (self.valor_salarial_real * Decimal(55.68/100) + self.valor_salarial_real) * Decimal(self.dias)
         else:
-            valor_salarial = (abs(self.salario)) / 30
-            self.costo = (valor_salarial * Decimal(55.68 / 100) + valor_salarial) * Decimal(self.dias)
+            self.valor_salarial_real = (abs(self.salario)) / 30
+            self.costo = (self.valor_salarial_real * Decimal(55.68 / 100) + self.valor_salarial_real) * Decimal(self.dias)
         return super(ReemplazoAccidente, self).save(*args, **kwargs)
 
 
@@ -983,6 +985,10 @@ class CapacitadorAccidente(models.Model):
         if not self.id:
             self.created = timezone.now()
         self.modified = timezone.now()
+        valor_salarial = 0
+        self.salario = self.capacitador.salario
+        valor_salarial = (abs(self.salario)) / 30
+        self.costo = (valor_salarial * Decimal(55.68 / 100) + valor_salarial) * Decimal(self.dias)
         return super(CapacitadorAccidente, self).save(*args, **kwargs)
 
 
