@@ -473,7 +473,8 @@ class LiquidacionView(View):
             factor_ipc_final = 0.0
             factor_ipc_inicial = 0.0
             diferencia = relativedelta(fecha_liquidacion, accidente.fecha_accidente)
-            num_meses_liq = diferencia.years * 12 + diferencia.months
+            #num_meses_liq = diferencia.years * 12 + diferencia.months
+            num_meses_liq = (diferencia.days+1)/30
 
             if num_meses_liq < 0:
                 raise Exception("La fecha de liquidación es inferior a la fecha del accidente")
