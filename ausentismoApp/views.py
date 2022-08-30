@@ -502,15 +502,23 @@ class LiquidacionView(View):
             if ingreso_base is None or ingreso_base < smlv:
                 ingreso_base = smlv
 
-            valor_actualizado = ingreso_base + (ingreso_base * 25 / 100)
-            valor_presente = 0
+
+            valor_actualizado = 0
             lucro_cesante_consolidado = 0
             lucro_cesante_futuro = 0
 
             valor_presente = ingreso_base
 
             if accidente.invalidez and accidente.grado_invalidez is not None and accidente.grado_invalidez > 0 and accidente.grado_invalidez < 51:
+                valor_actualizado = ingreso_base + (ingreso_base * 25 / 100)
                 valor_actualizado *= accidente.grado_invalidez
+            elif accidente.invalidez and accidente.grado_invalidez is not None and accidente.grado_invalidez > 50:
+                valor_actualizado = ingreso_base + (ingreso_base * 25 / 100)
+            elif accidente.fallecido:
+                valor_actualizado = valor_actualizado - (valor_actualizado * 25/100)
+            else:
+                valor_actualizado = 0
+
 
             lucro_cesante_consolidado = valor_actualizado * ((((Decimal(1.0) + Decimal(interes_tecnico)) ** Decimal(num_meses_liq)) - Decimal(1.0)) / Decimal(interes_tecnico))
 
