@@ -482,7 +482,7 @@ class LiquidacionView(View):
             if num_meses_liq == 0:
                 num_meses_liq = 1.0
 
-            num_meses_exp -= num_meses_liq
+            num_meses_exp -= Decimal(num_meses_liq)
 
 
             try:
