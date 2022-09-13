@@ -788,10 +788,12 @@ class LucroView(View):
         except ObjectDoesNotExist:
             pass
 
-        estado = "LESIONADO"
+        if accidente.incapacidad:
+            estado = "INCAPACITADO"
+        if accidente.invalidez:
+            estado = "INVALIDO"
         if accidente.fallecido :
             estado = "FALLECIDO"
-
 
         context_data = {"accidente": accidente,
                         'salario': salario,
