@@ -510,6 +510,8 @@ class LiquidacionView(View):
 
             valor_presente = ingreso_base
 
+            logger.info(ingreso_base)
+
             if accidente.invalidez and accidente.grado_invalidez is not None and accidente.grado_invalidez > 0 and accidente.grado_invalidez < 51:
                 valor_actualizado = ingreso_base + (ingreso_base * 25 / 100)
                 valor_actualizado *= accidente.grado_invalidez
