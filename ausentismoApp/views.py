@@ -872,6 +872,8 @@ class AprociacionesView(View):
         form.instance.valor_factor = factor.factor
         logger.info(form.instance.tiempo)
         logger.info(request.POST["tiempo"])
+        form.instance.tiempo = datetime.time(request.POST["tiempo"].split(":")[0], request.POST["tiempo"].split(":")[1], 0)
+
         tiempo = form.instance.tiempo.hour + form.instance.tiempo.minute/60
         form.instance.total = ((acompanante.salario / 240) * Decimal(tiempo)) + ((acompanante.salario / 240) * Decimal(tiempo) * factor.factor)
 
