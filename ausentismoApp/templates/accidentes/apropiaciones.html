@@ -55,7 +55,7 @@
                                         <td>{{ item.id }}</td>
                                         <td>{{ item.empleado }}</td>
                                         <td>{{ item.tipo_acompanamiento }}</td>
-                                        <td>{{ item.tiempo }}</td>
+                                        <td>{{ item.tiempo|prepend_hours }}</td>
                                         <td>{{ item.factor }}</td>
                                         <td>{{ item.salario|prepend_dollars }}</td>
                                         <td>{{ item.valor_diario|prepend_dollars }}</td>

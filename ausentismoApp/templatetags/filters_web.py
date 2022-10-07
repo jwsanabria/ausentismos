@@ -11,6 +11,15 @@ def prepend_dollars(dollars):
     else:
         return ''
 
+
+@register.filter
+def prepend_hours(hours):
+    if hours:
+        hours = hours.strftime("%H:%M")
+        return "%s" % (hours)
+    else:
+        return ''
+
 @register.filter(name="placeholder")
 def placeholder(value, token):
     value.field.widget.attrs["placeholder"] = token
