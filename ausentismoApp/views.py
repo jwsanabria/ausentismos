@@ -475,7 +475,8 @@ class LiquidacionView(View):
             diferencia = relativedelta(fecha_liquidacion, accidente.fecha_accidente)
             logger.info("MESES A LIQuIDAR: " + str(diferencia) +"|" + str(fecha_liquidacion) + "|" + str(accidente.fecha_accidente))
             #num_meses_liq = diferencia.years * 12 + diferencia.months
-            num_meses_liq = (diferencia.days+1)/30
+            #num_meses_liq = (diferencia.days+1)/30
+            num_meses_liq = diferencia.months
 
             if num_meses_liq < 0:
                 raise Exception("La fecha de liquidación es inferior a la fecha del accidente")
