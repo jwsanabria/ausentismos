@@ -496,7 +496,6 @@ class LiquidacionView(View):
                 logger.error(e)
                 raise Exception("Falta información de IPC para las fechas seleccionadas")
 
-            #ingreso_base = accidente.salario_accidentado + (accidente.salario_accidentado * 25 / 100)
             try:
                 ingreso_base = Decimal(accidente.salario_accidentado) * (Decimal(factor_ipc_final) / Decimal(factor_ipc_inicial))
             except:
@@ -512,13 +511,11 @@ class LiquidacionView(View):
 
             logger.info(factor_ipc_final)
             logger.info(factor_ipc_inicial)
-            valor_presente = ingreso_base
-
             logger.info(ingreso_base)
 
             if accidente.invalidez and accidente.grado_invalidez is not None and accidente.grado_invalidez > 0 and accidente.grado_invalidez < 51:
                 valor_actualizado = ingreso_base + (ingreso_base * 25 / 100)
-                valor_actualizado *= accidente.grado_invalidez
+                valor_actualizado *= (accidente.grado_invalidez/100)
             elif accidente.invalidez and accidente.grado_invalidez is not None and accidente.grado_invalidez > 50:
                 valor_actualizado = ingreso_base + (ingreso_base * 25 / 100)
             elif accidente.fallecido:
