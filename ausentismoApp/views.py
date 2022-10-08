@@ -473,7 +473,7 @@ class LiquidacionView(View):
             factor_ipc_final = 0.0
             factor_ipc_inicial = 0.0
             diferencia = relativedelta(fecha_liquidacion, accidente.fecha_accidente)
-            logger.info("MESES A LIQuIDAR: " + str(diferencia) +"|" + str(fecha_liquidacion) + "|" + str(accidente.fecha_accidente))
+            logger.info("MESES A LIQuIDAR: " + str(diferencia.months) +"|" + str(fecha_liquidacion) + "|" + str(accidente.fecha_accidente))
             #num_meses_liq = diferencia.years * 12 + diferencia.months
             #num_meses_liq = (diferencia.days+1)/30
             num_meses_liq = diferencia.months
