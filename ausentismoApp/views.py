@@ -498,12 +498,12 @@ class LiquidacionView(View):
 
             #ingreso_base = accidente.salario_accidentado + (accidente.salario_accidentado * 25 / 100)
             try:
-                ingreso_base = accidente.salario_accidentado * (factor_ipc_final / factor_ipc_inicial)
+                ingreso_base = Decimal(accidente.salario_accidentado) * (Decimal(factor_ipc_final) / Decimal(factor_ipc_inicial))
             except:
-                ingreso_base = smlv
+                ingreso_base = Decimal(smlv)
 
             if ingreso_base is None or ingreso_base < smlv:
-                ingreso_base = smlv
+                ingreso_base = Decimal(smlv)
 
 
             valor_actualizado = 0
