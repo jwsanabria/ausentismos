@@ -12,7 +12,7 @@
         <div class="pl-4"> <b><span class="text-dark">Accidentado: </span></b>{{ accidente.empleado }} </div>
         <div class="pl-4"> <b><span class="text-dark">Fecha nacimiento: </span></b>{{ accidente.empleado.fecha_nacimiento }} </div>
         <div class="pl-4"> <b><span>Fecha accidente: </span></b>{{ accidente.fecha_accidente }} </div>
-        <div class="pl-4"> <b><span>Estado: </span></b>{%  if accidente.fallecido %} FALLECIDO {% elif accidente.invalidez %} INVALIDEZ {% else %} LESIONADO {% endif %}</div>
+        <div class="pl-4"> <b><span>Estado: </span></b>{%  if accidente.fallecido %} FALLECIDO {% elif accidente.invalidez %} INVALIDEZ {% else %} INCAPACITADO {% endif %}</div>
         <a href="{% url 'detalle_accidente' accidente.id %}" class="btn btn-success"><span class="fa fa-id-card"></span>ir a Accidente</a>
     </div>
     <div id="accordion">
