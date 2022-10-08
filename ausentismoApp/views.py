@@ -522,7 +522,8 @@ class LiquidacionView(View):
             elif accidente.invalidez and accidente.grado_invalidez is not None and accidente.grado_invalidez > 50:
                 valor_actualizado = ingreso_base + (ingreso_base * 25 / 100)
             elif accidente.fallecido:
-                valor_actualizado = ingreso_base - (ingreso_base * 25/100)
+                valor_actualizado = ingreso_base + (ingreso_base * 25 / 100)
+                valor_actualizado -= (valor_actualizado * 25/100)
             else:
                 valor_actualizado = 0
 
