@@ -32,10 +32,10 @@ class AusentismoTable(tables.Table):
     fecha_ausentismo = tables.DateColumn(format='d-m-Y')
 
     def render_valor_ausentismo(self, record):
-        return '${:.2f}'.format(record.valor_ausentismo).replace(",", "@").replace(".", ",").replace("@", ".")
+        return '${:,.2f}'.format(record.valor_ausentismo).replace(",", "@").replace(".", ",").replace("@", ".")
 
     def render_salario_ausentismo(self, record):
-        return '${:,.2f}'.format(record.salario_ausentismo)
+        return '${:,.2f}'.format(record.salario_ausentismo).replace(",", "@").replace(".", ",").replace("@", ".")
 
     class Meta:
         model = Ausentismo
