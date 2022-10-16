@@ -880,7 +880,7 @@ class AprociacionesView(View):
         logger.info(request.POST["tiempo"])
         form.instance.tiempo = datetime.strptime(request.POST["tiempo"], '%H:%M')
         tiempo = form.instance.tiempo.hour + form.instance.tiempo.minute/60
-        form.instance.total = ((acompanante.salario / 240) * Decimal(tiempo)) + ((acompanante.salario / 240) * Decimal(tiempo) * factor.factor)
+        form.instance.total = ((acompanante.salario / 240) * Decimal(tiempo) * factor.factor)
 
         form.instance.accidente = accidente
         # save the data and after fetch the object in instance
