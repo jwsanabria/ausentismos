@@ -12,6 +12,7 @@
             {% csrf_token %}
             <table class="text-left p-2 m-2">
                 {{ form.as_table }}
+                {{ form.media }}
             </table>
             <button type="submit" class="btn btn-primary mb-2"><span class="fa fa-save"></span> Guardar</button>
             <a href="{% url "ausentismo" %}" class="btn btn-danger mb-2"><span class="fa fa-refresh"></span> Cancelar</a>
