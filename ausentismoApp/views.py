@@ -24,7 +24,7 @@ from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.contrib.auth.decorators import login_required
 import json
 import logging
-
+from django.contrib import messages
 
 logger = logging.getLogger(__name__)
 
@@ -32,7 +32,7 @@ interes_tecnico = 0.004867
 
 
 def page_not_found_view(request, exception):
-    return render(request, '404.html', status=404)
+    return render(request, "404.html", status=404)
 
 
 def post_guardar_ausentismo(request, *args, **kwargs):
@@ -41,17 +41,19 @@ def post_guardar_ausentismo(request, *args, **kwargs):
         form = AusentismoForm(request.POST)
         # get the form data
         try:
-            empleado = get_object_or_404(Persona, id=request.POST['empleado'])
-            tiempo = request.POST['tiempo_ausentismo']
-            periodo = request.POST['periodo_ausentismo']
+            empleado = get_object_or_404(Persona, id=request.POST["empleado"])
+            tiempo = request.POST["tiempo_ausentismo"]
+            periodo = request.POST["periodo_ausentismo"]
             form.instance.horas_ausentismo = 0
 
-            if periodo == 'D':
+            if periodo == "D":
                 form.instance.horas_ausentismo = int(tiempo) * 8
             else:
                 form.instance.horas_ausentismo = int(tiempo)
 
-            form.instance.valor_ausentismo = Decimal(empleado.salario/240 * Decimal(form.instance.horas_ausentismo))*Decimal(1.5568)
+            form.instance.valor_ausentismo = Decimal(
+                empleado.salario / 240 * Decimal(form.instance.horas_ausentismo)
+            ) * Decimal(1.5568)
             form.instance.salario_ausentismo = empleado.salario
             form.instance.cargo = empleado.cargo.descripcion
             form.instance.seccion = empleado.seccion.descripcion
@@ -60,7 +62,13 @@ def post_guardar_ausentismo(request, *args, **kwargs):
             instance = form.save()
             instance.nombre_empleado = empleado.nombre
 
-            ser_instance = serializers.serialize('json', [instance, empleado,])
+            ser_instance = serializers.serialize(
+                "json",
+                [
+                    instance,
+                    empleado,
+                ],
+            )
             # send to client side.
             return JsonResponse({"instance": ser_instance}, status=200)
 
@@ -69,85 +77,102 @@ def post_guardar_ausentismo(request, *args, **kwargs):
             return JsonResponse({"error": e.__str__()}, status=400)
 
     # some error occured
-    return JsonResponse({"error": "Se presento un error al calcular el valor del ausentismo"}, status=400)
+    return JsonResponse(
+        {"error": "Se presento un error al calcular el valor del ausentismo"},
+        status=400,
+    )
 
 
-def post_remove_row (request, *args, **kwargs):
+def post_remove_row(request, *args, **kwargs):
     # request should be ajax and method should be POST.
     if request.is_ajax and request.method == "POST":
         # get the form data
         try:
-            tipo = request.POST['tipo']
-            if tipo == 'I':
-                model = get_object_or_404(CostosAccInsumosMedicos, id=request.POST['id'])
+            tipo = request.POST["tipo"]
+            if tipo == "I":
+                model = get_object_or_404(
+                    CostosAccInsumosMedicos, id=request.POST["id"]
+                )
 
-            elif tipo=='T':
-                model = get_object_or_404(CostosAccTransporte, id=request.POST['id'])
+            elif tipo == "T":
+                model = get_object_or_404(CostosAccTransporte, id=request.POST["id"])
 
-            elif tipo=='O':
-                model = get_object_or_404(CostosAccOtros, id=request.POST['id'])
+            elif tipo == "O":
+                model = get_object_or_404(CostosAccOtros, id=request.POST["id"])
 
-            elif tipo=='M':
-                model = get_object_or_404(CostosAccMaquinaria, id=request.POST['id'])
+            elif tipo == "M":
+                model = get_object_or_404(CostosAccMaquinaria, id=request.POST["id"])
 
-            elif tipo=='R':
-                model = get_object_or_404(CostosAccRepuestos, id=request.POST['id'])
+            elif tipo == "R":
+                model = get_object_or_404(CostosAccRepuestos, id=request.POST["id"])
 
-            elif tipo=='B':
-                model = get_object_or_404(CostosAccManoObra, id=request.POST['id'])
+            elif tipo == "B":
+                model = get_object_or_404(CostosAccManoObra, id=request.POST["id"])
 
-            elif tipo=='E':
-                model = get_object_or_404(CostosAccDanoEmergente, id=request.POST['id'])
+            elif tipo == "E":
+                model = get_object_or_404(CostosAccDanoEmergente, id=request.POST["id"])
 
-            elif tipo=='S':
-                model = get_object_or_404(ReemplazoAccidente, id=request.POST['id'])
+            elif tipo == "S":
+                model = get_object_or_404(ReemplazoAccidente, id=request.POST["id"])
 
-            elif tipo=='C':
-                model = get_object_or_404(CapacitadorAccidente, id=request.POST['id'])
+            elif tipo == "C":
+                model = get_object_or_404(CapacitadorAccidente, id=request.POST["id"])
 
-            elif tipo=='A':
-                model = get_object_or_404(CostosAccAdicionales, id=request.POST['id'])
+            elif tipo == "A":
+                model = get_object_or_404(CostosAccAdicionales, id=request.POST["id"])
 
-            elif tipo == 'P':
-                model = get_object_or_404(TiemposAccAcompanamiento, id=request.POST['id'])
-
+            elif tipo == "P":
+                model = get_object_or_404(
+                    TiemposAccAcompanamiento, id=request.POST["id"]
+                )
 
             model.delete()
             # send to client side.
-            ser_instance = serializers.serialize('json', [model, ])
+            ser_instance = serializers.serialize(
+                "json",
+                [
+                    model,
+                ],
+            )
             return JsonResponse({"instance": ser_instance}, status=200)
         except:
             # some form errors occured.
-            return JsonResponse({"error": "Se presento un error al eliminar la fila"}, status=400)
+            return JsonResponse(
+                {"error": "Se presento un error al eliminar la fila"}, status=400
+            )
 
     # some error occured
     return JsonResponse({"error": ""}, status=400)
 
 
 def post_remove_acompanamiento(request, *args, **kwargs):
-    accidente = get_object_or_404(Accidente, id=kwargs['pk'])
+    accidente = get_object_or_404(Accidente, id=kwargs["pk"])
     # request should be ajax and method should be POST.
     if request.is_ajax and request.method == "POST":
         # get the form data
         try:
-            model = get_object_or_404(TiemposAccAcompanamiento, id=request.POST['id'])
+            model = get_object_or_404(TiemposAccAcompanamiento, id=request.POST["id"])
 
             model.delete()
 
             matrix = []
 
-            result = TiemposAccAcompanamiento.objects.filter(accidente=accidente.id).values('tipo_acompanamiento').order_by(
-                'tipo_acompanamiento').annotate(dTotal=Sum('total'))
-            tipos_acompanamiento = TipoAcompanamiento.objects.all().order_by('id')
-            factor_parafiscales = FactorAccParafiscales.objects.all().order_by('id')
+            result = (
+                TiemposAccAcompanamiento.objects.filter(accidente=accidente.id)
+                .values("tipo_acompanamiento")
+                .order_by("tipo_acompanamiento")
+                .annotate(dTotal=Sum("total"))
+            )
+            tipos_acompanamiento = TipoAcompanamiento.objects.all().order_by("id")
+            factor_parafiscales = FactorAccParafiscales.objects.all().order_by("id")
             for parafiscal in factor_parafiscales:
                 fila = []
                 fila.append(parafiscal.descripcion)
                 for tipo in tipos_acompanamiento:
-                    valor = 0;
+                    valor = 0
                     for r in result.iterator():
-                        if tipo.id == r['tipo_acompanamiento']:
-                            valor = parafiscal.factor * r['dTotal']
+                        if tipo.id == r["tipo_acompanamiento"]:
+                            valor = parafiscal.factor * r["dTotal"]
                     fila.append(valor)
                 matrix.append(fila)
 
@@ -156,7 +181,9 @@ def post_remove_acompanamiento(request, *args, **kwargs):
             return JsonResponse({"instance": ser_instance}, status=200)
         except Exception:
             # some form errors occured.
-            return JsonResponse({"error": "Se presento un error al eliminar la fila"}, status=400)
+            return JsonResponse(
+                {"error": "Se presento un error al eliminar la fila"}, status=400
+            )
 
     # some error occured
     return JsonResponse({"error": ""}, status=400)
@@ -172,35 +199,60 @@ class DecimalEncoder(json.JSONEncoder):
         return json.JSONEncoder.default(self, obj)
 
 
-def post_dano_moral (request, *args, **kwargs):
-    accidente = get_object_or_404(Accidente, id=kwargs['pk'])
+def post_dano_moral(request, *args, **kwargs):
+    accidente = get_object_or_404(Accidente, id=kwargs["pk"])
     # request should be ajax and method should be POST.
     if request.is_ajax and request.method == "POST":
         # get the form data
         form = DanoMoralForm(request.POST)
         # save the data and after fetch the object in instance
         if form.is_valid():
-            if request.POST['nivel'] == 'N1':
-                accidente.valor_moral_n1 = request.POST['cantidad']
-            elif request.POST['nivel']  == 'N2':
-                accidente.valor_moral_n2 = request.POST['cantidad']
-            elif request.POST['nivel'] == 'N3':
-                accidente.valor_moral_n3 = request.POST['cantidad']
-            elif request.POST['nivel'] == 'N4':
-                accidente.valor_moral_n4 = request.POST['cantidad']
-            elif request.POST['nivel']  == 'N5':
-                accidente.valor_moral_n5 = request.POST['cantidad']
+            if request.POST["nivel"] == "N1":
+                accidente.valor_moral_n1 = request.POST["cantidad"]
+            elif request.POST["nivel"] == "N2":
+                accidente.valor_moral_n2 = request.POST["cantidad"]
+            elif request.POST["nivel"] == "N3":
+                accidente.valor_moral_n3 = request.POST["cantidad"]
+            elif request.POST["nivel"] == "N4":
+                accidente.valor_moral_n4 = request.POST["cantidad"]
+            elif request.POST["nivel"] == "N5":
+                accidente.valor_moral_n5 = request.POST["cantidad"]
 
             valor_dano = Decimal(0.0)
-            valor_dano = valor_dano + (Decimal(accidente.valor_moral_n1) *  Decimal(accidente.salario_minimo) * Decimal(accidente.factor_moral_n1))
-            valor_dano = valor_dano + (Decimal(accidente.valor_moral_n2) * Decimal(accidente.salario_minimo) * Decimal(accidente.factor_moral_n2))
-            valor_dano = valor_dano + (Decimal(accidente.valor_moral_n3) * Decimal(accidente.salario_minimo) * Decimal(accidente.factor_moral_n3))
-            valor_dano = valor_dano + (Decimal(accidente.valor_moral_n4) * Decimal(accidente.salario_minimo) * Decimal(accidente.factor_moral_n4))
-            valor_dano = valor_dano + (Decimal(accidente.valor_moral_n5) * Decimal(accidente.salario_minimo) * Decimal(accidente.factor_moral_n5))
+            valor_dano = valor_dano + (
+                Decimal(accidente.valor_moral_n1)
+                * Decimal(accidente.salario_minimo)
+                * Decimal(accidente.factor_moral_n1)
+            )
+            valor_dano = valor_dano + (
+                Decimal(accidente.valor_moral_n2)
+                * Decimal(accidente.salario_minimo)
+                * Decimal(accidente.factor_moral_n2)
+            )
+            valor_dano = valor_dano + (
+                Decimal(accidente.valor_moral_n3)
+                * Decimal(accidente.salario_minimo)
+                * Decimal(accidente.factor_moral_n3)
+            )
+            valor_dano = valor_dano + (
+                Decimal(accidente.valor_moral_n4)
+                * Decimal(accidente.salario_minimo)
+                * Decimal(accidente.factor_moral_n4)
+            )
+            valor_dano = valor_dano + (
+                Decimal(accidente.valor_moral_n5)
+                * Decimal(accidente.salario_minimo)
+                * Decimal(accidente.factor_moral_n5)
+            )
             accidente.valor_dano_moral = valor_dano
             accidente.save()
             # serialize an object in json
-            ser_instance = serializers.serialize('json', [accidente,])
+            ser_instance = serializers.serialize(
+                "json",
+                [
+                    accidente,
+                ],
+            )
             # send to client side.
             return JsonResponse({"instance": ser_instance}, status=200)
         else:
@@ -211,8 +263,8 @@ def post_dano_moral (request, *args, **kwargs):
     return JsonResponse({"error": ""}, status=400)
 
 
-def post_adicionales (request, *args, **kwargs):
-    accidente = get_object_or_404(Accidente, id=kwargs['pk'])
+def post_adicionales(request, *args, **kwargs):
+    accidente = get_object_or_404(Accidente, id=kwargs["pk"])
     # request should be ajax and method should be POST.
     if request.is_ajax and request.method == "POST":
         # get the form data
@@ -222,7 +274,12 @@ def post_adicionales (request, *args, **kwargs):
         if form.is_valid():
             instance = form.save()
             # serialize an object in json
-            ser_instance = serializers.serialize('json', [instance,])
+            ser_instance = serializers.serialize(
+                "json",
+                [
+                    instance,
+                ],
+            )
             # send to client side.
             return JsonResponse({"instance": ser_instance}, status=200)
         else:
@@ -234,7 +291,7 @@ def post_adicionales (request, *args, **kwargs):
 
 
 def post_capacitador(request, *args, **kwargs):
-    accidente = get_object_or_404(Accidente, id=kwargs['pk'])
+    accidente = get_object_or_404(Accidente, id=kwargs["pk"])
     capacitador = get_object_or_404(Persona, id=request.POST["capacitador"])
     # request should be ajax and method should be POST.
     if request.is_ajax and request.method == "POST":
@@ -247,7 +304,13 @@ def post_capacitador(request, *args, **kwargs):
         if form.is_valid():
             instance = form.save()
             # serialize an object in json
-            ser_instance = serializers.serialize('json', [instance, capacitador,])
+            ser_instance = serializers.serialize(
+                "json",
+                [
+                    instance,
+                    capacitador,
+                ],
+            )
             # send to client side.
             return JsonResponse({"instance": ser_instance}, status=200)
         else:
@@ -259,7 +322,7 @@ def post_capacitador(request, *args, **kwargs):
 
 
 def postReemplazo(request, *args, **kwargs):
-    accidente = get_object_or_404(Accidente, id=kwargs['pk'])
+    accidente = get_object_or_404(Accidente, id=kwargs["pk"])
     reemplazo = Persona()
     # request should be ajax and method should be POST.
     if request.is_ajax and request.method == "POST":
@@ -273,21 +336,28 @@ def postReemplazo(request, *args, **kwargs):
             instance.nombre_reemplazo = form.instance.nombre_reemplazo
             instance.save()
             reemplazo.nombre = instance.nombre_reemplazo
-            form.cleaned_data['reemplazo']
+            form.cleaned_data["reemplazo"]
             # serialize an object in json
-            ser_instance = serializers.serialize('json', [instance, reemplazo, ])
+            ser_instance = serializers.serialize(
+                "json",
+                [
+                    instance,
+                    reemplazo,
+                ],
+            )
             # send to client side.
             return JsonResponse({"instance": ser_instance}, status=200)
         else:
             # some form errors occured.
+            print(form.errors)
             return JsonResponse({"error": form.errors}, status=400)
 
     # some error occured
     return JsonResponse({"error": ""}, status=400)
 
 
-def post_insumo (request, *args, **kwargs):
-    accidente = get_object_or_404(Accidente, id=kwargs['pk'])
+def post_insumo(request, *args, **kwargs):
+    accidente = get_object_or_404(Accidente, id=kwargs["pk"])
     # request should be ajax and method should be POST.
     if request.is_ajax and request.method == "POST":
         # get the form data
@@ -297,7 +367,12 @@ def post_insumo (request, *args, **kwargs):
         if form.is_valid():
             instance = form.save()
             # serialize an object in json
-            ser_instance = serializers.serialize('json', [instance,])
+            ser_instance = serializers.serialize(
+                "json",
+                [
+                    instance,
+                ],
+            )
             # send to client side.
             return JsonResponse({"instance": ser_instance}, status=200)
         else:
@@ -308,8 +383,8 @@ def post_insumo (request, *args, **kwargs):
     return JsonResponse({"error": ""}, status=400)
 
 
-def post_otros (request, *args, **kwargs):
-    accidente = get_object_or_404(Accidente, id=kwargs['pk'])
+def post_otros(request, *args, **kwargs):
+    accidente = get_object_or_404(Accidente, id=kwargs["pk"])
     # request should be ajax and method should be POST.
     if request.is_ajax and request.method == "POST":
         # get the form data
@@ -319,7 +394,12 @@ def post_otros (request, *args, **kwargs):
         if form.is_valid():
             instance = form.save()
             # serialize an object in json
-            ser_instance = serializers.serialize('json', [instance,])
+            ser_instance = serializers.serialize(
+                "json",
+                [
+                    instance,
+                ],
+            )
             # send to client side.
             return JsonResponse({"instance": ser_instance}, status=200)
         else:
@@ -329,8 +409,9 @@ def post_otros (request, *args, **kwargs):
     # some error occured
     return JsonResponse({"error": ""}, status=400)
 
-def postTransporte (request, *args, **kwargs):
-    accidente = get_object_or_404(Accidente, id=kwargs['pk'])
+
+def postTransporte(request, *args, **kwargs):
+    accidente = get_object_or_404(Accidente, id=kwargs["pk"])
     # request should be ajax and method should be POST.
     if request.is_ajax and request.method == "POST":
         # get the form data
@@ -340,7 +421,12 @@ def postTransporte (request, *args, **kwargs):
         if form.is_valid():
             instance = form.save()
             # serialize an object in json
-            ser_instance = serializers.serialize('json', [instance,])
+            ser_instance = serializers.serialize(
+                "json",
+                [
+                    instance,
+                ],
+            )
             # send to client side.
             return JsonResponse({"instance": ser_instance}, status=200)
         else:
@@ -351,9 +437,8 @@ def postTransporte (request, *args, **kwargs):
     return JsonResponse({"error": ""}, status=400)
 
 
-
-def postMaquinaria (request, *args, **kwargs):
-    accidente = get_object_or_404(Accidente, id=kwargs['pk'])
+def postMaquinaria(request, *args, **kwargs):
+    accidente = get_object_or_404(Accidente, id=kwargs["pk"])
     # request should be ajax and method should be POST.
     if request.is_ajax and request.method == "POST":
         # get the form data
@@ -363,7 +448,12 @@ def postMaquinaria (request, *args, **kwargs):
         if form.is_valid():
             instance = form.save()
             # serialize an object in json
-            ser_instance = serializers.serialize('json', [instance,])
+            ser_instance = serializers.serialize(
+                "json",
+                [
+                    instance,
+                ],
+            )
             # send to client side.
             return JsonResponse({"instance": ser_instance}, status=200)
         else:
@@ -374,8 +464,8 @@ def postMaquinaria (request, *args, **kwargs):
     return JsonResponse({"error": ""}, status=400)
 
 
-def postRepuesto (request, *args, **kwargs):
-    accidente = get_object_or_404(Accidente, id=kwargs['pk'])
+def postRepuesto(request, *args, **kwargs):
+    accidente = get_object_or_404(Accidente, id=kwargs["pk"])
     # request should be ajax and method should be POST.
     if request.is_ajax and request.method == "POST":
         # get the form data
@@ -385,7 +475,12 @@ def postRepuesto (request, *args, **kwargs):
         if form.is_valid():
             instance = form.save()
             # serialize an object in json
-            ser_instance = serializers.serialize('json', [instance,])
+            ser_instance = serializers.serialize(
+                "json",
+                [
+                    instance,
+                ],
+            )
             # send to client side.
             return JsonResponse({"instance": ser_instance}, status=200)
         else:
@@ -395,8 +490,9 @@ def postRepuesto (request, *args, **kwargs):
     # some error occured
     return JsonResponse({"error": ""}, status=400)
 
-def postManoObra (request, *args, **kwargs):
-    accidente = get_object_or_404(Accidente, id=kwargs['pk'])
+
+def postManoObra(request, *args, **kwargs):
+    accidente = get_object_or_404(Accidente, id=kwargs["pk"])
     # request should be ajax and method should be POST.
     if request.is_ajax and request.method == "POST":
         # get the form data
@@ -406,7 +502,12 @@ def postManoObra (request, *args, **kwargs):
         if form.is_valid():
             instance = form.save()
             # serialize an object in json
-            ser_instance = serializers.serialize('json', [instance,])
+            ser_instance = serializers.serialize(
+                "json",
+                [
+                    instance,
+                ],
+            )
             # send to client side.
             return JsonResponse({"instance": ser_instance}, status=200)
         else:
@@ -417,8 +518,8 @@ def postManoObra (request, *args, **kwargs):
     return JsonResponse({"error": ""}, status=400)
 
 
-def postDanoEmergente (request, *args, **kwargs):
-    accidente = get_object_or_404(Accidente, id=kwargs['pk'])
+def postDanoEmergente(request, *args, **kwargs):
+    accidente = get_object_or_404(Accidente, id=kwargs["pk"])
     # request should be ajax and method should be POST.
     if request.is_ajax and request.method == "POST":
         # get the form data
@@ -428,7 +529,12 @@ def postDanoEmergente (request, *args, **kwargs):
         if form.is_valid():
             instance = form.save()
             # serialize an object in json
-            ser_instance = serializers.serialize('json', [instance,])
+            ser_instance = serializers.serialize(
+                "json",
+                [
+                    instance,
+                ],
+            )
             # send to client side.
             return JsonResponse({"instance": ser_instance}, status=200)
         else:
@@ -443,17 +549,17 @@ class BuscarPersonaView(View):
     def post(self, request, *args, **kwargs):
         data = {}
         try:
-            action = request.POST['action']
+            action = request.POST["action"]
 
-            if action == 'autocomplete':
+            if action == "autocomplete":
                 data = []
-                for i in Persona.objects.filter(nombre__icontains=request.POST['term']):
+                for i in Persona.objects.filter(nombre__icontains=request.POST["term"]):
                     item = i.personaToDictionary()
-                    item['text'] = i.__str__()
-                    item['id'] = i.id
+                    item["text"] = i.__str__()
+                    item["id"] = i.id
                     data.append(item)
         except Exception as e:
-            data['error']: str(e)
+            data["error"]: str(e)
 
         return JsonResponse(data, safe=False)
 
@@ -462,48 +568,67 @@ class LiquidacionView(View):
     def get(self, request):
         data = []
         try:
-            parametro = get_object_or_404(ParametrosApp, parametro='SMLV')
+            parametro = get_object_or_404(ParametrosApp, parametro="SMLV")
             smlv = float(parametro.valor)
-            fecha_liquidacion = datetime.strptime(request.GET['fecha_liquidacion'], "%d-%m-%Y")
-            id_accidente = request.GET['id_accidente']
-            num_meses_exp = Decimal(request.GET['lcf'])
+            fecha_liquidacion = datetime.strptime(
+                request.GET["fecha_liquidacion"], "%d-%m-%Y"
+            )
+            id_accidente = request.GET["id_accidente"]
+            num_meses_exp = Decimal(request.GET["lcf"])
             accidente = get_object_or_404(Accidente, id=id_accidente)
-
 
             factor_ipc_final = 0.0
             factor_ipc_inicial = 0.0
 
             diferencia = fecha_liquidacion.date() - accidente.fecha_accidente
-            logger.info("MESES A LIQuIDAR: " + str(diferencia.days) +"|" + str(fecha_liquidacion) + "|" + str(accidente.fecha_accidente))
-            num_meses_liq = (diferencia.days+1)/30
-
+            logger.info(
+                "MESES A LIQuIDAR: "
+                + str(diferencia.days)
+                + "|"
+                + str(fecha_liquidacion)
+                + "|"
+                + str(accidente.fecha_accidente)
+            )
+            num_meses_liq = (diferencia.days + 1) / 30
 
             if num_meses_liq < 0:
-                raise Exception("La fecha de liquidación es inferior a la fecha del accidente")
+                raise Exception(
+                    "La fecha de liquidación es inferior a la fecha del accidente"
+                )
 
             if num_meses_liq == 0:
                 num_meses_liq = 1.0
 
             num_meses_exp -= Decimal(num_meses_liq)
 
-
             try:
-                f_ipc_final = FactorIPC.objects.filter(anio=fecha_liquidacion.year).filter(mes=fecha_liquidacion.month).get()
+                f_ipc_final = (
+                    FactorIPC.objects.filter(anio=fecha_liquidacion.year)
+                    .filter(mes=fecha_liquidacion.month)
+                    .get()
+                )
                 factor_ipc_final = f_ipc_final.factor
-                f_ipc_inicial = FactorIPC.objects.filter(anio=accidente.fecha_accidente.year).filter(mes=accidente.fecha_accidente.month).get()
+                f_ipc_inicial = (
+                    FactorIPC.objects.filter(anio=accidente.fecha_accidente.year)
+                    .filter(mes=accidente.fecha_accidente.month)
+                    .get()
+                )
                 factor_ipc_inicial = f_ipc_inicial.factor
             except ObjectDoesNotExist as e:
                 logger.error(e)
-                raise Exception("Falta información de IPC para las fechas seleccionadas")
+                raise Exception(
+                    "Falta información de IPC para las fechas seleccionadas"
+                )
 
             try:
-                ingreso_base = Decimal(accidente.salario_accidentado) * (Decimal(factor_ipc_final) / Decimal(factor_ipc_inicial))
+                ingreso_base = Decimal(accidente.salario_accidentado) * (
+                    Decimal(factor_ipc_final) / Decimal(factor_ipc_inicial)
+                )
             except:
                 ingreso_base = Decimal(smlv)
 
             if ingreso_base is None or ingreso_base < smlv:
                 ingreso_base = Decimal(smlv)
-
 
             valor_actualizado = 0
             lucro_cesante_consolidado = 0
@@ -513,26 +638,59 @@ class LiquidacionView(View):
             logger.info(factor_ipc_inicial)
             logger.info(ingreso_base)
 
-            if accidente.invalidez and accidente.grado_invalidez is not None and accidente.grado_invalidez > 0 and accidente.grado_invalidez < 51:
+            if (
+                accidente.invalidez
+                and accidente.grado_invalidez is not None
+                and accidente.grado_invalidez > 0
+                and accidente.grado_invalidez < 51
+            ):
                 valor_actualizado = ingreso_base + (ingreso_base * 25 / 100)
-                valor_actualizado = Decimal(valor_actualizado) * Decimal(accidente.grado_invalidez/100)
+                valor_actualizado = Decimal(valor_actualizado) * Decimal(
+                    accidente.grado_invalidez / 100
+                )
 
                 if valor_actualizado is None or valor_actualizado < smlv:
                     valor_actualizado = Decimal(smlv)
 
-            elif accidente.invalidez and accidente.grado_invalidez is not None and accidente.grado_invalidez > 50:
+            elif (
+                accidente.invalidez
+                and accidente.grado_invalidez is not None
+                and accidente.grado_invalidez > 50
+            ):
                 valor_actualizado = ingreso_base + (ingreso_base * 25 / 100)
             elif accidente.fallecido:
                 valor_actualizado = ingreso_base + (ingreso_base * 25 / 100)
-                valor_actualizado -= (valor_actualizado * 25/100)
+                valor_actualizado -= valor_actualizado * 25 / 100
             else:
                 valor_actualizado = 0
 
+            lucro_cesante_consolidado = valor_actualizado * (
+                (
+                    (
+                        (Decimal(1.0) + Decimal(interes_tecnico))
+                        ** Decimal(num_meses_liq)
+                    )
+                    - Decimal(1.0)
+                )
+                / Decimal(interes_tecnico)
+            )
 
-            lucro_cesante_consolidado = valor_actualizado * ((((Decimal(1.0) + Decimal(interes_tecnico)) ** Decimal(num_meses_liq)) - Decimal(1.0)) / Decimal(interes_tecnico))
-
-            lucro_cesante_futuro = valor_actualizado * ((((Decimal(1.0) + Decimal(interes_tecnico)) ** Decimal(num_meses_exp)) - Decimal(1.0)) / (Decimal(interes_tecnico) * ((Decimal(1.0) + Decimal(interes_tecnico)) ** Decimal(num_meses_exp))))
-
+            lucro_cesante_futuro = valor_actualizado * (
+                (
+                    (
+                        (Decimal(1.0) + Decimal(interes_tecnico))
+                        ** Decimal(num_meses_exp)
+                    )
+                    - Decimal(1.0)
+                )
+                / (
+                    Decimal(interes_tecnico)
+                    * (
+                        (Decimal(1.0) + Decimal(interes_tecnico))
+                        ** Decimal(num_meses_exp)
+                    )
+                )
+            )
 
             accidente.fecha_liquidacion = fecha_liquidacion
             accidente.lucro_consolidado = lucro_cesante_consolidado
@@ -543,28 +701,27 @@ class LiquidacionView(View):
             accidente.save()
 
             item = {}
-            item['ipc_final'] = factor_ipc_final
-            item['ipc_inicial'] = factor_ipc_inicial
-            item['lcc']= num_meses_liq
-            item['lucro_cesante_consolidado']= lucro_cesante_consolidado
-            item['lucro_cesante_futuro']= lucro_cesante_futuro
-            item['fecha_liq']=fecha_liquidacion
+            item["ipc_final"] = factor_ipc_final
+            item["ipc_inicial"] = factor_ipc_inicial
+            item["lcc"] = num_meses_liq
+            item["lucro_cesante_consolidado"] = lucro_cesante_consolidado
+            item["lucro_cesante_futuro"] = lucro_cesante_futuro
+            item["fecha_liq"] = fecha_liquidacion
 
             logger.info(item)
             data.append(item)
             return JsonResponse(data, safe=False, status=200)
         except Exception as e:
             logger.error(e)
-            data.append({'error': str(e)})
+            data.append({"error": str(e)})
 
         return JsonResponse(data, safe=False, status=400)
 
 
 class RegistrarAusentismoView(View):
     def get(self, request):
-        context_data = {'form': AusentismoForm()}
-        return render(request, 'ausentismos/add.html', context_data)
-
+        context_data = {"form": AusentismoForm()}
+        return render(request, "ausentismos/add.html", context_data)
 
 
 class RegistrarAccidenteView(CreateView):
@@ -576,13 +733,16 @@ class RegistrarAccidenteView(CreateView):
 
     def form_valid(self, form):
         empleado = get_object_or_404(Persona, id=form.instance.empleado.id)
-        parametro = get_object_or_404(ParametrosApp, parametro='SMLV')
+        parametro = get_object_or_404(ParametrosApp, parametro="SMLV")
         niveles = None
-        if (form.instance.fallecido == True):
-            niveles = NivDanoMoral.objects.filter(tipo_dano='M')
+        if form.instance.fallecido == True:
+            niveles = NivDanoMoral.objects.filter(tipo_dano="M")
         elif form.instance.invalidez == True:
-            niveles = NivDanoMoral.objects.filter(tipo_dano='I', rango_inf__lte=form.instance.grado_invalidez,
-                                                      rango_sup__gte=form.instance.grado_invalidez)
+            niveles = NivDanoMoral.objects.filter(
+                tipo_dano="I",
+                rango_inf__lte=form.instance.grado_invalidez,
+                rango_sup__gte=form.instance.grado_invalidez,
+            )
 
         if niveles is not None and niveles.count() > 0:
             for niv in niveles:
@@ -615,12 +775,11 @@ class RegistrarAccidenteView(CreateView):
         return super().form_valid(form)
 
 
-
 # Create your views here.
 class PersonaListView(SingleTableView):
     model = Persona
     table_class = PersonaTable
-    template_name = 'personas/infoPersonal.html'
+    template_name = "personas/infoPersonal.html"
 
 
 class FilteredAccidenteListView(ExportMixin, SingleTableMixin, FilterView):
@@ -631,7 +790,6 @@ class FilteredAccidenteListView(ExportMixin, SingleTableMixin, FilterView):
     filterset_class = AccidenteFilter
 
 
-
 class FilteredAusentismoListView(ExportMixin, SingleTableMixin, FilterView):
     table_class = AusentismoTable
     model = Ausentismo
@@ -639,7 +797,8 @@ class FilteredAusentismoListView(ExportMixin, SingleTableMixin, FilterView):
     paginate_by = 20
     filterset_class = AusentismoFilter
 
-'''
+
+"""
     def get_context_data(self, **kwargs):
         context = super(FilteredAusentismoListView, self).get_context_data(**kwargs)
         if('fecha' in self.kwargs):
@@ -657,27 +816,28 @@ class FilteredAusentismoListView(ExportMixin, SingleTableMixin, FilterView):
 
         context['filter'] = f
         context['table'] = t
-        
+
         export_format = self.request.GET.get("_export", None)
-        
+
         if TableExport.is_valid_format(export_format):
             exporter = TableExport(export_format, query)
             return exporter.response("query.{}".format(export_format))
-        
+
         return context
-'''
+"""
 
 
 class DetalleAccidenteView(View):
     def get(self, request, pk):
         context_data = {"accidente": Accidente.objects.get(id=pk)}
-        return render(request, 'accidentes/detalle.html', context_data)
+        return render(request, "accidentes/detalle.html", context_data)
 
 
 class PersonaView(View):
     def get(self, request, pk):
         context_data = {"persona": Persona.objects.get(id=pk)}
-        return render(request, 'personal/infoPersonal.html', context_data)
+        return render(request, "personal/infoPersonal.html", context_data)
+
 
 @login_required()
 def home(request):
@@ -685,11 +845,12 @@ def home(request):
 
 
 def ausentismos(request):
-    #context_data = {"ausentismos": Ausentismo.objects.all()}
-    #return render(request, "ausentismos/index.html", context_data)
+    # context_data = {"ausentismos": Ausentismo.objects.all()}
+    # return render(request, "ausentismos/index.html", context_data)
     table = AusentismoTable(Ausentismo.objects.all())
     table.paginate(page=request.GET.get("page", 1), per_page=5)
     return render(request, "ausentismos/index.html", {"ausentismos": table})
+
 
 @login_required()
 def informes(request):
@@ -704,16 +865,14 @@ def accidentes(request):
 def personal(request):
     personas = PersonaTable(Persona.objects.all())
     personas.paginate(page=request.GET.get("page", 1), per_page=5)
-    context = {
-        "personas": personas
-    }
+    context = {"personas": personas}
 
-    return render(request, 'personal/index.html', context)
+    return render(request, "personal/index.html", context)
 
 
 class CostosView(View):
     def get(self, request, pk):
-        accidente = get_object_or_404(Accidente, id= pk)
+        accidente = get_object_or_404(Accidente, id=pk)
         f_insumos = CostosAccInsumosMedicosForm(initial={"accidente": accidente})
         f_transporte = CostosAccTransporteForm(initial={"accidente": accidente})
         f_otros = CostosAccOtrosForm(initial={"accidente": accidente})
@@ -721,43 +880,47 @@ class CostosView(View):
         f_repuesto = CostosAccRepuestoForm(initial={"accidente": accidente})
         f_manoObra = CostosAccManoObraForm(initial={"accidente": accidente})
 
-        context_data = {"accidente": accidente,
-                        'f_insumos': f_insumos,
-                        'f_transporte': f_transporte,
-                        'f_otros': f_otros,
-                        'f_maquinaria': f_maquinaria,
-                        'f_manoObra': f_manoObra,
-                        'f_repuesto': f_repuesto,
-                        "listInsumosMed": CostosAccInsumosMedicos.objects.filter(accidente=pk),
-                        "listTransporte": CostosAccTransporte.objects.filter(accidente=pk),
-                        "listOtros": CostosAccOtros.objects.filter(accidente=pk),
-                        "listMaquinaria": CostosAccMaquinaria.objects.filter(accidente=pk),
-                        "listRepuestos": CostosAccRepuestos.objects.filter(accidente=pk),
-                        "listManoObra": CostosAccManoObra.objects.filter(accidente=pk)}
-        return render(request, 'accidentes/documentar.html', context_data)
-
+        context_data = {
+            "accidente": accidente,
+            "f_insumos": f_insumos,
+            "f_transporte": f_transporte,
+            "f_otros": f_otros,
+            "f_maquinaria": f_maquinaria,
+            "f_manoObra": f_manoObra,
+            "f_repuesto": f_repuesto,
+            "listInsumosMed": CostosAccInsumosMedicos.objects.filter(accidente=pk),
+            "listTransporte": CostosAccTransporte.objects.filter(accidente=pk),
+            "listOtros": CostosAccOtros.objects.filter(accidente=pk),
+            "listMaquinaria": CostosAccMaquinaria.objects.filter(accidente=pk),
+            "listRepuestos": CostosAccRepuestos.objects.filter(accidente=pk),
+            "listManoObra": CostosAccManoObra.objects.filter(accidente=pk),
+        }
+        return render(request, "accidentes/documentar.html", context_data)
 
 
 class LucroView(View):
     def get(self, request, pk):
         f_dano_emergente = CostosAccDanoEmergenteForm()
         f_dano_moral = DanoMoralForm()
-        accidente = get_object_or_404(Accidente, id= pk)
-        parametro = get_object_or_404(ParametrosApp, parametro='SMLV')
+        accidente = get_object_or_404(Accidente, id=pk)
+        parametro = get_object_or_404(ParametrosApp, parametro="SMLV")
         niveles = None
-        if(accidente.fallecido == True):
-            niveles = NivDanoMoral.objects.filter(tipo_dano='M')
+        if accidente.fallecido == True:
+            niveles = NivDanoMoral.objects.filter(tipo_dano="M")
         elif accidente.invalidez == True:
-            niveles = NivDanoMoral.objects.filter(tipo_dano='I', rango_inf__lte=accidente.grado_invalidez, rango_sup__gte=accidente.grado_invalidez)
-
+            niveles = NivDanoMoral.objects.filter(
+                tipo_dano="I",
+                rango_inf__lte=accidente.grado_invalidez,
+                rango_sup__gte=accidente.grado_invalidez,
+            )
 
         smlv = float(parametro.valor)
 
         salario = accidente.empleado.salario
-        if(accidente.salario_accidentado is None):
+        if accidente.salario_accidentado is None:
 
-            accidente.salario_accidentado= salario
-            accidente.salario_minimo= smlv
+            accidente.salario_accidentado = salario
+            accidente.salario_minimo = smlv
 
             if niveles is not None and niveles.count() > 0:
                 for niv in niveles:
@@ -786,12 +949,16 @@ class LucroView(View):
 
             accidente.save()
 
-
-
-        edad = relativedelta(accidente.fecha_accidente, accidente.empleado.fecha_nacimiento)
+        edad = relativedelta(
+            accidente.fecha_accidente, accidente.empleado.fecha_nacimiento
+        )
         tiempo_expectativa = 0
         try:
-            expectativa = ExpectativaVida.objects.filter(edad = edad.years).filter(tipo = accidente.empleado.sexo).get()
+            expectativa = (
+                ExpectativaVida.objects.filter(edad=edad.years)
+                .filter(tipo=accidente.empleado.sexo)
+                .get()
+            )
             tiempo_expectativa = expectativa.expectativa
         except ObjectDoesNotExist:
             pass
@@ -800,47 +967,62 @@ class LucroView(View):
             estado = "INCAPACITADO"
         if accidente.invalidez:
             estado = "INVALIDO"
-        if accidente.fallecido :
+        if accidente.fallecido:
             estado = "FALLECIDO"
 
-        context_data = {"accidente": accidente,
-                        'salario': salario,
-                        'edad': edad,
-                        'estado': estado,
-                        'lcf': tiempo_expectativa * 12,
-                        'interes_tecnico': interes_tecnico,
-                        'expectativa': tiempo_expectativa,
-                        'smlv': smlv,
-                        'f_dano_emergente': f_dano_emergente,
-                        'f_dano_moral': f_dano_moral,
-                        'f_danomaterial': DanoMaterialForm(),
-                        'list_dano_emergente': CostosAccDanoEmergente.objects.filter(accidente=pk)}
+        context_data = {
+            "accidente": accidente,
+            "salario": salario,
+            "edad": edad,
+            "estado": estado,
+            "lcf": tiempo_expectativa * 12,
+            "interes_tecnico": interes_tecnico,
+            "expectativa": tiempo_expectativa,
+            "smlv": smlv,
+            "f_dano_emergente": f_dano_emergente,
+            "f_dano_moral": f_dano_moral,
+            "f_danomaterial": DanoMaterialForm(),
+            "list_dano_emergente": CostosAccDanoEmergente.objects.filter(accidente=pk),
+        }
 
-
-        return render(request, 'accidentes/lucro.html', context_data)
-
+        return render(request, "accidentes/lucro.html", context_data)
 
 
 class AprociacionesView(View):
     def get(self, request, pk):
         f_tiempos_acompanamiento = TiemposAccAcompanamientoForm()
-        accidente = get_object_or_404(Accidente, id= pk)
+        accidente = get_object_or_404(Accidente, id=pk)
 
         matrix = []
 
-        r_reemplazos = ReemplazoAccidente.objects.filter(accidente=pk).aggregate(total = Sum(F('valor_salarial_real')*F('dias')))['total']
-        r_capacitaciones = CapacitadorAccidente.objects.filter(accidente=pk).aggregate(total=Sum(F('salario') / 30 * F('dias')))['total']
+        r_reemplazos = ReemplazoAccidente.objects.filter(accidente=pk).aggregate(
+            total=Sum(F("valor_salarial_real") * F("dias"))
+        )["total"]
+        r_capacitaciones = CapacitadorAccidente.objects.filter(accidente=pk).aggregate(
+            total=Sum(F("salario") / 30 * F("dias"))
+        )["total"]
 
-        result = TiemposAccAcompanamiento.objects.filter(accidente=pk).values('tipo_acompanamiento').order_by('tipo_acompanamiento').annotate(dTotal=Sum('total'))
-        tipos_acompanamiento = TipoAcompanamiento.objects.all().order_by('id')
-        factor_parafiscales = FactorAccParafiscales.objects.all().order_by('id')
+        result = (
+            TiemposAccAcompanamiento.objects.filter(accidente=pk)
+            .values("tipo_acompanamiento")
+            .order_by("tipo_acompanamiento")
+            .annotate(dTotal=Sum("total"))
+        )
+        tipos_acompanamiento = TipoAcompanamiento.objects.all().order_by("id")
+        factor_parafiscales = FactorAccParafiscales.objects.all().order_by("id")
         for parafiscal in factor_parafiscales:
             fila = []
             fila.append(parafiscal.descripcion)
             for tipo in tipos_acompanamiento:
-                valor = 0;
+                valor = 0
                 if tipo.id == 5:
-                    result_5 = TiemposAccAcompanamiento.objects.filter(accidente=pk, tipo_acompanamiento=5).values('tipo_acompanamiento').annotate(dTotal=Sum('total'))
+                    result_5 = (
+                        TiemposAccAcompanamiento.objects.filter(
+                            accidente=pk, tipo_acompanamiento=5
+                        )
+                        .values("tipo_acompanamiento")
+                        .annotate(dTotal=Sum("total"))
+                    )
                     valores_adicionales = 0
                     if r_reemplazos is not None:
                         valores_adicionales = r_reemplazos
@@ -848,48 +1030,64 @@ class AprociacionesView(View):
                         valores_adicionales += r_capacitaciones
 
                     for r5 in result_5.iterator():
-                        valores_adicionales += r5['dTotal']
+                        valores_adicionales += r5["dTotal"]
                     valor = parafiscal.factor * valores_adicionales
 
                 for r in result.iterator():
-                    if tipo.id == r['tipo_acompanamiento'] and tipo.id != 5:
-                        valor = parafiscal.factor*r['dTotal']
+                    if tipo.id == r["tipo_acompanamiento"] and tipo.id != 5:
+                        valor = parafiscal.factor * r["dTotal"]
 
                 fila.append(valor)
             matrix.append(fila)
 
+        context_data = {
+            "accidente": accidente,
+            "f_tiempos_acompanamiento": f_tiempos_acompanamiento,
+            "list_acompanamientos": TiemposAccAcompanamiento.objects.filter(
+                accidente=pk
+            ),
+            "matrix": matrix,
+            "factor_parafiscal": factor_parafiscales,
+            "tipos_acompanamiento": tipos_acompanamiento,
+        }
 
-
-
-        context_data = {"accidente": accidente,
-                        'f_tiempos_acompanamiento': f_tiempos_acompanamiento,
-                        'list_acompanamientos': TiemposAccAcompanamiento.objects.filter(accidente=pk),
-                        'matrix': matrix, 'factor_parafiscal': factor_parafiscales, 'tipos_acompanamiento': tipos_acompanamiento}
-
-        return render(request, 'accidentes/apropiaciones.html', context_data)
+        return render(request, "accidentes/apropiaciones.html", context_data)
 
     def post(selft, request, *args, **kwargs):
-        accidente = get_object_or_404(Accidente, id=kwargs['pk'])
-        form = TiemposAccAcompanamientoForm(request.POST)
-        acompanante = get_object_or_404(Persona, id=request.POST["empleado"])
-        factor = get_object_or_404(FactorTiemposAcompanamiento, id=request.POST["factor"])
-        form.instance.salario = acompanante.salario
-        form.instance.valor_diario = acompanante.salario / 240
-        form.instance.valor_factor = factor.factor
-        logger.info(form.instance.tiempo)
-        logger.info(request.POST["tiempo"])
-        form.instance.tiempo = datetime.strptime(request.POST["tiempo"], '%H:%M')
-        tiempo = form.instance.tiempo.hour + form.instance.tiempo.minute/60
-        form.instance.total = ((acompanante.salario / 240) * Decimal(tiempo) * factor.factor)
+        try:
+            accidente = get_object_or_404(Accidente, id=kwargs["pk"])
+            form = TiemposAccAcompanamientoForm(request.POST)
+            acompanante = get_object_or_404(Persona, id=request.POST["empleado"])
+            factor = get_object_or_404(
+                FactorTiemposAcompanamiento, id=request.POST["factor"]
+            )
+            form.instance.salario = acompanante.salario
+            form.instance.valor_diario = acompanante.salario / 240
+            form.instance.valor_factor = factor.factor
+            logger.info(form.instance.tiempo)
+            logger.info(request.POST["tiempo"])
+            form.instance.tiempo = datetime.strptime(request.POST["tiempo"], "%H:%M")
+            tiempo = form.instance.tiempo.hour + form.instance.tiempo.minute / 60
+            form.instance.total = (
+                (acompanante.salario / 240) * Decimal(tiempo) * factor.factor
+            )
 
-        form.instance.accidente = accidente
-        # save the data and after fetch the object in instance
-        if form.is_valid():
-            instance = form.save()
-            return HttpResponseRedirect(reverse('apropiaciones_nomina', kwargs={'pk':instance.accidente.id}) )
-
+            form.instance.accidente = accidente
+            # save the data and after fetch the object in instance
+            if form.is_valid():
+                instance = form.save()
+                return HttpResponseRedirect(
+                    reverse(
+                        "apropiaciones_nomina", kwargs={"pk": instance.accidente.id}
+                    )
+                )
+        except Exception as e:
+            logger.error(e)
+            messages.error(request, str(e))
         # some error occured
-        return HttpResponseRedirect(reverse('apropiaciones_nomina', kwargs={'pk':kwargs['pk']}))
+        return HttpResponseRedirect(
+            reverse("apropiaciones_nomina", kwargs={"pk": kwargs["pk"]})
+        )
 
 
 class CostosNuevosView(CreateView):
@@ -899,20 +1097,22 @@ class CostosNuevosView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super(CostosNuevosView, self).get_context_data(**kwargs)
-        context['acc'] = self.kwargs['acc']
+        context["acc"] = self.kwargs["acc"]
         return context
 
     def form_valid(self, form):
-        form.instance.accidente = Accidente.objects.get(pk=self.kwargs['acc'])
-        context = {'acc': self.kwargs['acc']}
-        self.success_url = reverse_lazy("costos_list", kwargs={'pk': self.kwargs['acc']})
+        form.instance.accidente = Accidente.objects.get(pk=self.kwargs["acc"])
+        context = {"acc": self.kwargs["acc"]}
+        self.success_url = reverse_lazy(
+            "costos_list", kwargs={"pk": self.kwargs["acc"]}
+        )
         return super(CostosNuevosView, self).form_valid(form)
 
 
 class CostosEditView(UpdateView):
     model = CostosAccInsumosMedicos
     template_name = "catalogos/subcategoria_form.html"
-    context_object_name = 'obj'
+    context_object_name = "obj"
     form_class = CostosAccInsumosMedicosForm
     success_url = reverse_lazy("ausentismo:costos_list")
 
@@ -924,75 +1124,93 @@ class AdaptacionCambioView(View):
         f_capacitador = CapacitacionAccForm()
         f_costos_adicionales = CostosAccAdicionalesForm()
 
-        context_data = {"accidente": accidente,
-                    'f_reemplazo': f_reemplazo,
-                    'f_capacitador': f_capacitador,
-                    'f_costos_adicionales': f_costos_adicionales,
-                    'list_reemplazos': ReemplazoAccidente.objects.filter(accidente=pk),
-                    'list_capacitadores': CapacitadorAccidente.objects.filter(accidente=pk),
-                    'list_costos': CostosAccAdicionales.objects.filter(accidente=pk), }
+        context_data = {
+            "accidente": accidente,
+            "f_reemplazo": f_reemplazo,
+            "f_capacitador": f_capacitador,
+            "f_costos_adicionales": f_costos_adicionales,
+            "list_reemplazos": ReemplazoAccidente.objects.filter(accidente=pk),
+            "list_capacitadores": CapacitadorAccidente.objects.filter(accidente=pk),
+            "list_costos": CostosAccAdicionales.objects.filter(accidente=pk),
+        }
 
-        return render(request, 'accidentes/adaptacion_cambio.html', context_data)
+        return render(request, "accidentes/adaptacion_cambio.html", context_data)
 
 
 class BalanceView(View):
     def get(self, request, pk):
         accidente = get_object_or_404(Accidente, id=pk)
 
-        valor_1 = 0;
-        valor_2 = 0;
-        valor_3 = 0;
-        valor_4 = 0;
-        valor_5 = 0;
-        valor_6 = 0;
-        valor_7 = 0;
-        valor_8 = 0;
-        valor_9 = 0;
-        valor_10 = 0;
-        valor_11 = 0;
-        valor_12 = 0;
-        valor_13 = 0;
-        valor_14 = 0;
-        valor_15 = 0;
-        valor_16 = 0;
+        valor_1 = 0
+        valor_2 = 0
+        valor_3 = 0
+        valor_4 = 0
+        valor_5 = 0
+        valor_6 = 0
+        valor_7 = 0
+        valor_8 = 0
+        valor_9 = 0
+        valor_10 = 0
+        valor_11 = 0
+        valor_12 = 0
+        valor_13 = 0
+        valor_14 = 0
+        valor_15 = 0
+        valor_16 = 0
 
-        result = TiemposAccAcompanamiento.objects.filter(accidente=accidente.id).values('tipo_acompanamiento').order_by('tipo_acompanamiento').annotate(dTotal=Sum('total'))
-
+        result = (
+            TiemposAccAcompanamiento.objects.filter(accidente=accidente.id)
+            .values("tipo_acompanamiento")
+            .order_by("tipo_acompanamiento")
+            .annotate(dTotal=Sum("total"))
+        )
 
         for r in result.iterator():
-            if 1 == r['tipo_acompanamiento']:
-                valor_2 = calcular_valor_acompanamiento(Decimal(r['dTotal']))
-            elif 2 == r['tipo_acompanamiento']:
-                valor_9 = calcular_valor_acompanamiento(Decimal(r['dTotal']))
-            elif 3 == r['tipo_acompanamiento']:
-                valor_10 = calcular_valor_acompanamiento(Decimal(r['dTotal']))
-            elif 4 == r['tipo_acompanamiento']:
-                valor_11 = calcular_valor_acompanamiento(Decimal(r['dTotal']))
-            elif 5 == r['tipo_acompanamiento']:
-                valor_12 = calcular_valor_acompanamiento(Decimal(r['dTotal']))
+            if 1 == r["tipo_acompanamiento"]:
+                valor_2 = calcular_valor_acompanamiento(Decimal(r["dTotal"]))
+            elif 2 == r["tipo_acompanamiento"]:
+                valor_9 = calcular_valor_acompanamiento(Decimal(r["dTotal"]))
+            elif 3 == r["tipo_acompanamiento"]:
+                valor_10 = calcular_valor_acompanamiento(Decimal(r["dTotal"]))
+            elif 4 == r["tipo_acompanamiento"]:
+                valor_11 = calcular_valor_acompanamiento(Decimal(r["dTotal"]))
+            elif 5 == r["tipo_acompanamiento"]:
+                valor_12 = calcular_valor_acompanamiento(Decimal(r["dTotal"]))
 
-
-        v_reemplazos = ReemplazoAccidente.objects.filter(accidente=accidente.id).aggregate(total=Sum(F('costo')))[
-            'total']
-        v_capacitaciones = CapacitadorAccidente.objects.filter(accidente=accidente.id).aggregate(total=Sum(F('costo')))[
-            'total']
-        valor_12 += (0 if v_reemplazos is None else v_reemplazos)
-        valor_12 += (0 if v_capacitaciones is None else v_capacitaciones)
+        v_reemplazos = ReemplazoAccidente.objects.filter(
+            accidente=accidente.id
+        ).aggregate(total=Sum(F("costo")))["total"]
+        v_capacitaciones = CapacitadorAccidente.objects.filter(
+            accidente=accidente.id
+        ).aggregate(total=Sum(F("costo")))["total"]
+        valor_12 += 0 if v_reemplazos is None else v_reemplazos
+        valor_12 += 0 if v_capacitaciones is None else v_capacitaciones
 
         tiempo_dic = {}
-        result = TiemposAccAcompanamiento.objects.filter(accidente=accidente.id).order_by('tipo_acompanamiento')
+        result = TiemposAccAcompanamiento.objects.filter(
+            accidente=accidente.id
+        ).order_by("tipo_acompanamiento")
 
         for r in result:
             if tiempo_dic.get(r.tipo_acompanamiento.id) is None:
-                tiempo_dic[r.tipo_acompanamiento.id]= r.tiempo.hour * 60 + r.tiempo.minute
+                tiempo_dic[r.tipo_acompanamiento.id] = (
+                    r.tiempo.hour * 60 + r.tiempo.minute
+                )
             else:
-                tiempo_dic[r.tipo_acompanamiento.id] = tiempo_dic[r.tipo_acompanamiento.id] + (r.tiempo.hour * 60 + r.tiempo.minute)
+                tiempo_dic[r.tipo_acompanamiento.id] = tiempo_dic[
+                    r.tipo_acompanamiento.id
+                ] + (r.tiempo.hour * 60 + r.tiempo.minute)
 
-        t_reemplazos = ReemplazoAccidente.objects.filter(accidente= accidente.id).aggregate(total= Sum(F('dias')))['total']
-        t_capacitaciones = CapacitadorAccidente.objects.filter(accidente=accidente.id).aggregate(total=Sum(F('dias')))[
-            'total']
+        t_reemplazos = ReemplazoAccidente.objects.filter(
+            accidente=accidente.id
+        ).aggregate(total=Sum(F("dias")))["total"]
+        t_capacitaciones = CapacitadorAccidente.objects.filter(
+            accidente=accidente.id
+        ).aggregate(total=Sum(F("dias")))["total"]
 
-        dias_adicinales = (0 if t_reemplazos is None else t_reemplazos) + (0 if t_capacitaciones is None else t_capacitaciones)
+        dias_adicinales = (0 if t_reemplazos is None else t_reemplazos) + (
+            0 if t_capacitaciones is None else t_capacitaciones
+        )
 
         valor_1 = calcular_tiempo(tiempo_dic, 1, 0)
         valor_5 = calcular_tiempo(tiempo_dic, 2, 0)
@@ -1000,63 +1218,91 @@ class BalanceView(View):
         valor_7 = calcular_tiempo(tiempo_dic, 4, 0)
         valor_8 = calcular_tiempo(tiempo_dic, 5, dias_adicinales)
 
+        result = CostosAccInsumosMedicos.objects.filter(
+            accidente=accidente.id
+        ).aggregate(total=Sum(F("valor") * F("cantidad")))["total"]
+        if result is not None:
+            valor_3 = valor_3 + result
+        result = CostosAccTransporte.objects.filter(accidente=accidente.id).aggregate(
+            total=Sum(F("valor"))
+        )["total"]
+        if result is not None:
+            valor_3 = valor_3 + result
+        result = CostosAccOtros.objects.filter(accidente=accidente.id).aggregate(
+            total=Sum(F("valor"))
+        )["total"]
+        if result is not None:
+            valor_3 = valor_3 + result
 
-        result = CostosAccInsumosMedicos.objects.filter(accidente= accidente.id).aggregate(total = Sum(F('valor')*F('cantidad')))['total']
-        if result is not None: valor_3 = valor_3 + result
-        result = CostosAccTransporte.objects.filter(accidente= accidente.id).aggregate(total=Sum(F('valor')))['total']
-        if result is not None: valor_3 = valor_3 + result
-        result = CostosAccOtros.objects.filter(accidente=accidente.id).aggregate(total=Sum(F('valor')))['total']
-        if result is not None: valor_3 = valor_3 + result
-
-
-        #Reemplazos
-        result = ReemplazoAccidente.objects.filter(accidente= accidente.id).aggregate(total=Sum(F('costo')))['total']
-        if result is not None: valor_13 = result
+        # Reemplazos
+        result = ReemplazoAccidente.objects.filter(accidente=accidente.id).aggregate(
+            total=Sum(F("costo"))
+        )["total"]
+        if result is not None:
+            valor_13 = result
 
         # Capacitaciones
-        result = CapacitadorAccidente.objects.filter(accidente=accidente.id).aggregate(total=Sum(F('costo')))['total']
-        if result is not None: valor_13 = valor_13 + result
+        result = CapacitadorAccidente.objects.filter(accidente=accidente.id).aggregate(
+            total=Sum(F("costo"))
+        )["total"]
+        if result is not None:
+            valor_13 = valor_13 + result
 
-        result = CostosAccAdicionales.objects.filter(accidente= accidente.id).aggregate(total=Sum(F('valor')))['total']
-        if result is not None: valor_13 = valor_13 + result
+        result = CostosAccAdicionales.objects.filter(accidente=accidente.id).aggregate(
+            total=Sum(F("valor"))
+        )["total"]
+        if result is not None:
+            valor_13 = valor_13 + result
 
-        result = CostosAccDanoEmergente.objects.filter(accidente= accidente.id).aggregate(total=Sum(F('valor')))['total']
-        if result is not None: valor_4 = valor_4 + result
+        result = CostosAccDanoEmergente.objects.filter(
+            accidente=accidente.id
+        ).aggregate(total=Sum(F("valor")))["total"]
+        if result is not None:
+            valor_4 = valor_4 + result
 
-        result = CostosAccMaquinaria.objects.filter(accidente= accidente.id).aggregate(total = Sum(F('valor')*F('cantidad')))['total']
-        if result is not None: valor_14 = valor_14 + result
+        result = CostosAccMaquinaria.objects.filter(accidente=accidente.id).aggregate(
+            total=Sum(F("valor") * F("cantidad"))
+        )["total"]
+        if result is not None:
+            valor_14 = valor_14 + result
 
-        result = CostosAccRepuestos.objects.filter(accidente=accidente.id).aggregate(total=Sum(F('valor') * F('cantidad')))['total']
-        if result is not None: valor_15 = valor_15 + result
+        result = CostosAccRepuestos.objects.filter(accidente=accidente.id).aggregate(
+            total=Sum(F("valor") * F("cantidad"))
+        )["total"]
+        if result is not None:
+            valor_15 = valor_15 + result
 
-        result = CostosAccManoObra.objects.filter(accidente=accidente.id).aggregate(total=Sum(F('valor') * F('cantidad')))['total']
-        if result is not None: valor_16 = valor_16 + result
+        result = CostosAccManoObra.objects.filter(accidente=accidente.id).aggregate(
+            total=Sum(F("valor") * F("cantidad"))
+        )["total"]
+        if result is not None:
+            valor_16 = valor_16 + result
 
-        context_data = {"accidente": accidente,
-                        'valor_1': valor_1,
-                        'valor_2': valor_2,
-                        'valor_3': valor_3,
-                        'valor_4': valor_4,
-                        'valor_5': valor_5,
-                        'valor_6': valor_6,
-                        'valor_7': valor_7,
-                        'valor_8': valor_8,
-                        'valor_9': valor_9,
-                        'valor_10': valor_10,
-                        'valor_11': valor_11,
-                        'valor_12': valor_12,
-                        'valor_13': valor_13,
-                        'valor_14': valor_14,
-                        'valor_15': valor_15,
-                        'valor_16': valor_16,
-                     }
+        context_data = {
+            "accidente": accidente,
+            "valor_1": valor_1,
+            "valor_2": valor_2,
+            "valor_3": valor_3,
+            "valor_4": valor_4,
+            "valor_5": valor_5,
+            "valor_6": valor_6,
+            "valor_7": valor_7,
+            "valor_8": valor_8,
+            "valor_9": valor_9,
+            "valor_10": valor_10,
+            "valor_11": valor_11,
+            "valor_12": valor_12,
+            "valor_13": valor_13,
+            "valor_14": valor_14,
+            "valor_15": valor_15,
+            "valor_16": valor_16,
+        }
 
-        return render(request, 'accidentes/balance.html', context_data)
-
+        return render(request, "accidentes/balance.html", context_data)
 
 
 def calcular_tiempo(dic, indice, dias):
-    if dic.get(indice) is None and (dias is None or dias == 0) :
+    if dic.get(indice) is None and (dias is None or dias == 0):
         return "00:00"
     elif dias > 0:
         return str(dias * 8) + ":00"
@@ -1067,6 +1313,7 @@ def calcular_tiempo(dic, indice, dias):
         else:
             s_minutos = str(int(dic.get(indice) % 60))
         return str(int(dic.get(indice) / 60) + (dias * 8)) + ":" + s_minutos
+
 
 def calcular_valor_acompanamiento(total):
     return Decimal(total) * Decimal(0.5568)

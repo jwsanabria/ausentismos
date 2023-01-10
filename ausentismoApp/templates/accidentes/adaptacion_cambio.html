@@ -4,6 +4,8 @@
 {% load bootstrap4 %}
 {% load static %}
 {% load filters_web %}
+{{ form.errors }}
+{{ form.non_field_errors }}
 
 {% block content %}
     <div class="text-center bg-white">
@@ -231,8 +233,16 @@
             },
             error: function (response) {
                 // alert the error if any error occured
-                console.log(response["responseJSON"] ["error"])
-                alert (response["responseJSON"] ["error"]);
+                console.log(response.responseJSON.error)
+
+                let messages = '';
+
+                $.each(response.responseJSON.error, function (key, value) {
+                    $.each(value, function(i, message) {
+                        messages += key + ': ' +message;
+                    });
+                });
+                alert(messages);
             }
         })
     })
@@ -287,7 +297,16 @@
             },
             error: function (response) {
                 // alert the error if any error occured
-                alert (response["responseJSON"] ["error"]);
+                console.log(response.responseJSON.error)
+
+                let messages = '';
+
+                $.each(response.responseJSON.error, function (key, value) {
+                    $.each(value, function(i, message) {
+                        messages += key + ': ' +message;
+                    });
+                });
+                alert(messages);
             }
         })
     })
@@ -338,7 +357,16 @@
             },
             error: function (response) {
                 // alert the error if any error occured
-                alert (response["responseJSON"] ["error"]["valor"]);
+                console.log(response.responseJSON.error)
+
+                let messages = '';
+
+                $.each(response.responseJSON.error, function (key, value) {
+                    $.each(value, function(i, message) {
+                        messages += key + ': ' +message;
+                    });
+                });
+                alert(messages);
             }
         })
     })
@@ -423,7 +451,16 @@
             },
             error: function (response) {
                 // alert the error if any error occured
-                alert (response["responseJSON"] ["error"]["valor"]);
+                console.log(response.responseJSON.error)
+
+                let messages = '';
+
+                $.each(response.responseJSON.error, function (key, value) {
+                    $.each(value, function(i, message) {
+                        messages += key + ': ' +message;
+                    });
+                });
+                alert(messages);
             }
         })
     }
