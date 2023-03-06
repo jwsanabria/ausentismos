@@ -1292,9 +1292,12 @@ class BalanceView(View):
             subtotal_costos = subtotal_costos + costo_maquinaria
 
         subtotal_lucro = lucro_dano_emergente
-        subtotal_dano_material_futuro = (
-            accidente.lucro_consolidado + accidente.lucro_futuro
-        )
+        if accidente.lucro_consolidado is not None:
+            subtotal_dano_material_futuro = (
+                accidente.lucro_consolidado + accidente.lucro_futuro
+            )
+        else:
+            subtotal_dano_material_futuro = 0
 
         context_data = {
             "accidente": accidente,
@@ -1320,8 +1323,12 @@ class BalanceView(View):
             "costo_maquinaria": costo_maquinaria,
             "costo_materia_prima": costo_materia_prima,
             "costo_mano_obra": costo_mano_obra,
-            "lucro_cesante": accidente.lucro_consolidado,
-            "lucro_cesante_futuro": accidente.lucro_futuro,
+            "lucro_cesante": accidente.lucro_consolidado
+            if accidente.lucro_consolidado is not None
+            else 0,
+            "lucro_cesante_futuro": accidente.lucro_futuro
+            if accidente.lucro_futuro is not None
+            else 0,
             "subtotal_dano_material_futuro": subtotal_dano_material_futuro,
             "accidente_valor_moral_n1": accidente.valor_moral_n1,
         }
