@@ -1300,7 +1300,7 @@ class BalanceView(View):
         )["total"]
         if result is not None:
             costo_mano_obra = costo_mano_obra + result
-            subtotal_costos = subtotal_costos + costo_maquinaria
+            subtotal_costos += costo_maquinaria
 
         subtotal_lucro = lucro_dano_emergente
         if accidente.lucro_consolidado is not None:
