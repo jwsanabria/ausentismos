@@ -1143,7 +1143,7 @@ class BalanceView(View):
 
         valor_1 = 0
         valor_2 = 0
-        valor_3 = 0
+        subtotal_costos = 0
         valor_4 = 0
         valor_5 = 0
         valor_6 = 0
@@ -1226,19 +1226,19 @@ class BalanceView(View):
             accidente=accidente.id
         ).aggregate(total=Sum(F("valor") * F("cantidad")))["total"]
         if result is not None:
-            valor_3 = valor_3 + result
+            subtotal_costos = subtotal_costos + result
             costo_insumo_medico = costo_insumo_medico + result
         result = CostosAccTransporte.objects.filter(accidente=accidente.id).aggregate(
             total=Sum(F("valor"))
         )["total"]
         if result is not None:
-            valor_3 = valor_3 + result
+            subtotal_costos = subtotal_costos + result
             costo_transporte = costo_transporte + result
         result = CostosAccOtros.objects.filter(accidente=accidente.id).aggregate(
             total=Sum(F("valor"))
         )["total"]
         if result is not None:
-            valor_3 = valor_3 + result
+            subtotal_costos = subtotal_costos + result
             costo_otros = costo_otros + result
 
         # Reemplazos
@@ -1272,27 +1272,27 @@ class BalanceView(View):
         )["total"]
         if result is not None:
             costo_maquinaria = costo_maquinaria + result
-            valor_3 = valor_3 + costo_maquinaria
+            subtotal_costos = subtotal_costos + costo_maquinaria
 
         result = CostosAccRepuestos.objects.filter(accidente=accidente.id).aggregate(
             total=Sum(F("valor") * F("cantidad"))
         )["total"]
         if result is not None:
             costo_materia_prima = costo_materia_prima + result
-            valor_3 = valor_3 + costo_maquinaria
+            subtotal_costos = subtotal_costos + costo_maquinaria
 
         result = CostosAccManoObra.objects.filter(accidente=accidente.id).aggregate(
             total=Sum(F("valor") * F("cantidad"))
         )["total"]
         if result is not None:
             costo_mano_obra = costo_mano_obra + result
-            valor_3 = valor_3 + costo_maquinaria
+            subtotal_costos = subtotal_costos + costo_maquinaria
 
         context_data = {
             "accidente": accidente,
             "valor_1": valor_1,
             "valor_2": valor_2,
-            "valor_3": valor_3,
+            "subtotal_costos": subtotal_costos,
             "valor_4": valor_4,
             "valor_5": valor_5,
             "valor_6": valor_6,
