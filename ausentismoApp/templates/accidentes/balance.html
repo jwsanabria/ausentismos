@@ -86,7 +86,7 @@
                         </tr>
                         <tr>
                             <td>Costo invalidez o fallecimiento</td>
-                            <td  style="text-align:right">{{ valor_4 |prepend_dollars}}</td>
+                            <td  style="text-align:right">{{ lucro_dano_emergente |prepend_dollars}}</td>
                             <td></td>
                             <td></td>
                             <td></td>
@@ -257,6 +257,28 @@
                         <td>{{subtotal_costos|prepend_dollars}}</td>
                         <td></td>
                     </tr>
+                    <tr>
+                        <td colspan="6"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="3"></td>
+                        <td colspan="2">LUCRO</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>OTROS</td>
+                        <td>NO ASEGURABLE</td>
+                        <td>INDIRECTO</td>
+                        <td>DAÑO MATERIAL A TITULO DE EMERGENTE</td>
+                        <td>{{lucro_dano_emergente|prepend_dollars}}</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td colspan="3"></td>
+                        <td>SUBTOTAL</td>
+                        <td>{{lucro_dano_emergente|prepend_dollars}}</td>
+                        <td></td>
+                    </tr>
                 </table>
                 <table class="font-size: small">
                     <tr>
@@ -292,7 +314,7 @@
                     </tr>
                     <tr>
                         <td colspan="2">COSTOS INVALIDEZ O FALLECIMIENTO</td>
-                        <td class="text-right">{{valor_4|prepend_dollars}}</td>
+                        <td class="text-right">{{lucro_dano_emergente|prepend_dollars}}</td>
                     </tr>
                     <tr>
                         <td rowspan="4">TIEMPOS DE ACCIDENTE</td>

@@ -1145,7 +1145,7 @@ class BalanceView(View):
         valor_1 = 0
         valor_2 = 0
         subtotal_costos = 0
-        valor_4 = 0
+        lucro_dano_emergente = 0
         valor_5 = 0
         valor_6 = 0
         valor_7 = 0
@@ -1266,7 +1266,7 @@ class BalanceView(View):
             accidente=accidente.id
         ).aggregate(total=Sum(F("valor")))["total"]
         if result is not None:
-            valor_4 = valor_4 + result
+            lucro_dano_emergente = lucro_dano_emergente + result
 
         result = CostosAccMaquinaria.objects.filter(accidente=accidente.id).aggregate(
             total=Sum(F("valor") * F("cantidad"))
@@ -1294,7 +1294,7 @@ class BalanceView(View):
             "valor_1": valor_1,
             "valor_2": valor_2,
             "subtotal_costos": subtotal_costos,
-            "valor_4": valor_4,
+            "lucro_dano_emergente": lucro_dano_emergente,
             "valor_5": valor_5,
             "valor_6": valor_6,
             "valor_7": valor_7,
