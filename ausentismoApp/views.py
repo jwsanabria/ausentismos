@@ -1323,6 +1323,7 @@ class BalanceView(View):
             "lucro_cesante": accidente.lucro_consolidado,
             "lucro_cesante_futuro": accidente.lucro_futuro,
             "subtotal_dano_material_futuro": subtotal_dano_material_futuro,
+            "accidente_valor_moral_n1": accidente.valor_moral_n1,
         }
 
         return render(request, "accidentes/balance.html", context_data)
