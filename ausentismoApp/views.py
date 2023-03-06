@@ -1154,7 +1154,7 @@ class BalanceView(View):
         valor_10 = 0
         valor_11 = 0
         valor_12 = 0
-        valor_13 = 0
+        subtotal_adaptacion_cambio = 0
         costo_maquinaria = 0
         costo_materia_prima = 0
         costo_mano_obra = 0
@@ -1169,6 +1169,9 @@ class BalanceView(View):
         valor_nivel3 = 0
         valor_nivel4 = 0
         valor_nivel5 = 0
+        costo_reemplazo = 0
+        costo_capacitaciones = 0
+        costo_adicionales = 0
 
         result = (
             TiemposAccAcompanamiento.objects.filter(accidente=accidente.id)
@@ -1254,20 +1257,23 @@ class BalanceView(View):
             total=Sum(F("costo"))
         )["total"]
         if result is not None:
-            valor_13 = result
+            costo_reemplazo = costo_reemplazo + result
+            subtotal_adaptacion_cambio = subtotal_adaptacion_cambio + result
 
         # Capacitaciones
         result = CapacitadorAccidente.objects.filter(accidente=accidente.id).aggregate(
             total=Sum(F("costo"))
         )["total"]
         if result is not None:
-            valor_13 = valor_13 + result
+            costo_capacitaciones = costo_capacitaciones + result
+            subtotal_adaptacion_cambio = subtotal_adaptacion_cambio + result
 
         result = CostosAccAdicionales.objects.filter(accidente=accidente.id).aggregate(
             total=Sum(F("valor"))
         )["total"]
         if result is not None:
-            valor_13 = valor_13 + result
+            costo_adicionales = costo_adicionales + result
+            subtotal_adaptacion_cambio = subtotal_adaptacion_cambio + result
 
         result = CostosAccDanoEmergente.objects.filter(
             accidente=accidente.id
@@ -1349,7 +1355,7 @@ class BalanceView(View):
             "valor_10": valor_10,
             "valor_11": valor_11,
             "valor_12": valor_12,
-            "valor_13": valor_13,
+            "subtotal_adaptacion_cambio": subtotal_adaptacion_cambio,
             "costo_maquinaria": costo_maquinaria,
             "costo_materia_prima": costo_materia_prima,
             "costo_mano_obra": costo_mano_obra,
@@ -1372,6 +1378,9 @@ class BalanceView(View):
             "accidente_valor_moral_n4": valor_nivel4,
             "accidente_valor_moral_n5": valor_nivel5,
             "subtotal_niveles": subtotal_niveles,
+            "costo_reemplazo": costo_reemplazo,
+            "costo_capacitaciones": costo_capacitaciones,
+            "costo_adicionales": costo_adicionales,
         }
 
         return render(request, "accidentes/balance.html", context_data)
