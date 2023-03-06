@@ -1158,6 +1158,10 @@ class BalanceView(View):
         valor_15 = 0
         valor_16 = 0
 
+        costo_insumo_medico = 0
+        costo_transporte = 0
+        costo_otros = 0
+
         result = (
             TiemposAccAcompanamiento.objects.filter(accidente=accidente.id)
             .values("tipo_acompanamiento")
@@ -1223,16 +1227,19 @@ class BalanceView(View):
         ).aggregate(total=Sum(F("valor") * F("cantidad")))["total"]
         if result is not None:
             valor_3 = valor_3 + result
+            costo_insumo_medico = costo_insumo_medico + result
         result = CostosAccTransporte.objects.filter(accidente=accidente.id).aggregate(
             total=Sum(F("valor"))
         )["total"]
         if result is not None:
             valor_3 = valor_3 + result
+            costo_transporte = costo_transporte + result
         result = CostosAccOtros.objects.filter(accidente=accidente.id).aggregate(
             total=Sum(F("valor"))
         )["total"]
         if result is not None:
             valor_3 = valor_3 + result
+            costo_otros = costo_otros + result
 
         # Reemplazos
         result = ReemplazoAccidente.objects.filter(accidente=accidente.id).aggregate(
@@ -1296,6 +1303,9 @@ class BalanceView(View):
             "valor_14": valor_14,
             "valor_15": valor_15,
             "valor_16": valor_16,
+            "costo_insumo_medico": costo_insumo_medico,
+            "costo_transporte": costo_transporte,
+            "costo_otros": costo_otros,
         }
 
         return render(request, "accidentes/balance.html", context_data)
