@@ -1164,6 +1164,11 @@ class BalanceView(View):
         costo_otros = 0
         subtotal_lucro = 0
         subtotal_dano_material_futuro = 0
+        valor_nivel1 = 0
+        valor_nivel2 = 0
+        valor_nivel3 = 0
+        valor_nivel4 = 0
+        valor_nivel5 = 0
 
         result = (
             TiemposAccAcompanamiento.objects.filter(accidente=accidente.id)
@@ -1299,6 +1304,37 @@ class BalanceView(View):
         else:
             subtotal_dano_material_futuro = 0
 
+        valor_dano = Decimal(0.0)
+        valor_nivel1 = valor_dano + (
+            Decimal(accidente.valor_moral_n1)
+            * Decimal(accidente.salario_minimo)
+            * Decimal(accidente.factor_moral_n1)
+        )
+        valor_nivel2 = valor_dano + (
+            Decimal(accidente.valor_moral_n1)
+            * Decimal(accidente.salario_minimo)
+            * Decimal(accidente.factor_moral_n2)
+        )
+        valor_nivel3 = valor_dano + (
+            Decimal(accidente.valor_moral_n1)
+            * Decimal(accidente.salario_minimo)
+            * Decimal(accidente.factor_moral_n3)
+        )
+        valor_nivel4 = valor_dano + (
+            Decimal(accidente.valor_moral_n1)
+            * Decimal(accidente.salario_minimo)
+            * Decimal(accidente.factor_moral_n4)
+        )
+        valor_nivel5 = valor_dano + (
+            Decimal(accidente.valor_moral_n1)
+            * Decimal(accidente.salario_minimo)
+            * Decimal(accidente.factor_moral_n5)
+        )
+
+        subtotal_niveles = (
+            valor_nivel1 + valor_nivel2 + valor_nivel3 + valor_nivel4 + valor_nivel5
+        )
+
         context_data = {
             "accidente": accidente,
             "valor_1": valor_1,
@@ -1330,7 +1366,12 @@ class BalanceView(View):
             if accidente.lucro_futuro is not None
             else 0,
             "subtotal_dano_material_futuro": subtotal_dano_material_futuro,
-            "accidente_valor_moral_n1": accidente.valor_moral_n1,
+            "accidente_valor_moral_n1": valor_nivel1,
+            "accidente_valor_moral_n2": valor_nivel2,
+            "accidente_valor_moral_n3": valor_nivel3,
+            "accidente_valor_moral_n4": valor_nivel4,
+            "accidente_valor_moral_n5": valor_nivel5,
+            "subtotal_niveles": subtotal_niveles,
         }
 
         return render(request, "accidentes/balance.html", context_data)
