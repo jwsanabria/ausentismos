@@ -1162,6 +1162,8 @@ class BalanceView(View):
         costo_insumo_medico = 0
         costo_transporte = 0
         costo_otros = 0
+        subtotal_lucro = 0
+        subtotal_dano_material_futuro = 0
 
         result = (
             TiemposAccAcompanamiento.objects.filter(accidente=accidente.id)
@@ -1289,6 +1291,11 @@ class BalanceView(View):
             costo_mano_obra = costo_mano_obra + result
             subtotal_costos = subtotal_costos + costo_maquinaria
 
+        subtotal_lucro = lucro_dano_emergente
+        subtotal_dano_material_futuro = (
+            accidente.lucro_consolidado + accidente.lucro_futuro
+        )
+
         context_data = {
             "accidente": accidente,
             "valor_1": valor_1,
@@ -1313,6 +1320,9 @@ class BalanceView(View):
             "costo_maquinaria": costo_maquinaria,
             "costo_materia_prima": costo_materia_prima,
             "costo_mano_obra": costo_mano_obra,
+            "lucro_cesante": accidente.lucro_consolidado,
+            "lucro_cesante_futuro": accidente.lucro_futuro,
+            "subtotal_dano_material_futuro": subtotal_dano_material_futuro,
         }
 
         return render(request, "accidentes/balance.html", context_data)
