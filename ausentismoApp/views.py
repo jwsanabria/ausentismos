@@ -963,6 +963,7 @@ class LucroView(View):
         except ObjectDoesNotExist:
             pass
 
+        estado = "LESIONADO"
         if accidente.incapacidad:
             estado = "INCAPACITADO"
         if accidente.invalidez:
