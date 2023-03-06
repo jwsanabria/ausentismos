@@ -206,7 +206,7 @@
                         <td>DIRECTO</td>
                         <td>COSTOS INSUMOS MÉDICOS</td>
                         <td>{{costo_insumo_medico|prepend_dollars}}</td>
-                        <td></td>
+                        <td rowspan="25"></td>
                     </tr>
                     <tr>
                         <td>OTROS</td>
@@ -275,8 +275,8 @@
                     </tr>
                     <tr>
                         <td colspan="3"></td>
-                        <td>SUBTOTAL</td>
-                        <td>{{lucro_dano_emergente|prepend_dollars}}</td>
+                        <td class="bg-secondary text-white">SUBTOTAL</td>
+                        <td class="bg-secondary text-white">{{lucro_dano_emergente|prepend_dollars}}</td>
                         <td></td>
                     </tr>
                     <tr>
@@ -306,7 +306,7 @@
                     <tr>
                         <td colspan="3"></td>
                         <td class="bg-secondary text-white">SUBTOTAL</td>
-                        <td>{{subtotal_dano_material_futuro|prepend_dollars}}</td>
+                        <td class="bg-secondary text-white">{{subtotal_dano_material_futuro|prepend_dollars}}</td>
                         <td></td>
                     </tr>
                     <tr>
@@ -360,7 +360,7 @@
                     <tr>
                         <td colspan="3"></td>
                         <td class="bg-secondary text-white">SUBTOTAL</td>
-                        <td>{{subtotal_niveles|prepend_dollars}}</td>
+                        <td class="bg-secondary text-white">{{subtotal_niveles|prepend_dollars}}</td>
                         <td></td>
                     </tr>
                     <tr>
@@ -368,8 +368,7 @@
                     </tr>
                     <tr>
                         <td colspan="3"></td>
-                        <td colspan="2" class="bg-primary text-center col-sm text-white">ADAPTACIÓN AL CAMBIO</td>
-                        <td></td>
+                        <td colspan="3" class="bg-primary text-center col-sm text-white">ADAPTACIÓN AL CAMBIO</td>
                     </tr>
                     <tr>
                         <td>MANO DE OBRA</td>
@@ -398,7 +397,7 @@
                     <tr>
                         <td colspan="3"></td>
                         <td class="bg-secondary text-white">SUBTOTAL</td>
-                        <td>{{subtotal_adaptacion_cambio|prepend_dollars}}</td>
+                        <td class="bg-secondary text-white">{{subtotal_adaptacion_cambio|prepend_dollars}}</td>
                         <td></td>
                     </tr>
                 </table>
