@@ -1154,9 +1154,9 @@ class BalanceView(View):
         valor_11 = 0
         valor_12 = 0
         valor_13 = 0
-        valor_14 = 0
-        valor_15 = 0
-        valor_16 = 0
+        costo_maquinaria = 0
+        costo_materia_prima = 0
+        costo_mano_obra = 0
 
         costo_insumo_medico = 0
         costo_transporte = 0
@@ -1271,19 +1271,22 @@ class BalanceView(View):
             total=Sum(F("valor") * F("cantidad"))
         )["total"]
         if result is not None:
-            valor_14 = valor_14 + result
+            costo_maquinaria = costo_maquinaria + result
+            valor_3 = valor_3 + costo_maquinaria
 
         result = CostosAccRepuestos.objects.filter(accidente=accidente.id).aggregate(
             total=Sum(F("valor") * F("cantidad"))
         )["total"]
         if result is not None:
-            valor_15 = valor_15 + result
+            costo_materia_prima = costo_materia_prima + result
+            valor_3 = valor_3 + costo_maquinaria
 
         result = CostosAccManoObra.objects.filter(accidente=accidente.id).aggregate(
             total=Sum(F("valor") * F("cantidad"))
         )["total"]
         if result is not None:
-            valor_16 = valor_16 + result
+            costo_mano_obra = costo_mano_obra + result
+            valor_3 = valor_3 + costo_maquinaria
 
         context_data = {
             "accidente": accidente,
@@ -1300,12 +1303,15 @@ class BalanceView(View):
             "valor_11": valor_11,
             "valor_12": valor_12,
             "valor_13": valor_13,
-            "valor_14": valor_14,
-            "valor_15": valor_15,
-            "valor_16": valor_16,
+            "costo_maquinaria": costo_maquinaria,
+            "costo_materia_prima": costo_materia_prima,
+            "costo_mano_obra": costo_mano_obra,
             "costo_insumo_medico": costo_insumo_medico,
             "costo_transporte": costo_transporte,
             "costo_otros": costo_otros,
+            "costo_maquinaria": costo_maquinaria,
+            "costo_materia_prima": costo_materia_prima,
+            "costo_mano_obra": costo_mano_obra,
         }
 
         return render(request, "accidentes/balance.html", context_data)
