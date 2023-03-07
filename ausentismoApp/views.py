@@ -1223,18 +1223,21 @@ class BalanceView(View):
             accidente=accidente.id
         ).aggregate(total=Sum(F("dias")))["total"]
 
-        tiempo_reemplazos += 0 if t_reemplazos is None else t_reemplazos
-        subtotal_tiempo_adaptacion += tiempo_reemplazos
+        tiempo_reemplazos = calcular_tiempo(
+            None, 0, 0 if t_reemplazos is None else t_reemplazos
+        )
 
         t_capacitaciones = CapacitadorAccidente.objects.filter(
             accidente=accidente.id
         ).aggregate(total=Sum(F("dias")))["total"]
-        tiempo_capacitaciones += 0 if t_capacitaciones is None else t_capacitaciones
-        subtotal_tiempo_adaptacion += tiempo_capacitaciones
+        tiempo_capacitaciones = calcular_tiempo(
+            None, 0, 0 if t_capacitaciones is None else t_capacitaciones
+        )
 
         dias_adicinales = (0 if t_reemplazos is None else t_reemplazos) + (
             0 if t_capacitaciones is None else t_capacitaciones
         )
+        subtotal_tiempo_adaptacion = calcular_tiempo(None, 0, dias_adicinales)
 
         valor_1 = calcular_tiempo(tiempo_dic, 1, 0)
         valor_5 = calcular_tiempo(tiempo_dic, 2, 0)
