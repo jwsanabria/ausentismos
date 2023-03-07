@@ -197,15 +197,15 @@
                 <table class="table-responsive font-size: small table-striped table-hover table-sm">
                     <tr>
                         <td colspan="4"></td>
-                        <td width="15%">PESOS</td>
-                        <td width="15%">TIEMPO</td>
+                        <td width="15%" style="text-align:center">PESOS</td>
+                        <td width="15%" style="text-align:center">TIEMPO</td>
                     </tr>
                     <tr>
                         <td width="10%">OTROS</td>
                         <td width="15%">ASEGURABLE</td>
                         <td width="15%">DIRECTO</td>
                         <td width="30%">COSTOS INSUMOS MÉDICOS</td>
-                        <td>{{costo_insumo_medico|prepend_dollars}}</td>
+                        <td style="text-align:right">{{costo_insumo_medico|prepend_dollars}}</td>
                         <td rowspan="25"></td>
                     </tr>
                     <tr>
@@ -213,14 +213,14 @@
                         <td>ASEGURABLE</td>
                         <td>DIRECTO</td>
                         <td>COSTO TRANSPORTE</td>
-                        <td>{{costo_transporte|prepend_dollars}}</td>
+                        <td style="text-align:right">{{costo_transporte|prepend_dollars}}</td>
                     </tr>
                     <tr>
                         <td>OTROS</td>
                         <td>ASEGURABLE</td>
                         <td>DIRECTO</td>
                         <td>OTROS COSTOS</td>
-                        <td>{{costo_otros|prepend_dollars}}</td>
+                        <td style="text-align:right">{{costo_otros|prepend_dollars}}</td>
                     </tr>
                     <tr>
                         <td colspan="5"></td>
@@ -230,26 +230,26 @@
                         <td>ASEGURABLE</td>
                         <td>INDIRECTO</td>
                         <td>LISTA MAQUINARIA REQUERIDA</td>
-                        <td>{{costo_maquinaria|prepend_dollars}}</td>
+                        <td style="text-align:right">{{costo_maquinaria|prepend_dollars}}</td>
                     </tr>
                     <tr>
                         <td>MATERIAL</td>
                         <td>ASEGURABLE</td>
                         <td>INDIRECTO</td>
                         <td>LISTA MATERIA PRIMA</td>
-                        <td>{{costo_materia_prima|prepend_dollars}}</td>
+                        <td style="text-align:right">{{costo_materia_prima|prepend_dollars}}</td>
                     </tr>
                     <tr>
                         <td>MANO DE OBRA</td>
                         <td>ASEGURABLE</td>
                         <td>INDIRECTO</td>
                         <td>LISTA MANO DE OBRA REQUERIDA</td>
-                        <td>{{costo_mano_obra|prepend_dollars}}</td>
+                        <td style="text-align:right">{{costo_mano_obra|prepend_dollars}}</td>
                     </tr>
                     <tr>
                         <td colspan="3"></td>
                         <td class="bg-secondary text-white">SUBTOTAL</td>
-                        <td class="bg-secondary text-white">{{subtotal_costos|prepend_dollars}}</td>
+                        <td class="bg-secondary text-white text-align:right">{{subtotal_costos|prepend_dollars}}</td>
                     </tr>
                     <tr>
                         <td colspan="5"></td>
@@ -263,12 +263,12 @@
                         <td>NO ASEGURABLE</td>
                         <td>INDIRECTO</td>
                         <td>DAÑO MATERIAL A TITULO DE EMERGENTE</td>
-                        <td>{{lucro_dano_emergente|prepend_dollars}}</td>
+                        <td style="text-align:right">{{lucro_dano_emergente|prepend_dollars}}</td>
                     </tr>
                     <tr>
                         <td colspan="3"></td>
                         <td class="bg-secondary text-white">SUBTOTAL</td>
-                        <td class="bg-secondary text-white">{{lucro_dano_emergente|prepend_dollars}}</td>
+                        <td class="bg-secondary text-white text-align:right">{{lucro_dano_emergente|prepend_dollars}}</td>
                     </tr>
                     <tr>
                         <td colspan="5"></td>
@@ -282,19 +282,19 @@
                         <td>NO ASEGURABLE</td>
                         <td>INDIRECTO</td>
                         <td>LUCRO CESANTE</td>
-                        <td>{{lucro_cesante|prepend_dollars}}</td>
+                        <td style="text-align:right">{{lucro_cesante|prepend_dollars}}</td>
                     </tr>
                     <tr>
                         <td>OTROS</td>
                         <td>NO ASEGURABLE</td>
                         <td>INDIRECTO</td>
                         <td>LUCRO CESANTE FUTURO</td>
-                        <td>{{lucro_cesante_futuro|prepend_dollars}}</td>
+                        <td style="text-align:right">{{lucro_cesante_futuro|prepend_dollars}}</td>
                     </tr>
                     <tr>
                         <td colspan="3"></td>
                         <td class="bg-secondary text-white">SUBTOTAL</td>
-                        <td class="bg-secondary text-white">{{subtotal_dano_material_futuro|prepend_dollars}}</td>
+                        <td class="bg-secondary text-white text-align:right">{{subtotal_dano_material_futuro|prepend_dollars}}</td>
                     </tr>
                     <tr>
                         <td colspan="5"></td>
@@ -307,41 +307,41 @@
                         <td>OTROS</td>
                         <td>NO ASEGURABLE</td>
                         <td>INDIRECTO</td>
-                        <td>NIEVL 1</td>
-                        <td>{{accidente_valor_moral_n1|prepend_dollars}}</td>
+                        <td>NIVEL 1</td>
+                        <td style="text-align:right">{{accidente_valor_moral_n1|prepend_dollars}}</td>
                     </tr>
                     <tr>
                         <td>OTROS</td>
                         <td>NO ASEGURABLE</td>
                         <td>INDIRECTO</td>
                         <td>NIVEL 2</td>
-                        <td>{{accidente_valor_moral_n2|prepend_dollars}}</td>
+                        <td style="text-align:right">{{accidente_valor_moral_n2|prepend_dollars}}</td>
                     </tr>
                     <tr>
                         <td>OTROS</td>
                         <td>NO ASEGURABLE</td>
                         <td>INDIRECTO</td>
                         <td>NIVEL 3</td>
-                        <td>{{accidente_valor_moral_n3|prepend_dollars}}</td>
+                        <td style="text-align:right">{{accidente_valor_moral_n3|prepend_dollars}}</td>
                     </tr>
                     <tr>
                         <td>OTROS</td>
                         <td>NO ASEGURABLE</td>
                         <td>INDIRECTO</td>
                         <td>NIVEL 4</td>
-                        <td>{{accidente_valor_moral_n4|prepend_dollars}}</td>
+                        <td style="text-align:right">{{accidente_valor_moral_n4|prepend_dollars}}</td>
                     </tr>
                     <tr>
                         <td>OTROS</td>
                         <td>NO ASEGURABLE</td>
                         <td>INDIRECTO</td>
                         <td>NIVEL 5</td>
-                        <td>{{accidente_valor_moral_n5|prepend_dollars}}</td>
+                        <td style="text-align:right">{{accidente_valor_moral_n5|prepend_dollars}}</td>
                     </tr>
                     <tr>
                         <td colspan="3"></td>
                         <td class="bg-secondary text-white">SUBTOTAL</td>
-                        <td class="bg-secondary text-white">{{subtotal_niveles|prepend_dollars}}</td>
+                        <td class="bg-secondary text-white text-align:right">{{subtotal_niveles|prepend_dollars}}</td>
                     </tr>
                     <tr>
                         <td colspan="5"></td>
@@ -355,7 +355,7 @@
                         <td>NO ASEGURABLE</td>
                         <td>INDIRECTO</td>
                         <td>REEMPLAZOS</td>
-                        <td>{{costo_reemplazo|prepend_dollars}}</td>
+                        <td style="text-align:right">{{costo_reemplazo|prepend_dollars}}</td>
                         <td></td>
                     </tr>
                     <tr>
@@ -363,7 +363,7 @@
                         <td>NO ASEGURABLE</td>
                         <td>INDIRECTO</td>
                         <td>CAPACITACIONES</td>
-                        <td>{{costo_capacitaciones|prepend_dollars}}</td>
+                        <td style="text-align:right">{{costo_capacitaciones|prepend_dollars}}</td>
                         <td></td>
                     </tr>
                     <tr>
@@ -371,13 +371,13 @@
                         <td>NO ASEGURABLE</td>
                         <td>INDIRECTO</td>
                         <td>COSTOS ADICIONALES</td>
-                        <td>{{costo_adicionales|prepend_dollars}}</td>
+                        <td style="text-align:right">{{costo_adicionales|prepend_dollars}}</td>
                         <td></td>
                     </tr>
                     <tr>
                         <td colspan="3"></td>
                         <td class="bg-secondary text-white">SUBTOTAL</td>
-                        <td class="bg-secondary text-white">{{subtotal_adaptacion_cambio|prepend_dollars}}</td>
+                        <td class="bg-secondary text-white text-align:right">{{subtotal_adaptacion_cambio|prepend_dollars}}</td>
                         <td></td>
                     </tr>
                 </table>
