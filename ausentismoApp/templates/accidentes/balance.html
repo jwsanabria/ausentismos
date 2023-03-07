@@ -51,7 +51,7 @@
                 <hr/>
                 <table class="table-responsive font-size: small table-striped table-hover table-sm">
                     <tr>
-                        <td width="40%" colspan="4"></td>
+                        <td width="60%" colspan="4"></td>
                         <td width="20%" style="text-align:center">PESOS</td>
                         <td width="20%" style="text-align:center">TIEMPO</td>
                     </tr>
@@ -61,7 +61,7 @@
                         <td width="10%">DIRECTO</td>
                         <td width="30%">COSTOS INSUMOS MÉDICOS</td>
                         <td style="text-align:right">{{costo_insumo_medico|prepend_dollars}}</td>
-                        <td rowspan="25"></td>
+                        <td rowspan="26"></td>
                     </tr>
                     <tr>
                         <td>OTROS</td>
@@ -336,13 +336,12 @@
                         <td colspan="6"></td>
                     </tr>
                     <tr>
-                        <td colspan="3"></td>
+                        <td colspan="3" rowspan="12"></td>
                         <td>TOTAL ASEGURABLE</td>
                         <td style="text-align:right">{{valor_2|prepend_dollars}}</td>
                         <td style="text-align:right">{{valor_1}}</td>
                     </tr>
                     <tr>
-                        <td colspan="3"></td>
                         <td>TOTAL NO ASEGURABLE</td>
                         <td style="text-align:right">{{valor_2|prepend_dollars}}</td>
                         <td style="text-align:right">{{valor_1}}</td>
@@ -351,25 +350,21 @@
                         <td colspan="6"></td>
                     </tr>
                     <tr>
-                        <td colspan="3"></td>
                         <td>TOTAL MANO DE OBRA</td>
                         <td style="text-align:right">{{valor_2|prepend_dollars}}</td>
                         <td style="text-align:right">{{valor_1}}</td>
                     </tr>
                     <tr>
-                        <td colspan="3"></td>
                         <td>TOTAL MAQUINARIA</td>
                         <td style="text-align:right">{{valor_2|prepend_dollars}}</td>
                         <td style="text-align:right">{{valor_1}}</td>
                     </tr>
                     <tr>
-                        <td colspan="3"></td>
                         <td>TOTAL MATERIAL/EQUIPOS</td>
                         <td style="text-align:right">{{valor_2|prepend_dollars}}</td>
                         <td style="text-align:right">{{valor_1}}</td>
                     </tr>
                     <tr>
-                        <td colspan="3"></td>
                         <td>TOTAL OTROS</td>
                         <td style="text-align:right">{{valor_2|prepend_dollars}}</td>
                         <td style="text-align:right">{{valor_1}}</td>
@@ -378,7 +373,6 @@
                         <td colspan="6"></td>
                     </tr>
                     <tr>
-                        <td colspan="3"></td>
                         <td class="bg-primary col-sm text-white">TOTAL</td>
                         <td style="text-align:right">{{valor_2|prepend_dollars}}</td>
                         <td style="text-align:right">{{valor_1}}</td>
