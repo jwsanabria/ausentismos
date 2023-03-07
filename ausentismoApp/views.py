@@ -1172,6 +1172,9 @@ class BalanceView(View):
         costo_reemplazo = 0
         costo_capacitaciones = 0
         costo_adicionales = 0
+        tiempo_reemplazos = 0
+        tiempo_capacitaciones = 0
+        subtotal_tiempo_adaptacion = 0
 
         result = (
             TiemposAccAcompanamiento.objects.filter(accidente=accidente.id)
@@ -1219,9 +1222,15 @@ class BalanceView(View):
         t_reemplazos = ReemplazoAccidente.objects.filter(
             accidente=accidente.id
         ).aggregate(total=Sum(F("dias")))["total"]
+
+        tiempo_reemplazos += 0 if t_reemplazos is None else t_reemplazos
+        subtotal_tiempo_adaptacion += tiempo_reemplazos
+
         t_capacitaciones = CapacitadorAccidente.objects.filter(
             accidente=accidente.id
         ).aggregate(total=Sum(F("dias")))["total"]
+        tiempo_capacitaciones += 0 if t_capacitaciones is None else t_capacitaciones
+        subtotal_tiempo_adaptacion += tiempo_capacitaciones
 
         dias_adicinales = (0 if t_reemplazos is None else t_reemplazos) + (
             0 if t_capacitaciones is None else t_capacitaciones
@@ -1381,6 +1390,9 @@ class BalanceView(View):
             "costo_reemplazo": costo_reemplazo,
             "costo_capacitaciones": costo_capacitaciones,
             "costo_adicionales": costo_adicionales,
+            "tiempo_reemplazos": tiempo_reemplazos,
+            "tiempo_capacitaciones": tiempo_capacitaciones,
+            "subtotal_tiempo_adaptacion": subtotal_tiempo_adaptacion,
         }
 
         return render(request, "accidentes/balance.html", context_data)
