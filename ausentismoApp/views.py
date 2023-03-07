@@ -1402,7 +1402,7 @@ class BalanceView(View):
 
 
 def calcular_tiempo(dic, indice, dias):
-    if dic.get(indice) is None and (dias is None or dias == 0):
+    if (dic is None or dic.get(indice) is None) and (dias is None or dias == 0):
         return "00:00"
     elif dias > 0:
         return str(dias * 8) + ":00"
