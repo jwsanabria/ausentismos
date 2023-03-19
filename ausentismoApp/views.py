@@ -1142,6 +1142,71 @@ class BalanceView(View):
     def get(self, request, pk):
         accidente = get_object_or_404(Accidente, id=pk)
 
+        balance = {
+            "total_valor": 0,
+            "total_tiempo": 0,
+            "sub_secc_1": 0,
+            "sub_lucro": 0,
+            "sub_dano_material": 0,
+            "sub_dano_moral": 0,
+            "sub_adaptacion_valor": 0,
+            "sub_adaptacion_tiempo": 0,
+            "sub_nomina_valor": 0,
+            "sub_nomina_tiempo": 0,
+            "sub_apropicaciones_valor": 0,
+            "sub_apropiaciones_tiempo": 0,
+        }
+        balance["otros"] = {
+            "costos_insumos_medicos": 0,
+            "costo_transporte": 0,
+            "otros_costos": 0,
+            "dano_material": 0,
+            "lucro_cesante": 0,
+            "lucro_cesante_futuro": 0,
+            "nivel1": 0,
+            "nivel2": 0,
+            "nivel3": 0,
+            "nivel4": 0,
+            "nivel5": 0,
+            "subtotal_valor": 0,
+            "subtotal_tiempo": 0,
+        }
+        balance["maquinaria"] = {
+            "lista_maquinaria": 0,
+            "subtotal_valor": 0,
+            "subtotal_tiempo": 0,
+        }
+        balance["material"] = {
+            "lista_materia_prima": 0,
+            "subtotal_valor": 0,
+            "subtotal_tiempo": 0,
+        }
+        balance["mano_obra"] = {
+            "lista_mano_obra_requerida": 0,
+            "reemplazos_valor": 0,
+            "reemplazos_tiempo": 0,
+            "capacitaciones_valor": 0,
+            "capacitaciones_tiempo": 0,
+            "costos_adicionales_valor": 0,
+            "costos_adicionales_tiempo": 0,
+            "apro_encontraba_momento_valor": 0,
+            "apro_encontraba_momento_tiempo": 0,
+            "apro_ayudo_rescate_valor": 0,
+            "apro_ayudo_rescate_tiempo": 0,
+            "apro_encontraba_area_valor": 0,
+            "apro_encontraba_area_tiempo": 0,
+            "apro_ayuda_investigacion_valor": 0,
+            "apro_ayuda_investigacion_tiempo": 0,
+            "apro_ayuda_imple_valor": 0,
+            "apro_ayuda_imple_tiempo": 0,
+            "parafiscales_valor": 0,
+            "parafiscales_tiempo": 0,
+            "prestaciones_valor": 0,
+            "prestaciones_tiempo": 0,
+            "subtotal_valor": 0,
+            "subtotal_tiempo": 0,
+        }
+
         valor_1 = 0
         valor_2 = 0
         subtotal_costos = 0
