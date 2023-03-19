@@ -1209,6 +1209,7 @@ class BalanceView(View):
         }
 
         calcular_seccion_costos(accidente, balance)
+        calcular_dano_emergente(accidente, balance)
 
         valor_1 = 0
         valor_2 = 0
@@ -1328,12 +1329,6 @@ class BalanceView(View):
         if result is not None:
             costo_adicionales = costo_adicionales + result
             subtotal_adaptacion_cambio = subtotal_adaptacion_cambio + result
-
-        result = CostosAccDanoEmergente.objects.filter(
-            accidente=accidente.id
-        ).aggregate(total=Sum(F("valor")))["total"]
-        if result is not None:
-            lucro_dano_emergente = lucro_dano_emergente + result
 
         subtotal_lucro = lucro_dano_emergente
         if accidente.lucro_consolidado is not None:
@@ -1473,3 +1468,12 @@ def calcular_seccion_costos(accidente, balance):
     if result is not None:
         balance["sub_secc_1"] += result
         balance["mano_obra"]["lista_mano_obra_requerida"] += result
+
+
+def calcular_dano_emergente(accidente, balance):
+    result = CostosAccDanoEmergente.objects.filter(accidente=accidente.id).aggregate(
+        total=Sum(F("valor"))
+    )["total"]
+    if result is not None:
+        balance["otros"]["dano_material"] = result
+        balance["sub_lucro"] += result
