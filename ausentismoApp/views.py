@@ -1415,7 +1415,7 @@ def calcular_seccion_costos(accidente, balance):
     )["total"]
     if result is not None:
         balance["sub_secc_1"] += result
-        balance["otros"]["sub_total_valor"] += result
+        balance["otros"]["subtotal_valor"] += result
         balance["otros"]["costos_insumos_medicos"] += result
 
     result = CostosAccTransporte.objects.filter(accidente=accidente.id).aggregate(
@@ -1423,7 +1423,7 @@ def calcular_seccion_costos(accidente, balance):
     )["total"]
     if result is not None:
         balance["sub_secc_1"] += result
-        balance["otros"]["sub_total_valor"] += result
+        balance["otros"]["subtotal_valor"] += result
         balance["otros"]["costo_transporte"] += result
 
     result = CostosAccOtros.objects.filter(accidente=accidente.id).aggregate(
@@ -1431,7 +1431,7 @@ def calcular_seccion_costos(accidente, balance):
     )["total"]
     if result is not None:
         balance["sub_secc_1"] += result
-        balance["otros"]["sub_total_valor"] += result
+        balance["otros"]["subtotal_valor"] += result
         balance["otros"]["otros_costos"] += result
 
     result = CostosAccMaquinaria.objects.filter(accidente=accidente.id).aggregate(
@@ -1439,7 +1439,7 @@ def calcular_seccion_costos(accidente, balance):
     )["total"]
     if result is not None:
         balance["sub_secc_1"] += result
-        balance["maquinaria"]["sub_total_valor"] += result
+        balance["maquinaria"]["subtotal_valor"] += result
         balance["maquinaria"]["lista_maquinaria"] += result
 
     result = CostosAccRepuestos.objects.filter(accidente=accidente.id).aggregate(
@@ -1447,7 +1447,7 @@ def calcular_seccion_costos(accidente, balance):
     )["total"]
     if result is not None:
         balance["sub_secc_1"] += result
-        balance["material"]["sub_total_valor"] += result
+        balance["material"]["subtotal_valor"] += result
         balance["material"]["lista_materia_prima"] += result
 
     result = CostosAccManoObra.objects.filter(accidente=accidente.id).aggregate(
@@ -1455,7 +1455,7 @@ def calcular_seccion_costos(accidente, balance):
     )["total"]
     if result is not None:
         balance["sub_secc_1"] += result
-        balance["mano_obra"]["sub_total_valor"] += result
+        balance["mano_obra"]["subtotal_valor"] += result
         balance["mano_obra"]["lista_mano_obra_requerida"] += result
 
 
@@ -1465,19 +1465,19 @@ def calcular_dano_emergente(accidente, balance):
     )["total"]
     if result is not None:
         balance["otros"]["dano_material"] = result
-        balance["otros"]["sub_total_valor"] += result
+        balance["otros"]["subtotal_valor"] += result
         balance["sub_lucro"] += result
 
 
 def calcular_lucros(accidente, balance):
     if accidente.lucro_consolidado is not None:
         balance["otros"]["lucro_cesante"] += accidente.lucro_consolidado
-        balance["otros"]["sub_total_valor"] += accidente.lucro_consolidado
+        balance["otros"]["subtotal_valor"] += accidente.lucro_consolidado
         balance["sub_dano_material"] += accidente.lucro_consolidado
 
     if accidente.lucro_futuro is not None:
         balance["otros"]["lucro_cesante_futuro"] += accidente.lucro_futuro
-        balance["otros"]["sub_total_valor"] += accidente.lucro_futuro
+        balance["otros"]["subtotal_valor"] += accidente.lucro_futuro
         balance["sub_dano_material"] += accidente.lucro_futuro
 
 
