@@ -1212,7 +1212,6 @@ class BalanceView(View):
 
         valor_1 = 0
         valor_2 = 0
-        subtotal_costos = 0
         lucro_dano_emergente = 0
         valor_5 = 0
         valor_6 = 0
@@ -1223,13 +1222,7 @@ class BalanceView(View):
         valor_11 = 0
         valor_12 = 0
         subtotal_adaptacion_cambio = 0
-        costo_maquinaria = 0
-        costo_materia_prima = 0
-        costo_mano_obra = 0
 
-        costo_insumo_medico = 0
-        costo_transporte = 0
-        costo_otros = 0
         subtotal_lucro = 0
         subtotal_dano_material_futuro = 0
         valor_nivel1 = 0
@@ -1386,7 +1379,6 @@ class BalanceView(View):
             "accidente": accidente,
             "valor_1": valor_1,
             "valor_2": valor_2,
-            "subtotal_costos": subtotal_costos,
             "lucro_dano_emergente": lucro_dano_emergente,
             "valor_5": valor_5,
             "valor_6": valor_6,
@@ -1397,15 +1389,6 @@ class BalanceView(View):
             "valor_11": valor_11,
             "valor_12": valor_12,
             "subtotal_adaptacion_cambio": subtotal_adaptacion_cambio,
-            "costo_maquinaria": costo_maquinaria,
-            "costo_materia_prima": costo_materia_prima,
-            "costo_mano_obra": costo_mano_obra,
-            "costo_insumo_medico": costo_insumo_medico,
-            "costo_transporte": costo_transporte,
-            "costo_otros": costo_otros,
-            "costo_maquinaria": costo_maquinaria,
-            "costo_materia_prima": costo_materia_prima,
-            "costo_mano_obra": costo_mano_obra,
             "lucro_cesante": accidente.lucro_consolidado
             if accidente.lucro_consolidado is not None
             else 0,
