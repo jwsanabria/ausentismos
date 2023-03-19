@@ -68,14 +68,14 @@
                         <td>ASEGURABLE</td>
                         <td>DIRECTO</td>
                         <td>COSTO TRANSPORTE</td>
-                        <td style="text-align:right">{{balance["otros"]["costo_transporte"]|prepend_dollars}}</td>
+                        <td style="text-align:right">{{balance.otros.costo_transporte|prepend_dollars}}</td>
                     </tr>
                     <tr>
                         <td>OTROS</td>
                         <td>ASEGURABLE</td>
                         <td>DIRECTO</td>
                         <td>OTROS COSTOS</td>
-                        <td style="text-align:right">{{balance["otros"]["costo_otros"]|prepend_dollars}}</td>
+                        <td style="text-align:right">{{balance.otros.costo_otros|prepend_dollars}}</td>
                     </tr>
                     <tr>
                         <td colspan="5"></td>
@@ -85,26 +85,26 @@
                         <td>ASEGURABLE</td>
                         <td>INDIRECTO</td>
                         <td>LISTA MAQUINARIA REQUERIDA</td>
-                        <td style="text-align:right">{{balance["maquinaria"]["lista_maquinaria"]|prepend_dollars}}</td>
+                        <td style="text-align:right">{{balance.maquinaria.lista_maquinaria|prepend_dollars}}</td>
                     </tr>
                     <tr>
                         <td>MATERIAL</td>
                         <td>ASEGURABLE</td>
                         <td>INDIRECTO</td>
                         <td>LISTA MATERIA PRIMA</td>
-                        <td style="text-align:right">{{balance["material"]["lista_materia_prima"]|prepend_dollars}}</td>
+                        <td style="text-align:right">{{balance.material.lista_materia_prima|prepend_dollars}}</td>
                     </tr>
                     <tr>
                         <td>MANO DE OBRA</td>
                         <td>ASEGURABLE</td>
                         <td>INDIRECTO</td>
                         <td>LISTA MANO DE OBRA REQUERIDA</td>
-                        <td style="text-align:right">{{balance["mano_obra"]["lista_mano_obra_requerida"]|prepend_dollars}}</td>
+                        <td style="text-align:right">{{balance.mano_obra.lista_mano_obra_requerida|prepend_dollars}}</td>
                     </tr>
                     <tr>
                         <td colspan="3"></td>
                         <td class="bg-secondary text-white">SUBTOTAL</td>
-                        <td class="bg-secondary text-white text-align:right">{{balance["sub_secc_1"]|prepend_dollars}}</td>
+                        <td class="bg-secondary text-white text-align:right">{{balance.sub_secc_1|prepend_dollars}}</td>
                     </tr>
                     <tr>
                         <td colspan="5"></td>
