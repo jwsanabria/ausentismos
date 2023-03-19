@@ -1489,31 +1489,31 @@ def calcular_apropiaciones_nomina(accidente, balance):
 
 
 def calcular_niveles_dano_moral(accidente, balance):
-    balance["otros"]["nivel1"] = valor_dano + (
+    balance["otros"]["nivel1"] += (
         Decimal(accidente.valor_moral_n1)
         * Decimal(accidente.salario_minimo)
         * Decimal(accidente.factor_moral_n1)
     )
 
-    balance["otros"]["nivel2"] = valor_dano + (
+    balance["otros"]["nivel2"] += (
         Decimal(accidente.valor_moral_n1)
         * Decimal(accidente.salario_minimo)
         * Decimal(accidente.factor_moral_n2)
     )
 
-    balance["otros"]["nivel3"] = valor_dano + (
+    balance["otros"]["nivel3"] += (
         Decimal(accidente.valor_moral_n1)
         * Decimal(accidente.salario_minimo)
         * Decimal(accidente.factor_moral_n3)
     )
 
-    balance["otros"]["nivel4"] = valor_dano + (
+    balance["otros"]["nivel4"] += (
         Decimal(accidente.valor_moral_n1)
         * Decimal(accidente.salario_minimo)
         * Decimal(accidente.factor_moral_n4)
     )
 
-    balance["otros"]["nivel5"] = valor_dano + (
+    balance["otros"]["nivel5"] += (
         Decimal(accidente.valor_moral_n1)
         * Decimal(accidente.salario_minimo)
         * Decimal(accidente.factor_moral_n5)
