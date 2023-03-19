@@ -1282,26 +1282,6 @@ class BalanceView(View):
                     r.tipo_acompanamiento.id
                 ] + (r.tiempo.hour * 60 + r.tiempo.minute)
 
-        t_reemplazos = ReemplazoAccidente.objects.filter(
-            accidente=accidente.id
-        ).aggregate(total=Sum(F("dias")))["total"]
-
-        tiempo_reemplazos = calcular_tiempo(
-            None, 0, 0 if t_reemplazos is None else t_reemplazos
-        )
-
-        t_capacitaciones = CapacitadorAccidente.objects.filter(
-            accidente=accidente.id
-        ).aggregate(total=Sum(F("dias")))["total"]
-        tiempo_capacitaciones = calcular_tiempo(
-            None, 0, 0 if t_capacitaciones is None else t_capacitaciones
-        )
-
-        dias_adicinales = (0 if t_reemplazos is None else t_reemplazos) + (
-            0 if t_capacitaciones is None else t_capacitaciones
-        )
-        subtotal_tiempo_adaptacion = calcular_tiempo(None, 0, dias_adicinales)
-
         valor_1 = calcular_tiempo(tiempo_dic, 1, 0)
         valor_5 = calcular_tiempo(tiempo_dic, 2, 0)
         valor_6 = calcular_tiempo(tiempo_dic, 3, 0)
@@ -1498,3 +1478,23 @@ def calcular_adaptacion_cambio(accidente, balance):
         balance["sub_adaptacion_valor"] += result
         balance["mano_obra"]["subtotal_valor"] += result
         balance["mano_obra"]["costos_adicionales_valor"] += result
+
+    t_reemplazos = ReemplazoAccidente.objects.filter(accidente=accidente.id).aggregate(
+        total=Sum(F("dias"))
+    )["total"]
+    balance["mano_obra"]["reemplazos_tiempo"] = calcular_tiempo(
+        None, 0, 0 if t_reemplazos is None else t_reemplazos
+    )
+
+    t_capacitaciones = CapacitadorAccidente.objects.filter(
+        accidente=accidente.id
+    ).aggregate(total=Sum(F("dias")))["total"]
+    balance["mano_obra"]["capacitaciones_tiempo"] = calcular_tiempo(
+        None, 0, 0 if t_capacitaciones is None else t_capacitaciones
+    )
+
+    dias_adicinales = (0 if t_reemplazos is None else t_reemplazos) + (
+        0 if t_capacitaciones is None else t_capacitaciones
+    )
+    balance["sub_adaptacion_tiempo"] = calcular_tiempo(None, 0, dias_adicinales)
+    balance["mano_obra"]["subtotal_tiempo"] += balance["sub_adaptacion_tiempo"]
