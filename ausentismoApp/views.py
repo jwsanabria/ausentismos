@@ -1216,57 +1216,7 @@ class BalanceView(View):
         calcular_niveles_dano_moral(accidente, balance)
         calcular_balances(balance)
 
-        valor_1 = 0
-        valor_2 = 0
-        valor_5 = 0
-        valor_6 = 0
-        valor_7 = 0
-        valor_8 = 0
-        valor_9 = 0
-        valor_10 = 0
-        valor_11 = 0
-        valor_12 = 0
-        subtotal_adaptacion_cambio = 0
-
-        valor_nivel1 = 0
-        valor_nivel2 = 0
-        valor_nivel3 = 0
-        valor_nivel4 = 0
-        valor_nivel5 = 0
-        costo_reemplazo = 0
-        costo_capacitaciones = 0
-        costo_adicionales = 0
-        tiempo_reemplazos = 0
-        tiempo_capacitaciones = 0
-        subtotal_tiempo_adaptacion = 0
-
-        context_data = {
-            "balance": balance,
-            "accidente": accidente,
-            "valor_1": valor_1,
-            "valor_2": valor_2,
-            "valor_5": valor_5,
-            "valor_6": valor_6,
-            "valor_7": valor_7,
-            "valor_8": valor_8,
-            "valor_9": valor_9,
-            "valor_10": valor_10,
-            "valor_11": valor_11,
-            "valor_12": valor_12,
-            "subtotal_adaptacion_cambio": subtotal_adaptacion_cambio,
-            "accidente_valor_moral_n1": valor_nivel1,
-            "accidente_valor_moral_n2": valor_nivel2,
-            "accidente_valor_moral_n3": valor_nivel3,
-            "accidente_valor_moral_n4": valor_nivel4,
-            "accidente_valor_moral_n5": valor_nivel5,
-            "subtotal_niveles": subtotal_niveles,
-            "costo_reemplazo": costo_reemplazo,
-            "costo_capacitaciones": costo_capacitaciones,
-            "costo_adicionales": costo_adicionales,
-            "tiempo_reemplazos": tiempo_reemplazos,
-            "tiempo_capacitaciones": tiempo_capacitaciones,
-            "subtotal_tiempo_adaptacion": subtotal_tiempo_adaptacion,
-        }
+        context_data = {"balance": balance, "accidente": accidente}
 
         return render(request, "accidentes/balance.html", context_data)
 
