@@ -1213,6 +1213,7 @@ class BalanceView(View):
         calcular_lucros(accidente, balance)
         calcular_adaptacion_cambio(accidente, balance)
         calcular_apropiaciones_nomina(accidente, balance)
+        calcular_niveles_dano_moral(accidente, balance)
         calcular_balances(balance)
 
         valor_1 = 0
@@ -1238,37 +1239,6 @@ class BalanceView(View):
         tiempo_reemplazos = 0
         tiempo_capacitaciones = 0
         subtotal_tiempo_adaptacion = 0
-
-        valor_dano = Decimal(0.0)
-        valor_nivel1 = valor_dano + (
-            Decimal(accidente.valor_moral_n1)
-            * Decimal(accidente.salario_minimo)
-            * Decimal(accidente.factor_moral_n1)
-        )
-        valor_nivel2 = valor_dano + (
-            Decimal(accidente.valor_moral_n1)
-            * Decimal(accidente.salario_minimo)
-            * Decimal(accidente.factor_moral_n2)
-        )
-        valor_nivel3 = valor_dano + (
-            Decimal(accidente.valor_moral_n1)
-            * Decimal(accidente.salario_minimo)
-            * Decimal(accidente.factor_moral_n3)
-        )
-        valor_nivel4 = valor_dano + (
-            Decimal(accidente.valor_moral_n1)
-            * Decimal(accidente.salario_minimo)
-            * Decimal(accidente.factor_moral_n4)
-        )
-        valor_nivel5 = valor_dano + (
-            Decimal(accidente.valor_moral_n1)
-            * Decimal(accidente.salario_minimo)
-            * Decimal(accidente.factor_moral_n5)
-        )
-
-        subtotal_niveles = (
-            valor_nivel1 + valor_nivel2 + valor_nivel3 + valor_nivel4 + valor_nivel5
-        )
 
         context_data = {
             "balance": balance,
@@ -1516,3 +1486,44 @@ def calcular_apropiaciones_nomina(accidente, balance):
         tiempo_dic, 4, 0
     )
     balance["mano_obra"]["apro_ayuda_imple_tiempo"] = calcular_tiempo(tiempo_dic, 5, 0)
+
+
+def calcular_niveles_dano_moral(accidente, balance):
+    balance["otros"]["nivel1"] = valor_dano + (
+        Decimal(accidente.valor_moral_n1)
+        * Decimal(accidente.salario_minimo)
+        * Decimal(accidente.factor_moral_n1)
+    )
+
+    balance["otros"]["nivel2"] = valor_dano + (
+        Decimal(accidente.valor_moral_n1)
+        * Decimal(accidente.salario_minimo)
+        * Decimal(accidente.factor_moral_n2)
+    )
+
+    balance["otros"]["nivel3"] = valor_dano + (
+        Decimal(accidente.valor_moral_n1)
+        * Decimal(accidente.salario_minimo)
+        * Decimal(accidente.factor_moral_n3)
+    )
+
+    balance["otros"]["nivel4"] = valor_dano + (
+        Decimal(accidente.valor_moral_n1)
+        * Decimal(accidente.salario_minimo)
+        * Decimal(accidente.factor_moral_n4)
+    )
+
+    balance["otros"]["nivel5"] = valor_dano + (
+        Decimal(accidente.valor_moral_n1)
+        * Decimal(accidente.salario_minimo)
+        * Decimal(accidente.factor_moral_n5)
+    )
+
+    balance["sub_dano_moral"] += (
+        balance["otros"]["nivel1"]
+        + balance["otros"]["nivel2"]
+        + balance["otros"]["nivel3"]
+        + balance["otros"]["nivel4"]
+        + balance["otros"]["nivel5"]
+    )
+    balance["otros"]["subtotal_valor"] += balance["sub_dano_moral"]
