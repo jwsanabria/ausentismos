@@ -1488,7 +1488,7 @@ def calcular_apropiaciones_nomina(accidente, balance):
         + balance["mano_obra"]["apro_ayuda_investigacion_valor"]
         + balance["mano_obra"]["apro_ayuda_imple_valor"]
     )
-    balance["mano_obra"]["subtotal_valor"] += balance["sub_apropiaciones"]
+    balance["mano_obra"]["subtotal_valor"] += balance["sub_apropiaciones_valor"]
 
     tiempo_dic = {}
     result = TiemposAccAcompanamiento.objects.filter(accidente=accidente.id).order_by(
