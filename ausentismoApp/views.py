@@ -1286,7 +1286,7 @@ class BalanceView(View):
         valor_5 = calcular_tiempo(tiempo_dic, 2, 0)
         valor_6 = calcular_tiempo(tiempo_dic, 3, 0)
         valor_7 = calcular_tiempo(tiempo_dic, 4, 0)
-        valor_8 = calcular_tiempo(tiempo_dic, 5, dias_adicinales)
+        valor_8 = calcular_tiempo(tiempo_dic, 5, 0)
 
         valor_dano = Decimal(0.0)
         valor_nivel1 = valor_dano + (
