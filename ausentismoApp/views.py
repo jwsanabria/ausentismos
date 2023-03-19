@@ -1373,7 +1373,7 @@ def calcular_adaptacion_cambio(accidente, balance):
         0 if t_capacitaciones is None else t_capacitaciones
     )
     balance["sub_adaptacion_tiempo"] = calcular_tiempo(None, 0, dias_adicinales)
-    balance["dias_adaptacion"] = dias_adicinales
+    balance["dias_adaptacion"] += dias_adicinales
 
 
 def calcular_apropiaciones_nomina(accidente, balance):
@@ -1445,6 +1445,9 @@ def calcular_apropiaciones_nomina(accidente, balance):
 
     balance["mano_obra"]["subtotal_tiempo"] = formatear_tiempo(
         balance["mano_obra"]["subtotal_tiempo"], 0
+    )
+    balance["sub_apropiaciones_tiempo"] = formatear_tiempo(
+        balance["mano_obra"]["subtotal_tiempo"], balance["dias_adaptacion"]
     )
 
 
