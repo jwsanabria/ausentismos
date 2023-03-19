@@ -1420,8 +1420,9 @@ def calcular_apropiaciones_nomina(accidente, balance):
         "tipo_acompanamiento"
     )
 
+    subtotal_tiempo = 0
     for r in result:
-        balance["mano_obra"]["subtotal_tiempo"] += r.tiempo.hour * 60 + r.tiempo.minute
+        subtotal_tiempo += r.tiempo.hour * 60 + r.tiempo.minute
         if tiempo_dic.get(r.tipo_acompanamiento.id) is None:
             tiempo_dic[r.tipo_acompanamiento.id] = r.tiempo.hour * 60 + r.tiempo.minute
         else:
@@ -1443,12 +1444,10 @@ def calcular_apropiaciones_nomina(accidente, balance):
     )
     balance["mano_obra"]["apro_ayuda_imple_tiempo"] = calcular_tiempo(tiempo_dic, 5, 0)
 
-    balance["mano_obra"]["subtotal_tiempo"] = formatear_tiempo(
-        balance["mano_obra"]["subtotal_tiempo"], 0
-    )
     balance["sub_apropiaciones_tiempo"] = formatear_tiempo(
-        balance["mano_obra"]["subtotal_tiempo"], balance["dias_adaptacion"]
+        subtotal_tiempo, balance["dias_adaptacion"]
     )
+    balance["mano_obra"]["subtotal_tiempo"] = formatear_tiempo(subtotal_tiempo, 0)
 
 
 def calcular_niveles_dano_moral(accidente, balance):
