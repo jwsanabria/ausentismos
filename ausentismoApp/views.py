@@ -1156,6 +1156,7 @@ class BalanceView(View):
             "sub_nomina_tiempo": 0,
             "sub_apropiaciones_valor": 0,
             "sub_apropiaciones_tiempo": 0,
+            "dias_adaptacion": 0,
         }
         balance["otros"] = {
             "costos_insumos_medicos": 0,
@@ -1227,12 +1228,16 @@ def calcular_tiempo(dic, indice, dias):
     elif dias > 0:
         return str(dias * 8) + ":00"
     else:
-        minutos = int(dic.get(indice) % 60)
-        if minutos < 10:
-            s_minutos = "0" + str(int(dic.get(indice) % 60))
-        else:
-            s_minutos = str(int(dic.get(indice) % 60))
-        return str(int(dic.get(indice) / 60) + (dias * 8)) + ":" + s_minutos
+        return formatear_tiempo(dic.get(indice), dias)
+
+
+def formatear_tiempo(tiempo, dias):
+    minutos = int(tiempo % 60)
+    if minutos < 10:
+        s_minutos = "0" + str(int(tiempo % 60))
+    else:
+        s_minutos = str(int(tiempo % 60))
+    return str(int(tiempo / 60) + (dias * 8)) + ":" + s_minutos
 
 
 def calcular_valor_acompanamiento(total):
@@ -1368,7 +1373,7 @@ def calcular_adaptacion_cambio(accidente, balance):
         0 if t_capacitaciones is None else t_capacitaciones
     )
     balance["sub_adaptacion_tiempo"] = calcular_tiempo(None, 0, dias_adicinales)
-    balance["mano_obra"]["subtotal_tiempo"] = balance["sub_adaptacion_tiempo"]
+    balance["dias_adaptacion"] = dias_adicinales
 
 
 def calcular_apropiaciones_nomina(accidente, balance):
@@ -1416,6 +1421,7 @@ def calcular_apropiaciones_nomina(accidente, balance):
     )
 
     for r in result:
+        balance["mano_obra"]["subtotal_tiempo"] += r.tiempo.hour * 60 + r.tiempo.minute
         if tiempo_dic.get(r.tipo_acompanamiento.id) is None:
             tiempo_dic[r.tipo_acompanamiento.id] = r.tiempo.hour * 60 + r.tiempo.minute
         else:
@@ -1436,6 +1442,13 @@ def calcular_apropiaciones_nomina(accidente, balance):
         tiempo_dic, 4, 0
     )
     balance["mano_obra"]["apro_ayuda_imple_tiempo"] = calcular_tiempo(tiempo_dic, 5, 0)
+
+    balance["mano_obra"]["subtotal_tiempo"] = formatear_tiempo(
+        balance["mano_obra"]["subtotal_tiempo"], 0
+    )
+    balance["sub_apropiaciones_tiempo"] = formatear_tiempo(
+        balance["mano_obra"]["subtotal_tiempo"], balance["dias_adaptacion"]
+    )
 
 
 def calcular_niveles_dano_moral(accidente, balance):
