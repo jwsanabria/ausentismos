@@ -1444,10 +1444,10 @@ def calcular_apropiaciones_nomina(accidente, balance):
     )
     balance["mano_obra"]["apro_ayuda_imple_tiempo"] = calcular_tiempo(tiempo_dic, 5, 0)
 
-    balance["sub_apropiaciones_tiempo"] = formatear_tiempo(
+    balance["sub_apropiaciones_tiempo"] = formatear_tiempo(subtotal_tiempo, 0)
+    balance["mano_obra"]["subtotal_tiempo"] = formatear_tiempo(
         subtotal_tiempo, balance["dias_adaptacion"]
     )
-    balance["mano_obra"]["subtotal_tiempo"] = formatear_tiempo(subtotal_tiempo, 0)
 
 
 def calcular_niveles_dano_moral(accidente, balance):
