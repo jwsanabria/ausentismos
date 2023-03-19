@@ -1211,6 +1211,7 @@ class BalanceView(View):
         calcular_seccion_costos(accidente, balance)
         calcular_dano_emergente(accidente, balance)
         calcular_lucros(accidente, balance)
+        calcular_adaptacion_cambio(accidente, balance)
         calcular_balances(balance)
 
         valor_1 = 0
