@@ -1419,6 +1419,7 @@ class BalanceView(View):
         )
 
         context_data = {
+            "balance": balance,
             "accidente": accidente,
             "valor_1": valor_1,
             "valor_2": valor_2,
