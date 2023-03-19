@@ -1212,11 +1212,11 @@ class BalanceView(View):
         calcular_dano_emergente(accidente, balance)
         calcular_lucros(accidente, balance)
         calcular_adaptacion_cambio(accidente, balance)
+        calcular_apropiaciones_nomina(accidente, balance)
         calcular_balances(balance)
 
         valor_1 = 0
         valor_2 = 0
-        lucro_dano_emergente = 0
         valor_5 = 0
         valor_6 = 0
         valor_7 = 0
@@ -1238,55 +1238,6 @@ class BalanceView(View):
         tiempo_reemplazos = 0
         tiempo_capacitaciones = 0
         subtotal_tiempo_adaptacion = 0
-
-        result = (
-            TiemposAccAcompanamiento.objects.filter(accidente=accidente.id)
-            .values("tipo_acompanamiento")
-            .order_by("tipo_acompanamiento")
-            .annotate(dTotal=Sum("total"))
-        )
-
-        for r in result.iterator():
-            if 1 == r["tipo_acompanamiento"]:
-                valor_2 = calcular_valor_acompanamiento(Decimal(r["dTotal"]))
-            elif 2 == r["tipo_acompanamiento"]:
-                valor_9 = calcular_valor_acompanamiento(Decimal(r["dTotal"]))
-            elif 3 == r["tipo_acompanamiento"]:
-                valor_10 = calcular_valor_acompanamiento(Decimal(r["dTotal"]))
-            elif 4 == r["tipo_acompanamiento"]:
-                valor_11 = calcular_valor_acompanamiento(Decimal(r["dTotal"]))
-            elif 5 == r["tipo_acompanamiento"]:
-                valor_12 = calcular_valor_acompanamiento(Decimal(r["dTotal"]))
-
-        v_reemplazos = ReemplazoAccidente.objects.filter(
-            accidente=accidente.id
-        ).aggregate(total=Sum(F("costo")))["total"]
-        v_capacitaciones = CapacitadorAccidente.objects.filter(
-            accidente=accidente.id
-        ).aggregate(total=Sum(F("costo")))["total"]
-        valor_12 += 0 if v_reemplazos is None else v_reemplazos
-        valor_12 += 0 if v_capacitaciones is None else v_capacitaciones
-
-        tiempo_dic = {}
-        result = TiemposAccAcompanamiento.objects.filter(
-            accidente=accidente.id
-        ).order_by("tipo_acompanamiento")
-
-        for r in result:
-            if tiempo_dic.get(r.tipo_acompanamiento.id) is None:
-                tiempo_dic[r.tipo_acompanamiento.id] = (
-                    r.tiempo.hour * 60 + r.tiempo.minute
-                )
-            else:
-                tiempo_dic[r.tipo_acompanamiento.id] = tiempo_dic[
-                    r.tipo_acompanamiento.id
-                ] + (r.tiempo.hour * 60 + r.tiempo.minute)
-
-        valor_1 = calcular_tiempo(tiempo_dic, 1, 0)
-        valor_5 = calcular_tiempo(tiempo_dic, 2, 0)
-        valor_6 = calcular_tiempo(tiempo_dic, 3, 0)
-        valor_7 = calcular_tiempo(tiempo_dic, 4, 0)
-        valor_8 = calcular_tiempo(tiempo_dic, 5, 0)
 
         valor_dano = Decimal(0.0)
         valor_nivel1 = valor_dano + (
@@ -1498,3 +1449,72 @@ def calcular_adaptacion_cambio(accidente, balance):
     )
     balance["sub_adaptacion_tiempo"] = calcular_tiempo(None, 0, dias_adicinales)
     balance["mano_obra"]["subtotal_tiempo"] = balance["sub_adaptacion_tiempo"]
+
+
+def calcular_apropiaciones_nomina(accidente, balance):
+    result = (
+        TiemposAccAcompanamiento.objects.filter(accidente=accidente.id)
+        .values("tipo_acompanamiento")
+        .order_by("tipo_acompanamiento")
+        .annotate(dTotal=Sum("total"))
+    )
+
+    for r in result.iterator():
+        if 1 == r["tipo_acompanamiento"]:
+            balance["mano_obra"][
+                "apro_encontraba_momento_valor"
+            ] += calcular_valor_acompanamiento(Decimal(r["dTotal"]))
+        elif 2 == r["tipo_acompanamiento"]:
+            balance["mano_obra"][
+                "apro_ayudo_rescate_valor"
+            ] += calcular_valor_acompanamiento(Decimal(r["dTotal"]))
+        elif 3 == r["tipo_acompanamiento"]:
+            balance["mano_obra"][
+                "apro_encontraba_area_valor"
+            ] += calcular_valor_acompanamiento(Decimal(r["dTotal"]))
+        elif 4 == r["tipo_acompanamiento"]:
+            balance["mano_obra"][
+                "apro_ayuda_investigacion_valor"
+            ] += calcular_valor_acompanamiento(Decimal(r["dTotal"]))
+        elif 5 == r["tipo_acompanamiento"]:
+            balance["mano_obra"][
+                "apro_ayuda_impl_valor"
+            ] += calcular_valor_acompanamiento(Decimal(r["dTotal"]))
+
+    balance["sub_apropiaciones_valor"] += (
+        balance["mano_obra"]["apro_encontraba_momento_valor"]
+        + balance["mano_obra"]["apro_ayudo_rescate_valor"]
+        + balance["mano_obra"]["apro_encontraba_area_valor"]
+    )
+    (
+        +balance["mano_obra"]["apro_ayuda_investigacion_valor"]
+        + balance["mano_obra"]["apro_ayuda_impl_valor"]
+    )
+    balance["mano_obra"]["subtotal_valor"] += balance["sub_apropiaciones"]
+
+    tiempo_dic = {}
+    result = TiemposAccAcompanamiento.objects.filter(accidente=accidente.id).order_by(
+        "tipo_acompanamiento"
+    )
+
+    for r in result:
+        if tiempo_dic.get(r.tipo_acompanamiento.id) is None:
+            tiempo_dic[r.tipo_acompanamiento.id] = r.tiempo.hour * 60 + r.tiempo.minute
+        else:
+            tiempo_dic[r.tipo_acompanamiento.id] = tiempo_dic[
+                r.tipo_acompanamiento.id
+            ] + (r.tiempo.hour * 60 + r.tiempo.minute)
+
+    balance["mano_obra"]["apro_encontraba_momento_tiempo"] = calcular_tiempo(
+        tiempo_dic, 1, 0
+    )
+    balance["mano_obra"]["apro_ayudo_rescate_tiempo"] = calcular_tiempo(
+        tiempo_dic, 2, 0
+    )
+    balance["mano_obra"]["apro_encontraba_area_tiempo"] = calcular_tiempo(
+        tiempo_dic, 3, 0
+    )
+    balance["mano_obra"]["apro_ayuda_investigacion_tiempo"] = calcular_tiempo(
+        tiempo_dic, 4, 0
+    )
+    balance["mano_obra"]["apro_ayuda_impl_tiempo"] = calcular_tiempo(tiempo_dic, 5, 0)
