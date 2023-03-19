@@ -800,7 +800,8 @@ class FilteredAusentismoListView(ExportMixin, SingleTableMixin, FilterView):
 
 """
     def get_context_data(self, **kwargs):
-        context = super(FilteredAusentismoListView, self).get_context_data(**kwargs)
+        context = super(FilteredAusentismoListView,
+                        self).get_context_data(**kwargs)
         if('fecha' in self.kwargs):
             print('FECHA ' + self.kwargs['fecha'])
             query = Ausentismo.objects.all().select_related('empleado')
@@ -1207,6 +1208,8 @@ class BalanceView(View):
             "subtotal_tiempo": 0,
         }
 
+        calcular_seccion_costos(accidente, balance)
+
         valor_1 = 0
         valor_2 = 0
         subtotal_costos = 0
@@ -1310,25 +1313,6 @@ class BalanceView(View):
         valor_7 = calcular_tiempo(tiempo_dic, 4, 0)
         valor_8 = calcular_tiempo(tiempo_dic, 5, dias_adicinales)
 
-        result = CostosAccInsumosMedicos.objects.filter(
-            accidente=accidente.id
-        ).aggregate(total=Sum(F("valor") * F("cantidad")))["total"]
-        if result is not None:
-            subtotal_costos = subtotal_costos + result
-            costo_insumo_medico = costo_insumo_medico + result
-        result = CostosAccTransporte.objects.filter(accidente=accidente.id).aggregate(
-            total=Sum(F("valor"))
-        )["total"]
-        if result is not None:
-            subtotal_costos = subtotal_costos + result
-            costo_transporte = costo_transporte + result
-        result = CostosAccOtros.objects.filter(accidente=accidente.id).aggregate(
-            total=Sum(F("valor"))
-        )["total"]
-        if result is not None:
-            subtotal_costos = subtotal_costos + result
-            costo_otros = costo_otros + result
-
         # Reemplazos
         result = ReemplazoAccidente.objects.filter(accidente=accidente.id).aggregate(
             total=Sum(F("costo"))
@@ -1357,27 +1341,6 @@ class BalanceView(View):
         ).aggregate(total=Sum(F("valor")))["total"]
         if result is not None:
             lucro_dano_emergente = lucro_dano_emergente + result
-
-        result = CostosAccMaquinaria.objects.filter(accidente=accidente.id).aggregate(
-            total=Sum(F("valor") * F("cantidad"))
-        )["total"]
-        if result is not None:
-            costo_maquinaria = costo_maquinaria + result
-            subtotal_costos = subtotal_costos + costo_maquinaria
-
-        result = CostosAccRepuestos.objects.filter(accidente=accidente.id).aggregate(
-            total=Sum(F("valor") * F("cantidad"))
-        )["total"]
-        if result is not None:
-            costo_materia_prima = costo_materia_prima + result
-            subtotal_costos = subtotal_costos + costo_maquinaria
-
-        result = CostosAccManoObra.objects.filter(accidente=accidente.id).aggregate(
-            total=Sum(F("valor") * F("cantidad"))
-        )["total"]
-        if result is not None:
-            costo_mano_obra = costo_mano_obra + result
-            subtotal_costos += costo_maquinaria
 
         subtotal_lucro = lucro_dano_emergente
         if accidente.lucro_consolidado is not None:
@@ -1483,3 +1446,47 @@ def calcular_tiempo(dic, indice, dias):
 
 def calcular_valor_acompanamiento(total):
     return Decimal(total) * Decimal(0.5568)
+
+
+def calcular_seccion_costos(accidente, balance):
+    result = CostosAccInsumosMedicos.objects.filter(accidente=accidente.id).aggregate(
+        total=Sum(F("valor") * F("cantidad"))
+    )["total"]
+    if result is not None:
+        balance["sub_secc_1"] += result
+        balance["otros"]["costos_insumos_medicos"] += result
+
+    result = CostosAccTransporte.objects.filter(accidente=accidente.id).aggregate(
+        total=Sum(F("valor"))
+    )["total"]
+    if result is not None:
+        balance["sub_secc_1"] += result
+        balance["otros"]["costo_transporte"] += result
+
+    result = CostosAccOtros.objects.filter(accidente=accidente.id).aggregate(
+        total=Sum(F("valor"))
+    )["total"]
+    if result is not None:
+        balance["sub_secc_1"] += result
+        balance["otros"]["otros_costos"] += result
+
+    result = CostosAccMaquinaria.objects.filter(accidente=accidente.id).aggregate(
+        total=Sum(F("valor") * F("cantidad"))
+    )["total"]
+    if result is not None:
+        balance["sub_secc_1"] += result
+        balance["maquinaria"]["lista_maquinaria"] += result
+
+    result = CostosAccRepuestos.objects.filter(accidente=accidente.id).aggregate(
+        total=Sum(F("valor") * F("cantidad"))
+    )["total"]
+    if result is not None:
+        balance["sub_secc_1"] += result
+        balance["material"]["lista_materia_prima"] += result
+
+    result = CostosAccManoObra.objects.filter(accidente=accidente.id).aggregate(
+        total=Sum(F("valor") * F("cantidad"))
+    )["total"]
+    if result is not None:
+        balance["sub_secc_1"] += result
+        balance["mano_obra"]["lista_mano_obra_requerida"] += result
