@@ -210,7 +210,7 @@
                         <td>NO ASEGURABLE</td>
                         <td>INDIRECTO</td>
                         <td>REEMPLAZOS</td>
-                        <td style="text-align:right">{{costo_reemplazo|prepend_dollars}}</td>
+                        <td style="text-align:right">{{balance.mano_obra.reemplazos_valor|prepend_dollars}}</td>
                         <td style="text-align:right">{{tiempo_reemplazos}}</td>
                     </tr>
                     <tr>
@@ -218,7 +218,7 @@
                         <td>NO ASEGURABLE</td>
                         <td>INDIRECTO</td>
                         <td>CAPACITACIONES</td>
-                        <td style="text-align:right">{{costo_capacitaciones|prepend_dollars}}</td>
+                        <td style="text-align:right">{{balance.mano_obra.capacitaciones_valor|prepend_dollars}}</td>
                         <td style="text-align:right">{{tiempo_capacitaciones}}</td>
                     </tr>
                     <tr>
@@ -226,13 +226,13 @@
                         <td>NO ASEGURABLE</td>
                         <td>INDIRECTO</td>
                         <td>COSTOS ADICIONALES</td>
-                        <td style="text-align:right">{{costo_adicionales|prepend_dollars}}</td>
+                        <td style="text-align:right">{{balance.mano_obra.costos_adicionales_valor|prepend_dollars}}</td>
                         <td></td>
                     </tr>
                     <tr>
                         <td colspan="3"></td>
                         <td class="bg-secondary text-white">SUBTOTAL</td>
-                        <td class="bg-secondary text-white" style="text-align:right">{{subtotal_adaptacion_cambio|prepend_dollars}}</td>
+                        <td class="bg-secondary text-white" style="text-align:right">{{balance.sub_adaptacion_valor|prepend_dollars}}</td>
                         <td class="bg-secondary text-white" style="text-align:right">{{subtotal_tiempo_adaptacion}}</td>
                     </tr>
                     <tr>

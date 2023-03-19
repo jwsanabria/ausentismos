@@ -1307,29 +1307,6 @@ class BalanceView(View):
         valor_7 = calcular_tiempo(tiempo_dic, 4, 0)
         valor_8 = calcular_tiempo(tiempo_dic, 5, dias_adicinales)
 
-        # Reemplazos
-        result = ReemplazoAccidente.objects.filter(accidente=accidente.id).aggregate(
-            total=Sum(F("costo"))
-        )["total"]
-        if result is not None:
-            costo_reemplazo = costo_reemplazo + result
-            subtotal_adaptacion_cambio = subtotal_adaptacion_cambio + result
-
-        # Capacitaciones
-        result = CapacitadorAccidente.objects.filter(accidente=accidente.id).aggregate(
-            total=Sum(F("costo"))
-        )["total"]
-        if result is not None:
-            costo_capacitaciones = costo_capacitaciones + result
-            subtotal_adaptacion_cambio = subtotal_adaptacion_cambio + result
-
-        result = CostosAccAdicionales.objects.filter(accidente=accidente.id).aggregate(
-            total=Sum(F("valor"))
-        )["total"]
-        if result is not None:
-            costo_adicionales = costo_adicionales + result
-            subtotal_adaptacion_cambio = subtotal_adaptacion_cambio + result
-
         valor_dano = Decimal(0.0)
         valor_nivel1 = valor_dano + (
             Decimal(accidente.valor_moral_n1)
@@ -1492,3 +1469,31 @@ def calcular_balances(balance):
         + balance["sub_nomina_valor"]
         + balance["sub_apropiaciones_valor"]
     )
+
+
+def calcular_adaptacion_cambio(accidente, balance):
+    # Reemplazos
+    result = ReemplazoAccidente.objects.filter(accidente=accidente.id).aggregate(
+        total=Sum(F("costo"))
+    )["total"]
+    if result is not None:
+        balance["sub_adaptacion_valor"] += result
+        balance["mano_obra"]["subtotal_valor"] += result
+        balance["mano_obra"]["reemplazos_valor"] += result
+
+    # Capacitaciones
+    result = CapacitadorAccidente.objects.filter(accidente=accidente.id).aggregate(
+        total=Sum(F("costo"))
+    )["total"]
+    if result is not None:
+        balance["sub_adaptacion_valor"] += result
+        balance["mano_obra"]["subtotal_valor"] += result
+        balance["mano_obra"]["capacitaciones_valor"] += result
+
+    result = CostosAccAdicionales.objects.filter(accidente=accidente.id).aggregate(
+        total=Sum(F("valor"))
+    )["total"]
+    if result is not None:
+        balance["sub_adaptacion_valor"] += result
+        balance["mano_obra"]["subtotal_valor"] += result
+        balance["mano_obra"]["costos_adicionales_valor"] += result
