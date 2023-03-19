@@ -1478,17 +1478,15 @@ def calcular_apropiaciones_nomina(accidente, balance):
             ] += calcular_valor_acompanamiento(Decimal(r["dTotal"]))
         elif 5 == r["tipo_acompanamiento"]:
             balance["mano_obra"][
-                "apro_ayuda_impl_valor"
+                "apro_ayuda_imple_valor"
             ] += calcular_valor_acompanamiento(Decimal(r["dTotal"]))
 
     balance["sub_apropiaciones_valor"] += (
         balance["mano_obra"]["apro_encontraba_momento_valor"]
         + balance["mano_obra"]["apro_ayudo_rescate_valor"]
         + balance["mano_obra"]["apro_encontraba_area_valor"]
-    )
-    (
-        +balance["mano_obra"]["apro_ayuda_investigacion_valor"]
-        + balance["mano_obra"]["apro_ayuda_impl_valor"]
+        + balance["mano_obra"]["apro_ayuda_investigacion_valor"]
+        + balance["mano_obra"]["apro_ayuda_imple_valor"]
     )
     balance["mano_obra"]["subtotal_valor"] += balance["sub_apropiaciones"]
 
@@ -1517,4 +1515,4 @@ def calcular_apropiaciones_nomina(accidente, balance):
     balance["mano_obra"]["apro_ayuda_investigacion_tiempo"] = calcular_tiempo(
         tiempo_dic, 4, 0
     )
-    balance["mano_obra"]["apro_ayuda_impl_tiempo"] = calcular_tiempo(tiempo_dic, 5, 0)
+    balance["mano_obra"]["apro_ayuda_imple_tiempo"] = calcular_tiempo(tiempo_dic, 5, 0)
