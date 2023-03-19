@@ -1154,7 +1154,7 @@ class BalanceView(View):
             "sub_adaptacion_tiempo": 0,
             "sub_nomina_valor": 0,
             "sub_nomina_tiempo": 0,
-            "sub_apropicaciones_valor": 0,
+            "sub_apropiaciones_valor": 0,
             "sub_apropiaciones_tiempo": 0,
         }
         balance["otros"] = {
