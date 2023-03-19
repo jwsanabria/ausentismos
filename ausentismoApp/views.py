@@ -1210,6 +1210,7 @@ class BalanceView(View):
 
         calcular_seccion_costos(accidente, balance)
         calcular_dano_emergente(accidente, balance)
+        calcular_lucros(accidente, balance)
 
         valor_1 = 0
         valor_2 = 0
@@ -1224,8 +1225,6 @@ class BalanceView(View):
         valor_12 = 0
         subtotal_adaptacion_cambio = 0
 
-        subtotal_lucro = 0
-        subtotal_dano_material_futuro = 0
         valor_nivel1 = 0
         valor_nivel2 = 0
         valor_nivel3 = 0
@@ -1330,14 +1329,6 @@ class BalanceView(View):
             costo_adicionales = costo_adicionales + result
             subtotal_adaptacion_cambio = subtotal_adaptacion_cambio + result
 
-        subtotal_lucro = lucro_dano_emergente
-        if accidente.lucro_consolidado is not None:
-            subtotal_dano_material_futuro = (
-                accidente.lucro_consolidado + accidente.lucro_futuro
-            )
-        else:
-            subtotal_dano_material_futuro = 0
-
         valor_dano = Decimal(0.0)
         valor_nivel1 = valor_dano + (
             Decimal(accidente.valor_moral_n1)
@@ -1374,7 +1365,6 @@ class BalanceView(View):
             "accidente": accidente,
             "valor_1": valor_1,
             "valor_2": valor_2,
-            "lucro_dano_emergente": lucro_dano_emergente,
             "valor_5": valor_5,
             "valor_6": valor_6,
             "valor_7": valor_7,
@@ -1384,13 +1374,6 @@ class BalanceView(View):
             "valor_11": valor_11,
             "valor_12": valor_12,
             "subtotal_adaptacion_cambio": subtotal_adaptacion_cambio,
-            "lucro_cesante": accidente.lucro_consolidado
-            if accidente.lucro_consolidado is not None
-            else 0,
-            "lucro_cesante_futuro": accidente.lucro_futuro
-            if accidente.lucro_futuro is not None
-            else 0,
-            "subtotal_dano_material_futuro": subtotal_dano_material_futuro,
             "accidente_valor_moral_n1": valor_nivel1,
             "accidente_valor_moral_n2": valor_nivel2,
             "accidente_valor_moral_n3": valor_nivel3,
@@ -1477,3 +1460,13 @@ def calcular_dano_emergente(accidente, balance):
     if result is not None:
         balance["otros"]["dano_material"] = result
         balance["sub_lucro"] += result
+
+
+def calcular_lucros(accidente, balance):
+    if accidente.lucro_consolidado is not None:
+        balance["otros"]["lucro_cesante"] += accidente.lucro_consolidado
+        balance["sub_dano_material"] += accidente.lucro_consolidado
+
+    if accidente.lucro_futuro is not None:
+        balance["otros"]["lucro_cesante_futuro"] += accidente.lucro_futuro
+        balance["sub_dano_material"] += accidente.lucro_futuro
