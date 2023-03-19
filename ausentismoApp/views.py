@@ -1232,7 +1232,6 @@ def calcular_tiempo(dic, indice, dias):
 
 
 def formatear_tiempo(tiempo, dias):
-    logger("TIEMPO " + tiempo)
     minutos = int(tiempo % 60)
     if minutos < 10:
         s_minutos = "0" + str(int(tiempo % 60))
@@ -1443,13 +1442,6 @@ def calcular_apropiaciones_nomina(accidente, balance):
         tiempo_dic, 4, 0
     )
     balance["mano_obra"]["apro_ayuda_imple_tiempo"] = calcular_tiempo(tiempo_dic, 5, 0)
-
-    balance["mano_obra"]["subtotal_tiempo"] = formatear_tiempo(
-        balance["mano_obra"]["subtotal_tiempo"], 0
-    )
-    balance["sub_apropiaciones_tiempo"] = formatear_tiempo(
-        balance["mano_obra"]["subtotal_tiempo"], balance["dias_adaptacion"]
-    )
 
 
 def calcular_niveles_dano_moral(accidente, balance):
