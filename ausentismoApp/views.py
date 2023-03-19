@@ -1232,6 +1232,7 @@ def calcular_tiempo(dic, indice, dias):
 
 
 def formatear_tiempo(tiempo, dias):
+    logger("TIEMPO " + tiempo)
     minutos = int(tiempo % 60)
     if minutos < 10:
         s_minutos = "0" + str(int(tiempo % 60))
