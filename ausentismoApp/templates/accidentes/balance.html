@@ -72,8 +72,13 @@
                     </tr>
                     <tr>
                         <td>OTROS</td>
-                        <td>ASEGURABLE</td>
-                        <td>DIRECTO</td>
+                        <td>
+                            <form method="post" class="form-inline" id="f_asegurable_2">
+                                {% csrf_token %}
+                                {{ f_balance_asegurable.as_ul }}
+                            </form>
+                        </td>
+                        <td></td>
                         <td>COSTO TRANSPORTE</td>
                         <td style="text-align:right">{{balance.otros.costo_transporte|prepend_dollars}}</td>
                     </tr>
