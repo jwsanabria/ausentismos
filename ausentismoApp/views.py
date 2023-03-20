@@ -1143,7 +1143,6 @@ class BalanceView(View):
     def get(self, request, pk):
         accidente = get_object_or_404(Accidente, id=pk)
         f_balance_asegurable = BalanceAsegurableForm()
-        f_balance_directo = BalanceDirectoForm()
 
         balance = {
             "total_valor": 0,
@@ -1223,7 +1222,6 @@ class BalanceView(View):
             "balance": balance,
             "accidente": accidente,
             "f_balance_asegurable": f_balance_asegurable,
-            "f_balance_directo": f_balance_directo,
         }
 
         return render(request, "accidentes/balance.html", context_data)
