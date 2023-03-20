@@ -275,12 +275,6 @@ class BalanceAsegurableForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super(BalanceAsegurableForm, self).__init__(*args, **kwargs)
-        for name in self.fields.keys():
-            self.fields[name].widget.attrs.update(
-                {
-                    "class": "form-control",
-                }
-            )
 
 
 class CostosAccDanoEmergenteForm(ModelForm):
