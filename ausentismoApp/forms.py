@@ -264,27 +264,17 @@ class DanoMoralForm(forms.Form):
 
 
 class BalanceAsegurableForm(forms.Form):
-    ASEGURABLE = (
-        ("SI", "ASEGURABLE"),
-        ("NO", "NO ASEGURABLE"),
+    TIPO = (
+        ("AD", "ASEGURABLE - DIRECTO"),
+        ("AI", "ASEGURABLE - INDIRECTO"),
+        ("ND", "NO ASEGURABLE - DIRECTO"),
+        ("NI", "NO ASEGURABLE - INDIRECTO"),
     )
 
     asegurable = forms.CharField(widget=forms.Select(choices=ASEGURABLE))
 
     def __init__(self, *args, **kwargs):
         super(BalanceAsegurableForm, self).__init__(*args, **kwargs)
-
-
-class BalanceDirectoForm(forms.Form):
-    DIRECTO = (
-        ("SI", "DIRECTO"),
-        ("NO", "INDIRECTO"),
-    )
-    directo = forms.CharField(widget=forms.Select(choices=DIRECTO))
-
-    def __init__(self, *args, **kwargs):
-        super(BalanceDirectoForm, self).__init__(*args, **kwargs)
-
         for name in self.fields.keys():
             self.fields[name].widget.attrs.update(
                 {
