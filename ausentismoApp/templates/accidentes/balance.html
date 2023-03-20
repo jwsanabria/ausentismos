@@ -60,14 +60,11 @@
                         <td width="10%">
                             <form method="post" class="form-inline" id="f_asegurable_1">
                                 {% csrf_token %}
-                                {{ f_balance_asegurable.as_p }}
+                                {{ f_balance_asegurable.as_div }}
                             </form>
                         </td>
                         <td width="10%">
-                            <form method="post" class="form-inline" id="f_directo_1">
-                                {% csrf_token %}
-                                {{ f_balance_directo.as_p }}
-                            </form>
+
                         </td>
                         <td width="15%">COSTOS INSUMOS MÉDICOS</td>
                         <td style="text-align:right">{{balance.otros.costos_insumos_medicos|prepend_dollars}}</td>
