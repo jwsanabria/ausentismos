@@ -49,6 +49,8 @@
             <div class="card-body">
 
                 <hr/>
+                <form method="post" class="form-inline" id="f_asegurable">
+                    {% csrf_token %}
                 <table class="table-responsive font-size: small table-striped table-hover table-sm">
                     <tr>
                         <td colspan="3"></td>
@@ -58,10 +60,7 @@
                     <tr>
                         <td width="10%">OTROS</td>
                         <td width="10%">
-                            <form method="post" class="form-inline" id="f_asegurable_1">
-                                {% csrf_token %}
-                                {{ f_balance_asegurable.tipo }}
-                            </form>
+                                {{ f_balance_asegurable.tipo1 }}
                         </td>
                         <td width="15%">COSTOS INSUMOS MÉDICOS</td>
                         <td style="text-align:right">{{balance.otros.costos_insumos_medicos|prepend_dollars}}</td>
@@ -70,10 +69,7 @@
                     <tr>
                         <td>OTROS</td>
                         <td>
-                            <form method="post" class="form-inline" id="f_asegurable_2">
-                                {% csrf_token %}
-                                {{ f_balance_asegurable.tipo}}
-                            </form>
+                            {{ f_balance_asegurable.tipo2}}
                         </td>
                         <td>COSTO TRANSPORTE</td>
                         <td style="text-align:right">{{balance.otros.costo_transporte|prepend_dollars}}</td>
@@ -81,10 +77,7 @@
                     <tr>
                         <td>OTROS</td>
                         <td>
-                            <form method="post" class="form-inline" id="f_asegurable_3">
-                                {% csrf_token %}
-                                {{ f_balance_asegurable.tipo }}
-                            </form>
+                            {{ f_balance_asegurable.tipo3 }}
                         </td>
                         <td>OTROS COSTOS</td>
                         <td style="text-align:right">{{balance.otros.otros_costos|prepend_dollars}}</td>
@@ -95,10 +88,7 @@
                     <tr>
                         <td>MAQUINARIA/INSTALACIÓN DE EQUIPOS</td>
                         <td>
-                            <form method="post" class="form-inline" id="f_asegurable_4">
-                                {% csrf_token %}
-                                {{ f_balance_asegurable.tipo}}
-                            </form>
+                            {{ f_balance_asegurable.tipo4}}
                         </td>
                         <td>LISTA MAQUINARIA REQUERIDA</td>
                         <td style="text-align:right">{{balance.maquinaria.lista_maquinaria|prepend_dollars}}</td>
@@ -106,10 +96,7 @@
                     <tr>
                         <td>MATERIAL</td>
                         <td>
-                            <form method="post" class="form-inline" id="f_asegurable_5">
-                                {% csrf_token %}
-                                {{ f_balance_asegurable.tipo}}
-                            </form>
+                            {{ f_balance_asegurable.tipo5}}
                         </td>
                         <td>LISTA MATERIA PRIMA</td>
                         <td style="text-align:right">{{balance.material.lista_materia_prima|prepend_dollars}}</td>
@@ -117,10 +104,7 @@
                     <tr>
                         <td>MANO DE OBRA</td>
                         <td>
-                            <form method="post" class="form-inline" id="f_asegurable_6">
-                                {% csrf_token %}
-                                {{ f_balance_asegurable.tipo}}
-                            </form>
+                            {{ f_balance_asegurable.tipo6}}
                         </td>
                         <td>LISTA MANO DE OBRA REQUERIDA</td>
                         <td style="text-align:right">{{balance.mano_obra.lista_mano_obra_requerida|prepend_dollars}}</td>
@@ -140,10 +124,7 @@
                     <tr>
                         <td>OTROS</td>
                         <td>
-                            <form method="post" class="form-inline" id="f_asegurable_7">
-                                {% csrf_token %}
-                                {{ f_balance_asegurable.tipo }}
-                            </form>
+                            {{ f_balance_asegurable.tipo7 }}
                         </td>
                         <td>DAÑO MATERIAL A TITULO DE EMERGENTE</td>
                         <td style="text-align:right">{{balance.otros.dano_material|prepend_dollars}}</td>
@@ -163,10 +144,7 @@
                     <tr>
                         <td>OTROS</td>
                         <td>
-                            <form method="post" class="form-inline" id="f_asegurable_8">
-                                {% csrf_token %}
-                                {{ f_balance_asegurable.tipo}}
-                            </form>
+                            {{ f_balance_asegurable.tipo8}}
                         </td>
                         <td>LUCRO CESANTE</td>
                         <td style="text-align:right">{{balance.otros.lucro_cesante|prepend_dollars}}</td>
@@ -174,10 +152,7 @@
                     <tr>
                         <td>OTROS</td>
                         <td>
-                            <form method="post" class="form-inline" id="f_asegurable_9">
-                                {% csrf_token %}
-                                {{ f_balance_asegurable.tipo }}
-                            </form>
+                            {{ f_balance_asegurable.tipo9 }}
                         </td>
                         <td>LUCRO CESANTE FUTURO</td>
                         <td style="text-align:right">{{balance.otros.lucro_cesante_futuro|prepend_dollars}}</td>
@@ -197,10 +172,7 @@
                     <tr>
                         <td>OTROS</td>
                         <td>
-                            <form method="post" class="form-inline" id="f_asegurable_10">
-                                {% csrf_token %}
-                                {{ f_balance_asegurable.tipo }}
-                            </form>
+                            {{ f_balance_asegurable.tipo10 }}
                         </td>
                         <td>NIVEL 1</td>
                         <td style="text-align:right">{{balance.otros.nivel1|prepend_dollars}}</td>
@@ -208,10 +180,7 @@
                     <tr>
                         <td>OTROS</td>
                         <td>
-                            <form method="post" class="form-inline" id="f_asegurable_11">
-                                {% csrf_token %}
-                                {{ f_balance_asegurable.tipo }}
-                            </form>
+                            {{ f_balance_asegurable.tipo11 }}
                         </td>
                         <td>NIVEL 2</td>
                         <td style="text-align:right">{{balance.otros.nivel2|prepend_dollars}}</td>
@@ -219,10 +188,7 @@
                     <tr>
                         <td>OTROS</td>
                         <td>
-                            <form method="post" class="form-inline" id="f_asegurable_12">
-                                {% csrf_token %}
-                                {{ f_balance_asegurable.tipo }}
-                            </form>
+                            {{ f_balance_asegurable.tipo12 }}
                         </td>
                         <td>NIVEL 3</td>
                         <td style="text-align:right">{{balance.otros.nivel3|prepend_dollars}}</td>
@@ -230,10 +196,7 @@
                     <tr>
                         <td>OTROS</td>
                         <td>
-                            <form method="post" class="form-inline" id="f_asegurable_13">
-                                {% csrf_token %}
-                                {{ f_balance_asegurable.tipo }}
-                            </form>
+                            {{ f_balance_asegurable.tipo13 }}
                         </td>
                         <td>NIVEL 4</td>
                         <td style="text-align:right">{{balance.otros.nivel4|prepend_dollars}}</td>
@@ -241,10 +204,7 @@
                     <tr>
                         <td>OTROS</td>
                         <td>
-                            <form method="post" class="form-inline" id="f_asegurable_14">
-                                {% csrf_token %}
-                                {{ f_balance_asegurable.tipo }}
-                            </form>
+                            {{ f_balance_asegurable.tipo14 }}
                         </td>
                         <td>NIVEL 5</td>
                         <td style="text-align:right">{{balance.otros.nivel5|prepend_dollars}}</td>
@@ -264,10 +224,7 @@
                     <tr>
                         <td>MANO DE OBRA</td>
                         <td>
-                            <form method="post" class="form-inline" id="f_asegurable_15">
-                                {% csrf_token %}
-                                {{ f_balance_asegurable.tipo }}
-                            </form>
+                            {{ f_balance_asegurable.tipo15 }}
                         </td>
                         <td>REEMPLAZOS</td>
                         <td style="text-align:right">{{balance.mano_obra.reemplazos_valor|prepend_dollars}}</td>
@@ -276,10 +233,7 @@
                     <tr>
                         <td>MANO DE OBRA</td>
                         <td>
-                            <form method="post" class="form-inline" id="f_asegurable_16">
-                                {% csrf_token %}
-                                {{ f_balance_asegurable.tipo }}
-                            </form>
+                           {{ f_balance_asegurable.tipo16 }}
                         </td>
                         <td>CAPACITACIONES</td>
                         <td style="text-align:right">{{balance.mano_obra.capacitaciones_valor|prepend_dollars}}</td>
@@ -288,10 +242,7 @@
                     <tr>
                         <td>MANO DE OBRA</td>
                         <td>
-                            <form method="post" class="form-inline" id="f_asegurable_17">
-                                {% csrf_token %}
-                                {{ f_balance_asegurable.tipo }}
-                            </form>
+                            {{ f_balance_asegurable.tipo17 }}
                         </td>
                         <td>COSTOS ADICIONALES</td>
                         <td style="text-align:right">{{balance.mano_obra.costos_adicionales_valor|prepend_dollars}}</td>
@@ -313,10 +264,7 @@
                     <tr>
                         <td>MANO DE OBRA</td>
                         <td>
-                            <form method="post" class="form-inline" id="f_asegurable_18">
-                                {% csrf_token %}
-                                {{ f_balance_asegurable.tipo }}
-                            </form>
+                            {{ f_balance_asegurable.tipo18 }}
                         </td>
                         <td>SE ENCONTRABA CON EL ACCIDENTADO AL MOMENTO DEL ACCIDENTE</td>
                         <td style="text-align:right">{{balance.mano_obra.apro_encontraba_momento_valor|prepend_dollars}}</td>
@@ -325,10 +273,7 @@
                     <tr>
                         <td>MANO DE OBRA</td>
                         <td>
-                            <form method="post" class="form-inline" id="f_asegurable_19">
-                                {% csrf_token %}
-                                {{ f_balance_asegurable.tipo }}
-                            </form>
+                            {{ f_balance_asegurable.tipo19 }}
                         </td>
                         <td>AYUDO EN EL RESCATE O ESTABILIZACIÓN DEL ACCIDENTADO</td>
                         <td style="text-align:right">{{balance.mano_obra.apro_ayudo_rescate_valor|prepend_dollars}}</td>
@@ -337,10 +282,7 @@
                     <tr>
                         <td>MANO DE OBRA</td>
                         <td>
-                            <form method="post" class="form-inline" id="f_asegurable_20">
-                                {% csrf_token %}
-                                {{ f_balance_asegurable.tipo }}
-                            </form>
+                            {{ f_balance_asegurable.tipo20 }}
                         </td>
                         <td>SE ENCONTRABA EN EL ÁREA DEL ACCIDENTE</td>
                         <td style="text-align:right">{{balance.mano_obra.apro_encontraba_area_valor|prepend_dollars}}</td>
@@ -349,10 +291,7 @@
                     <tr>
                         <td>MANO DE OBRA</td>
                         <td>
-                            <form method="post" class="form-inline" id="f_asegurable_21">
-                                {% csrf_token %}
-                                {{ f_balance_asegurable.tipo }}
-                            </form>
+                            {{ f_balance_asegurable.tipo21 }}
                         </td>
                         <td>AYUDA EN LA INVESTIGACIÓN DEL ACCIDENTE</td>
                         <td style="text-align:right">{{balance.mano_obra.apro_ayuda_investigacion_valor|prepend_dollars}}</td>
@@ -361,10 +300,7 @@
                     <tr>
                         <td>MANO DE OBRA</td>
                         <td>
-                            <form method="post" class="form-inline" id="f_asegurable_22">
-                                {% csrf_token %}
-                                {{ f_balance_asegurable.tipo }}
-                            </form>
+                            {{ f_balance_asegurable.tipo22 }}
                         </td>
                         <td>AYUDA A LA IMPLEMENTACIÓN DE ACCIONES CORRECTIVAS</td>
                         <td style="text-align:right">{{balance.mano_obra.apro_ayuda_imple_valor|prepend_dollars}}</td>
@@ -386,10 +322,7 @@
                     <tr>
                         <td>MANO DE OBRA</td>
                         <td>
-                            <form method="post" class="form-inline" id="f_asegurable_23">
-                                {% csrf_token %}
-                                {{ f_balance_asegurable.tipo }}
-                            </form>
+                            {{ f_balance_asegurable.tipo23 }}
                         </td>
                         <td>PARAFISCALES</td>
                         <td style="text-align:right">{{valor_2|prepend_dollars}}</td>
@@ -398,10 +331,8 @@
                     <tr>
                         <td>MANO DE OBRA</td>
                         <td>
-                            <form method="post" class="form-inline" id="f_asegurable_24">
-                                {% csrf_token %}
-                                {{ f_balance_asegurable.tipo }}
-                            </form>
+                            {{ f_balance_asegurable.tipo24 }}
+
                         </td>
                         <td>PRESTACIONES SOCIALES</td>
                         <td style="text-align:right">{{valor_9|prepend_dollars}}</td>
@@ -473,6 +404,7 @@
                         <td style="text-align:right">{{balance.total_tiempo}}</td>
                     </tr>
                 </table>
+            </form>
             </div>
         </div>
     </div>
