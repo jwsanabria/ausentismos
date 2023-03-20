@@ -57,13 +57,18 @@
                     </tr>
                     <tr>
                         <td width="10%">OTROS</td>
-                        <td width="10%"><form method="post" class="form-inline" id="form_dano_emergente">
-                            {% csrf_token %}
-                            {{ f_balance_asegurable.as_p }}
-
-                            <button type="submit" class="btn btn-primary mb-2"><span class="fa fa-save"></span></button>
-                        </form></td>
-                        <td width="10%">DIRECTO</td>
+                        <td width="10%">
+                            <form method="post" class="form-inline" id="f_asegurable_1">
+                                {% csrf_token %}
+                                {{ f_balance_asegurable.as_p }}
+                            </form>
+                        </td>
+                        <td width="10%">
+                            <form method="post" class="form-inline" id="f_directo_1">
+                                {% csrf_token %}
+                                {{ f_balance_directo.as_p }}
+                            </form>
+                        </td>
                         <td width="15%">COSTOS INSUMOS MÉDICOS</td>
                         <td style="text-align:right">{{balance.otros.costos_insumos_medicos|prepend_dollars}}</td>
                         <td rowspan="26"></td>
