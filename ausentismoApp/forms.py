@@ -263,7 +263,7 @@ class DanoMoralForm(forms.Form):
             )
 
 
-class BalanceAsegurableForm(forms.Form):
+class BalanceAsegurableForm(ModelForm):
     TIPO = (
         ("AD", "ASEGURABLE - DIRECTO"),
         ("AI", "ASEGURABLE - INDIRECTO"),
@@ -298,6 +298,42 @@ class BalanceAsegurableForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super(BalanceAsegurableForm, self).__init__(*args, **kwargs)
+
+        for name in self.fields.keys():
+            self.fields[name].widget.attrs.update(
+                {
+                    "class": "form-control",
+                }
+            )
+
+    class Meta:
+        model = BalanceAccidente
+        fields = (
+            "tipo1",
+            "tipo2",
+            "tipo3",
+            "tipo4",
+            "tipo5",
+            "tipo6",
+            "tipo7",
+            "tipo8",
+            "tipo9",
+            "tipo10",
+            "tipo11",
+            "tipo12",
+            "tipo13",
+            "tipo14",
+            "tipo15",
+            "tipo16",
+            "tipo17",
+            "tipo18",
+            "tipo19",
+            "tipo20",
+            "tipo21",
+            "tipo22",
+            "tipo23",
+            "tipo24",
+        )
 
 
 class CostosAccDanoEmergenteForm(ModelForm):

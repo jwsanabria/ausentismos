@@ -10,24 +10,26 @@ from decimal import Decimal
 
 # Create your models here.
 
+
 class Pais(models.Model):
     nombre = models.CharField(max_length=80)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = 'pais'
-        verbose_name_plural = 'paises'
+        verbose_name = "pais"
+        verbose_name_plural = "paises"
 
     def __str__(self):
         return self.nombre
 
     def save(self, *args, **kwargs):
-        ''' On save, update timestamps '''
+        """On save, update timestamps"""
         if not self.id:
             self.created = timezone.now()
         self.modified = timezone.now()
         return super(Pais, self).save(*args, **kwargs)
+
 
 class Departamento(models.Model):
     nombre = models.CharField(max_length=80)
@@ -35,18 +37,19 @@ class Departamento(models.Model):
     updated = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = 'departamento'
-        verbose_name_plural = 'departamentos'
+        verbose_name = "departamento"
+        verbose_name_plural = "departamentos"
 
     def __str__(self):
         return self.nombre
 
     def save(self, *args, **kwargs):
-        ''' On save, update timestamps '''
+        """On save, update timestamps"""
         if not self.id:
             self.created = timezone.now()
         self.modified = timezone.now()
         return super(Departamento, self).save(*args, **kwargs)
+
 
 class Ciudad(models.Model):
     nombre = models.CharField(max_length=80)
@@ -54,18 +57,19 @@ class Ciudad(models.Model):
     updated = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = 'ciudad'
-        verbose_name_plural = 'ciudades'
+        verbose_name = "ciudad"
+        verbose_name_plural = "ciudades"
 
     def __str__(self):
         return self.nombre
 
     def save(self, *args, **kwargs):
-        ''' On save, update timestamps '''
+        """On save, update timestamps"""
         if not self.id:
             self.created = timezone.now()
         self.modified = timezone.now()
         return super(Ciudad, self).save(*args, **kwargs)
+
 
 class Sede(models.Model):
     descripcion = models.CharField(max_length=50)
@@ -73,18 +77,19 @@ class Sede(models.Model):
     updated = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = 'sede'
-        verbose_name_plural = 'sedes'
+        verbose_name = "sede"
+        verbose_name_plural = "sedes"
 
     def __str__(self):
         return self.descripcion
 
     def save(self, *args, **kwargs):
-        ''' On save, update timestamps '''
+        """On save, update timestamps"""
         if not self.id:
             self.created = timezone.now()
         self.modified = timezone.now()
         return super(Sede, self).save(*args, **kwargs)
+
 
 class Seccion(models.Model):
     descripcion = models.CharField(max_length=50)
@@ -92,18 +97,19 @@ class Seccion(models.Model):
     updated = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = 'seccion'
-        verbose_name_plural = 'secciones'
+        verbose_name = "seccion"
+        verbose_name_plural = "secciones"
 
     def __str__(self):
         return self.descripcion
 
     def save(self, *args, **kwargs):
-        ''' On save, update timestamps '''
+        """On save, update timestamps"""
         if not self.id:
             self.created = timezone.now()
         self.modified = timezone.now()
         return super(Seccion, self).save(*args, **kwargs)
+
 
 class Area(models.Model):
     descripcion = models.CharField(max_length=50)
@@ -111,18 +117,19 @@ class Area(models.Model):
     updated = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = 'area'
-        verbose_name_plural = 'areas'
+        verbose_name = "area"
+        verbose_name_plural = "areas"
 
     def __str__(self):
         return self.descripcion
 
     def save(self, *args, **kwargs):
-        ''' On save, update timestamps '''
+        """On save, update timestamps"""
         if not self.id:
             self.created = timezone.now()
         self.modified = timezone.now()
         return super(Area, self).save(*args, **kwargs)
+
 
 class Cargo(models.Model):
     descripcion = models.CharField(max_length=50)
@@ -130,18 +137,19 @@ class Cargo(models.Model):
     updated = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = 'cargo'
-        verbose_name_plural = 'cargos'
+        verbose_name = "cargo"
+        verbose_name_plural = "cargos"
 
     def __str__(self):
         return self.descripcion
 
     def save(self, *args, **kwargs):
-        ''' On save, update timestamps '''
+        """On save, update timestamps"""
         if not self.id:
             self.created = timezone.now()
         self.modified = timezone.now()
         return super(Cargo, self).save(*args, **kwargs)
+
 
 class Afp(models.Model):
     nombre = models.CharField(max_length=80)
@@ -149,14 +157,14 @@ class Afp(models.Model):
     updated = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = 'afp'
-        verbose_name_plural = 'afp'
+        verbose_name = "afp"
+        verbose_name_plural = "afp"
 
     def __str__(self):
         return self.nombre
 
     def save(self, *args, **kwargs):
-        ''' On save, update timestamps '''
+        """On save, update timestamps"""
         if not self.id:
             self.created = timezone.now()
         self.modified = timezone.now()
@@ -169,18 +177,19 @@ class Arl(models.Model):
     updated = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = 'arl'
-        verbose_name_plural = 'arl'
+        verbose_name = "arl"
+        verbose_name_plural = "arl"
 
     def __str__(self):
         return self.nombre
 
     def save(self, *args, **kwargs):
-        ''' On save, update timestamps '''
+        """On save, update timestamps"""
         if not self.id:
             self.created = timezone.now()
         self.modified = timezone.now()
         return super(Arl, self).save(*args, **kwargs)
+
 
 class Eps(models.Model):
     nombre = models.CharField(max_length=80)
@@ -188,18 +197,19 @@ class Eps(models.Model):
     updated = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = 'eps'
-        verbose_name_plural = 'eps'
+        verbose_name = "eps"
+        verbose_name_plural = "eps"
 
     def __str__(self):
         return self.nombre
 
     def save(self, *args, **kwargs):
-        ''' On save, update timestamps '''
+        """On save, update timestamps"""
         if not self.id:
             self.created = timezone.now()
         self.modified = timezone.now()
         return super(Eps, self).save(*args, **kwargs)
+
 
 class CajaCompensacion(models.Model):
     nombre = models.CharField(max_length=80)
@@ -207,68 +217,64 @@ class CajaCompensacion(models.Model):
     updated = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = 'caja compensación'
-        verbose_name_plural = 'cajas compensación'
+        verbose_name = "caja compensación"
+        verbose_name_plural = "cajas compensación"
 
     def __str__(self):
         return self.nombre
 
     def save(self, *args, **kwargs):
-        ''' On save, update timestamps '''
+        """On save, update timestamps"""
         if not self.id:
             self.created = timezone.now()
         self.modified = timezone.now()
         return super(CajaCompensacion, self).save(*args, **kwargs)
 
+
 class Persona(models.Model):
     TIPO_DOCUMENTO = (
-        ('CC', 'Cedula de ciudadania'),
-        ('CE', 'Cedula de extranjeria'),
-        ('P', 'Pasaporte'),
-        ('TI', 'Tarjeta de identidad'),
+        ("CC", "Cedula de ciudadania"),
+        ("CE", "Cedula de extranjeria"),
+        ("P", "Pasaporte"),
+        ("TI", "Tarjeta de identidad"),
     )
 
-    GENERO = (
-        ('M', 'Masculino'),
-        ('F', 'Femenino'),
-        ('B', 'No binario')
-    )
+    GENERO = (("M", "Masculino"), ("F", "Femenino"), ("B", "No binario"))
     ESTADO_CIVIL = (
-        ('C', "Casado (a)"),
-        ('V', "Viudo (a)"),
-        ('S', "Soltero (a)"),
-        ('L', "Unión Libre")
+        ("C", "Casado (a)"),
+        ("V", "Viudo (a)"),
+        ("S", "Soltero (a)"),
+        ("L", "Unión Libre"),
     )
-    RH = (
-        ('+', 'Positivo'),
-        ('-', 'Negativo')
-    )
-    ESTADO = (
-        ('0', 'INACTIVO'),
-        ('1', 'ACTIVO')
-    )
-    GRUPO_RH = (
-        ('A', 'A'),
-        ('B', 'B'),
-        ('AB', 'AB'),
-        ('O', 'O')
-    )
+    RH = (("+", "Positivo"), ("-", "Negativo"))
+    ESTADO = (("0", "INACTIVO"), ("1", "ACTIVO"))
+    GRUPO_RH = (("A", "A"), ("B", "B"), ("AB", "AB"), ("O", "O"))
     tipo_documento = models.CharField(max_length=2, choices=TIPO_DOCUMENTO)
     documento = models.CharField(max_length=20)
-    nombre=models.CharField(max_length=255)
+    nombre = models.CharField(max_length=255)
     sexo = models.CharField(max_length=1, choices=GENERO)
     nacionalidad = models.ForeignKey(Pais, on_delete=models.CASCADE)
     libreta_militar = models.BooleanField()
-    distrito_militar = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(999)], blank=True, null=True)
+    distrito_militar = models.IntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(999)], blank=True, null=True
+    )
     numero_libreta = models.PositiveIntegerField(blank=True, null=True)
     fecha_nacimiento = models.DateField()
     estado_civil = models.CharField(max_length=1, choices=ESTADO_CIVIL)
     direccion_residencia = models.CharField(max_length=200)
-    estrato = models.PositiveIntegerField(validators=[MinValueValidator(0), MaxValueValidator(6)])
+    estrato = models.PositiveIntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(6)]
+    )
     departamento = models.ForeignKey(Departamento, on_delete=models.CASCADE)
     ciudad = models.ForeignKey(Ciudad, on_delete=models.CASCADE)
-    telefono = models.BigIntegerField(validators=[MinValueValidator(0), MaxValueValidator(9999999999)], blank=True, null=True)
-    celular = models.BigIntegerField(validators=[MinValueValidator(0), MaxValueValidator(9999999999)])
+    telefono = models.BigIntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(9999999999)],
+        blank=True,
+        null=True,
+    )
+    celular = models.BigIntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(9999999999)]
+    )
     correo = models.EmailField()
     foto = models.ImageField(blank=True, null=True)
     fecha_ingreso = models.DateField()
@@ -285,14 +291,18 @@ class Persona(models.Model):
     rh = models.CharField(max_length=1, choices=RH)
     grupo_rh = models.CharField(max_length=2, choices=GRUPO_RH)
     persona_contacto = models.CharField(max_length=100, blank=True, null=True)
-    celular_contacto = models.BigIntegerField(validators=[MinValueValidator(0), MaxValueValidator(9999999999)], blank=True, null=True)
+    celular_contacto = models.BigIntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(9999999999)],
+        blank=True,
+        null=True,
+    )
     correo_contacto = models.EmailField(blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = 'persona'
-        verbose_name_plural = 'personas'
+        verbose_name = "persona"
+        verbose_name_plural = "personas"
 
     def __str__(self):
         return self.tipo_documento + "-" + self.documento + " " + self.nombre
@@ -301,16 +311,16 @@ class Persona(models.Model):
         """
         Creates a string for the Genre. This is required to display genre in Admin.
         """
-        #return ', '.join([genre.name for genre in self.genre.all()[:3]])
-        return '${:,.2f}'.format(self.salario)
+        # return ', '.join([genre.name for genre in self.genre.all()[:3]])
+        return "${:,.2f}".format(self.salario)
 
-    display_salario.short_description = 'Salario'
+    display_salario.short_description = "Salario"
 
     def get_absolute_url(self):
-        return reverse("persona_view", kwargs={'pk': self.id})
+        return reverse("persona_view", kwargs={"pk": self.id})
 
     def save(self, *args, **kwargs):
-        ''' On save, update timestamps '''
+        """On save, update timestamps"""
         if not self.id:
             self.created = timezone.now()
         self.modified = timezone.now()
@@ -333,19 +343,21 @@ class InfoAcademica(models.Model):
     empleado = models.ForeignKey(Persona, on_delete=models.CASCADE)
     titulo = models.CharField(max_length=100)
     institucion = models.CharField(max_length=100)
-    anio = models.PositiveIntegerField(validators=[MinValueValidator(1950), MaxValueValidator(2050)])
+    anio = models.PositiveIntegerField(
+        validators=[MinValueValidator(1950), MaxValueValidator(2050)]
+    )
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = 'información académica'
-        verbose_name_plural = 'información académica'
+        verbose_name = "información académica"
+        verbose_name_plural = "información académica"
 
     def __str__(self):
         return self.titulo
 
     def save(self, *args, **kwargs):
-        ''' On save, update timestamps '''
+        """On save, update timestamps"""
         if not self.id:
             self.created = timezone.now()
         self.modified = timezone.now()
@@ -356,20 +368,24 @@ class ExperienciaLaboral(models.Model):
     empleado = models.ForeignKey(Persona, on_delete=models.CASCADE)
     empresa = models.CharField(max_length=200)
     cargo = models.CharField(max_length=200)
-    anio_inicio = models.PositiveIntegerField( validators=[MinValueValidator(1950), MaxValueValidator(2050)])
-    anio_fin = models.PositiveIntegerField( validators=[MinValueValidator(1950), MaxValueValidator(2050)])
+    anio_inicio = models.PositiveIntegerField(
+        validators=[MinValueValidator(1950), MaxValueValidator(2050)]
+    )
+    anio_fin = models.PositiveIntegerField(
+        validators=[MinValueValidator(1950), MaxValueValidator(2050)]
+    )
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = 'experiencia laboral'
-        verbose_name_plural = 'experiencia laboral'
+        verbose_name = "experiencia laboral"
+        verbose_name_plural = "experiencia laboral"
 
     def __str__(self):
         return self.cargo
 
     def save(self, *args, **kwargs):
-        ''' On save, update timestamps '''
+        """On save, update timestamps"""
         if not self.id:
             self.created = timezone.now()
         self.modified = timezone.now()
@@ -382,14 +398,14 @@ class MotivoAusentismo(models.Model):
     updated = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = 'motivo ausentismo'
-        verbose_name_plural = 'motivos ausentismo'
+        verbose_name = "motivo ausentismo"
+        verbose_name_plural = "motivos ausentismo"
 
     def __str__(self):
         return self.descripcion
 
     def save(self, *args, **kwargs):
-        ''' On save, update timestamps '''
+        """On save, update timestamps"""
         if not self.id:
             self.created = timezone.now()
         self.modified = timezone.now()
@@ -397,19 +413,22 @@ class MotivoAusentismo(models.Model):
 
 
 class Ausentismo(models.Model):
-    PERIODO_AUSENTISMO = (
-        ('D', 'Día'),
-        ('H', 'Hora')
-    )
+    PERIODO_AUSENTISMO = (("D", "Día"), ("H", "Hora"))
     empleado = models.ForeignKey(Persona, on_delete=models.CASCADE)
     motivo = models.ForeignKey(MotivoAusentismo, on_delete=models.CASCADE)
     fecha_solicitud = models.DateField()
     fecha_ausentismo = models.DateField()
     tiempo_ausentismo = models.PositiveIntegerField(validators=[MinValueValidator(1)])
     periodo_ausentismo = models.CharField(max_length=2, choices=PERIODO_AUSENTISMO)
-    horas_ausentismo = models.PositiveIntegerField(validators=[MinValueValidator(1)], blank=True, null=True)
-    salario_ausentismo = models.DecimalField(decimal_places=2, max_digits=10, blank=True, null=True)
-    valor_ausentismo = models.DecimalField(decimal_places=2, max_digits=18, blank=True, null=True)
+    horas_ausentismo = models.PositiveIntegerField(
+        validators=[MinValueValidator(1)], blank=True, null=True
+    )
+    salario_ausentismo = models.DecimalField(
+        decimal_places=2, max_digits=10, blank=True, null=True
+    )
+    valor_ausentismo = models.DecimalField(
+        decimal_places=2, max_digits=18, blank=True, null=True
+    )
     area = models.CharField(max_length=50, blank=True, null=True)
     seccion = models.CharField(max_length=50, blank=True, null=True)
     cargo = models.CharField(max_length=50, blank=True, null=True)
@@ -418,64 +437,65 @@ class Ausentismo(models.Model):
     updated = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = 'ausentismo'
-        verbose_name_plural = 'ausentismos'
+        verbose_name = "ausentismo"
+        verbose_name_plural = "ausentismos"
 
     def __str__(self):
         return str(self.id)
 
     def save(self, *args, **kwargs):
-        ''' On save, update timestamps '''
+        """On save, update timestamps"""
         if not self.id:
             self.created = timezone.now()
         self.modified = timezone.now()
         return super(Ausentismo, self).save(*args, **kwargs)
 
 
-
 class Cie10(models.Model):
-    MODALIDAD = (
-        ('Pri', 'Privada'),
-        ('Pub', 'Publica')
-    )
+    MODALIDAD = (("Pri", "Privada"), ("Pub", "Publica"))
     codigo = models.CharField(unique=True, max_length=4)
     nombre = models.CharField(max_length=255)
     descripcion = models.CharField(max_length=255, default="")
     habilitado = models.BooleanField(default=True)
     aplicacion = models.CharField(max_length=255, blank=True, null=True)
-    estandar_gel = models.BooleanField(default=False,blank=True, null=True)
-    estandar_msps = models.BooleanField(default=False,blank=True, null=True)
-    aplica_sexo = models.BooleanField(default=False,blank=True, null=True)
-    edad_minima = models.IntegerField(default=0,blank=True, null=True)
-    edad_maxima = models.IntegerField(default=0,blank=True, null=True)
-    grupo_mortalidad = models.IntegerField(default=0,blank=True, null=True)
-    extra_v = models.CharField(max_length=100,blank=True, null=True)
-    capitulo = models.CharField(max_length=100,blank=True, null=True)
-    grupo = models.IntegerField(default=0,blank=True, null=True)
-    subgrupo = models.IntegerField(default=0,blank=True, null=True)
-    categoria = models.IntegerField(default=0,blank=True, null=True)
-    subcategoria = models.IntegerField(default=0,blank=True, null=True)
-    valor_registro = models.DecimalField(max_digits=10, decimal_places=2, default=0.0,blank=True, null=True)
-    usuario_responsable = models.CharField(max_length=200,blank=True, null=True)
-    fecha_actualizacion = models.DateField(default=datetime.date.today,blank=True, null=True)
-    publico_privado = models.CharField(max_length=3, choices=MODALIDAD,blank=True, null=True)
+    estandar_gel = models.BooleanField(default=False, blank=True, null=True)
+    estandar_msps = models.BooleanField(default=False, blank=True, null=True)
+    aplica_sexo = models.BooleanField(default=False, blank=True, null=True)
+    edad_minima = models.IntegerField(default=0, blank=True, null=True)
+    edad_maxima = models.IntegerField(default=0, blank=True, null=True)
+    grupo_mortalidad = models.IntegerField(default=0, blank=True, null=True)
+    extra_v = models.CharField(max_length=100, blank=True, null=True)
+    capitulo = models.CharField(max_length=100, blank=True, null=True)
+    grupo = models.IntegerField(default=0, blank=True, null=True)
+    subgrupo = models.IntegerField(default=0, blank=True, null=True)
+    categoria = models.IntegerField(default=0, blank=True, null=True)
+    subcategoria = models.IntegerField(default=0, blank=True, null=True)
+    valor_registro = models.DecimalField(
+        max_digits=10, decimal_places=2, default=0.0, blank=True, null=True
+    )
+    usuario_responsable = models.CharField(max_length=200, blank=True, null=True)
+    fecha_actualizacion = models.DateField(
+        default=datetime.date.today, blank=True, null=True
+    )
+    publico_privado = models.CharField(
+        max_length=3, choices=MODALIDAD, blank=True, null=True
+    )
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = 'CIE 10'
-        verbose_name_plural = 'CIE 10'
+        verbose_name = "CIE 10"
+        verbose_name_plural = "CIE 10"
 
     def __str__(self):
-        return '%s - %s' % (self.codigo, self.nombre)
+        return "%s - %s" % (self.codigo, self.nombre)
 
     def save(self, *args, **kwargs):
-        ''' On save, update timestamps '''
+        """On save, update timestamps"""
         if not self.id:
             self.created = timezone.now()
         self.modified = timezone.now()
         return super(Cie10, self).save(*args, **kwargs)
-
 
 
 class Csst_ba_personal(models.Model):
@@ -485,14 +505,14 @@ class Csst_ba_personal(models.Model):
     updated = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = 'Condición Básica Personal'
-        verbose_name_plural = 'Condiciones Básicas Personales'
+        verbose_name = "Condición Básica Personal"
+        verbose_name_plural = "Condiciones Básicas Personales"
 
     def __str__(self):
-        return '%s - %s' % (self.codigo, self.descripcion)
+        return "%s - %s" % (self.codigo, self.descripcion)
 
     def save(self, *args, **kwargs):
-        ''' On save, update timestamps '''
+        """On save, update timestamps"""
         if not self.id:
             self.created = timezone.now()
         self.modified = timezone.now()
@@ -506,18 +526,19 @@ class Csst_ba_laboral(models.Model):
     updated = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = 'Condición Básica Laborel'
-        verbose_name_plural = 'Condiciones Básicas Laborales'
+        verbose_name = "Condición Básica Laborel"
+        verbose_name_plural = "Condiciones Básicas Laborales"
 
     def __str__(self):
-        return '%s - %s' % (self.codigo, self.descripcion)
+        return "%s - %s" % (self.codigo, self.descripcion)
 
     def save(self, *args, **kwargs):
-        ''' On save, update timestamps '''
+        """On save, update timestamps"""
         if not self.id:
             self.created = timezone.now()
         self.modified = timezone.now()
         return super(Csst_ba_laboral, self).save(*args, **kwargs)
+
 
 class Csst_inm_subestandar(models.Model):
     codigo = models.CharField(max_length=4, unique=True)
@@ -526,14 +547,14 @@ class Csst_inm_subestandar(models.Model):
     updated = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = 'Condición Inmediata Subestandar'
-        verbose_name_plural = 'Condiciones Inmediatas Subestandar'
+        verbose_name = "Condición Inmediata Subestandar"
+        verbose_name_plural = "Condiciones Inmediatas Subestandar"
 
     def __str__(self):
-        return '%s - %s' % (self.codigo, self.descripcion)
+        return "%s - %s" % (self.codigo, self.descripcion)
 
     def save(self, *args, **kwargs):
-        ''' On save, update timestamps '''
+        """On save, update timestamps"""
         if not self.id:
             self.created = timezone.now()
         self.modified = timezone.now()
@@ -547,14 +568,14 @@ class Csst_inm_amb_subestandar(models.Model):
     updated = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = 'Condición Inmediata Ambiental Subestandar'
-        verbose_name_plural = 'Condiciones Inmediatas Ambientales Subestandar'
+        verbose_name = "Condición Inmediata Ambiental Subestandar"
+        verbose_name_plural = "Condiciones Inmediatas Ambientales Subestandar"
 
     def __str__(self):
-        return '%s - %s' % (self.codigo, self.descripcion)
+        return "%s - %s" % (self.codigo, self.descripcion)
 
     def save(self, *args, **kwargs):
-        ''' On save, update timestamps '''
+        """On save, update timestamps"""
         if not self.id:
             self.created = timezone.now()
         self.modified = timezone.now()
@@ -562,20 +583,16 @@ class Csst_inm_amb_subestandar(models.Model):
 
 
 class Accidente(models.Model):
-    JORNADA = (
-        ('O', 'ORDINARIA'),
-        ('A', 'ADICIONAL'),
-        ('T', 'TURNOS')
-    )
+    JORNADA = (("O", "ORDINARIA"), ("A", "ADICIONAL"), ("T", "TURNOS"))
     empleado = models.ForeignKey(Persona, on_delete=models.CASCADE)
     fecha_accidente = models.DateField(validators=[validador_fecha_futura])
     hora_accidente = models.TimeField()
     tipo_jornada = models.CharField(max_length=1, choices=JORNADA)
     inicio_jornada = models.TimeField()
     final_jornada = models.TimeField()
-    fallecido = models.BooleanField(default=False,blank=True, null=True)
-    incapacidad = models.BooleanField(default=False,blank=True, null=True)
-    invalidez = models.BooleanField(default=False,blank=True, null=True)
+    fallecido = models.BooleanField(default=False, blank=True, null=True)
+    incapacidad = models.BooleanField(default=False, blank=True, null=True)
+    invalidez = models.BooleanField(default=False, blank=True, null=True)
     dias_incapacidad = models.PositiveIntegerField(blank=True, null=True)
     grado_invalidez = models.PositiveIntegerField(blank=True, null=True)
     descripcion_accidente = models.TextField()
@@ -583,44 +600,94 @@ class Accidente(models.Model):
     factor_personal = models.ForeignKey(Csst_ba_personal, on_delete=models.CASCADE)
     factor_laboral = models.ForeignKey(Csst_ba_laboral, on_delete=models.CASCADE)
     acto_subestandar = models.ForeignKey(Csst_inm_subestandar, on_delete=models.CASCADE)
-    cond_ambientales_subestandar = models.ForeignKey(Csst_inm_amb_subestandar, on_delete=models.CASCADE)
+    cond_ambientales_subestandar = models.ForeignKey(
+        Csst_inm_amb_subestandar, on_delete=models.CASCADE
+    )
     fecha_liquidacion = models.DateField(blank=True, null=True)
-    lucro_consolidado = models.DecimalField(decimal_places=2, max_digits=18, blank=True, null=True)
-    lucro_futuro = models.DecimalField(decimal_places=2, max_digits=18, blank=True, null=True)
-    ipc_inicial = models.DecimalField(decimal_places=2, max_digits=8, blank=True, null=True)
-    ipc_final = models.DecimalField(decimal_places=2, max_digits=8, blank=True, null=True)
+    lucro_consolidado = models.DecimalField(
+        decimal_places=2, max_digits=18, blank=True, null=True
+    )
+    lucro_futuro = models.DecimalField(
+        decimal_places=2, max_digits=18, blank=True, null=True
+    )
+    ipc_inicial = models.DecimalField(
+        decimal_places=2, max_digits=8, blank=True, null=True
+    )
+    ipc_final = models.DecimalField(
+        decimal_places=2, max_digits=8, blank=True, null=True
+    )
     num_mes_lcc = models.PositiveIntegerField(blank=True, null=True)
-    salario_accidentado = models.DecimalField(decimal_places=2, max_digits=10, blank=True, null=True)
-    salario_minimo = models.DecimalField(decimal_places=2, max_digits=10, blank=True, null=True)
-    factor_moral_n1 = models.PositiveIntegerField(validators=[MinValueValidator(0), MaxValueValidator(100)], blank=True, null=True)
-    factor_moral_n2 = models.PositiveIntegerField(validators=[MinValueValidator(0), MaxValueValidator(100)], blank=True, null=True)
-    factor_moral_n3 = models.PositiveIntegerField(validators=[MinValueValidator(0), MaxValueValidator(100)], blank=True, null=True)
-    factor_moral_n4 = models.PositiveIntegerField(validators=[MinValueValidator(0), MaxValueValidator(100)], blank=True,
-                                                  null=True)
-    factor_moral_n5 = models.PositiveIntegerField(validators=[MinValueValidator(0), MaxValueValidator(100)], blank=True,
-                                                  null=True)
-    valor_moral_n1 = models.DecimalField(decimal_places=2, max_digits=6, validators=[MinValueValidator(Decimal('0.01'))], blank=True, null=True)
-    valor_moral_n2 = models.DecimalField(decimal_places=2, max_digits=6,
-                                         validators=[MinValueValidator(Decimal('0.01'))], blank=True, null=True)
-    valor_moral_n3 = models.DecimalField(decimal_places=2, max_digits=6,
-                                         validators=[MinValueValidator(Decimal('0.01'))], blank=True, null=True)
-    valor_moral_n4 = models.DecimalField(decimal_places=2, max_digits=6,
-                                         validators=[MinValueValidator(Decimal('0.01'))], blank=True, null=True)
-    valor_moral_n5 = models.DecimalField(decimal_places=2, max_digits=6,
-                                         validators=[MinValueValidator(Decimal('0.01'))], blank=True, null=True)
-    valor_dano_moral = models.DecimalField(decimal_places=2, max_digits=18, blank=True, null=True)
+    salario_accidentado = models.DecimalField(
+        decimal_places=2, max_digits=10, blank=True, null=True
+    )
+    salario_minimo = models.DecimalField(
+        decimal_places=2, max_digits=10, blank=True, null=True
+    )
+    factor_moral_n1 = models.PositiveIntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(100)], blank=True, null=True
+    )
+    factor_moral_n2 = models.PositiveIntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(100)], blank=True, null=True
+    )
+    factor_moral_n3 = models.PositiveIntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(100)], blank=True, null=True
+    )
+    factor_moral_n4 = models.PositiveIntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(100)], blank=True, null=True
+    )
+    factor_moral_n5 = models.PositiveIntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(100)], blank=True, null=True
+    )
+    valor_moral_n1 = models.DecimalField(
+        decimal_places=2,
+        max_digits=6,
+        validators=[MinValueValidator(Decimal("0.01"))],
+        blank=True,
+        null=True,
+    )
+    valor_moral_n2 = models.DecimalField(
+        decimal_places=2,
+        max_digits=6,
+        validators=[MinValueValidator(Decimal("0.01"))],
+        blank=True,
+        null=True,
+    )
+    valor_moral_n3 = models.DecimalField(
+        decimal_places=2,
+        max_digits=6,
+        validators=[MinValueValidator(Decimal("0.01"))],
+        blank=True,
+        null=True,
+    )
+    valor_moral_n4 = models.DecimalField(
+        decimal_places=2,
+        max_digits=6,
+        validators=[MinValueValidator(Decimal("0.01"))],
+        blank=True,
+        null=True,
+    )
+    valor_moral_n5 = models.DecimalField(
+        decimal_places=2,
+        max_digits=6,
+        validators=[MinValueValidator(Decimal("0.01"))],
+        blank=True,
+        null=True,
+    )
+    valor_dano_moral = models.DecimalField(
+        decimal_places=2, max_digits=18, blank=True, null=True
+    )
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = 'accidente'
-        verbose_name_plural = 'accidentes'
+        verbose_name = "accidente"
+        verbose_name_plural = "accidentes"
 
     def __str__(self):
         return str(self.id)
 
     def save(self, *args, **kwargs):
-        ''' On save, update timestamps '''
+        """On save, update timestamps"""
         if not self.id:
             self.created = timezone.now()
         self.modified = timezone.now()
@@ -629,63 +696,67 @@ class Accidente(models.Model):
         return super(Accidente, self).save(*args, **kwargs)
 
     def get_documentar_url(self):
-        return reverse("costos_list", kwargs={'pk': self.id})
+        return reverse("costos_list", kwargs={"pk": self.id})
 
     def get_lucro_url(self):
-        return reverse("lucro_cesante", kwargs={'pk': self.id})
+        return reverse("lucro_cesante", kwargs={"pk": self.id})
 
     def get_nomina_url(self):
-        return reverse("apropiaciones_nomina", kwargs={'pk': self.id})
+        return reverse("apropiaciones_nomina", kwargs={"pk": self.id})
 
     def get_cambio_url(self):
-        return reverse("adaptacion_cambio", kwargs={'pk': self.id})
+        return reverse("adaptacion_cambio", kwargs={"pk": self.id})
 
     def get_balance_url(self):
-        return reverse("balance", kwargs={'pk': self.id})
+        return reverse("balance", kwargs={"pk": self.id})
 
     def get_detalle_url(self):
-        return reverse("detalle_accidente", kwargs={'pk': self.id})
+        return reverse("detalle_accidente", kwargs={"pk": self.id})
 
 
 class CostosAccInsumosMedicos(models.Model):
     accidente = models.ForeignKey(Accidente, on_delete=models.CASCADE)
     insumo = models.CharField(max_length=200)
-    valor = models.DecimalField(decimal_places=2, max_digits=10, validators=[MinValueValidator(Decimal('0.01'))])
-    cantidad = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(1000)])
-
+    valor = models.DecimalField(
+        decimal_places=2, max_digits=10, validators=[MinValueValidator(Decimal("0.01"))]
+    )
+    cantidad = models.PositiveIntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(1000)]
+    )
 
     class Meta:
-        verbose_name = 'Costos Accidente Insumo Médico'
-        verbose_name_plural = 'Costos Accidnte Insumos Médicos'
+        verbose_name = "Costos Accidente Insumo Médico"
+        verbose_name_plural = "Costos Accidnte Insumos Médicos"
 
     def __str__(self):
         return str(self.id)
 
     def save(self, *args, **kwargs):
-        ''' On save, update timestamps '''
+        """On save, update timestamps"""
         if not self.id:
             self.created = timezone.now()
         self.modified = timezone.now()
         return super(CostosAccInsumosMedicos, self).save(*args, **kwargs)
 
 
-
 class CostosAccTransporte(models.Model):
     accidente = models.ForeignKey(Accidente, on_delete=models.CASCADE)
     elemento = models.CharField(max_length=200)
-    valor = models.DecimalField(decimal_places=2, max_digits=10, validators=[MinValueValidator(Decimal('0.01'))])
+    valor = models.DecimalField(
+        decimal_places=2, max_digits=10, validators=[MinValueValidator(Decimal("0.01"))]
+    )
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = 'Costo de transporte'
-        verbose_name_plural = 'Costos de transporte'
+        verbose_name = "Costo de transporte"
+        verbose_name_plural = "Costos de transporte"
 
     def __str__(self):
         return str(self.id)
 
     def save(self, *args, **kwargs):
-        ''' On save, update timestamps '''
+        """On save, update timestamps"""
         if not self.id:
             self.created = timezone.now()
         self.modified = timezone.now()
@@ -695,19 +766,21 @@ class CostosAccTransporte(models.Model):
 class CostosAccOtros(models.Model):
     accidente = models.ForeignKey(Accidente, on_delete=models.CASCADE)
     elemento = models.CharField(max_length=200)
-    valor = models.DecimalField(decimal_places=2, max_digits=10, validators=[MinValueValidator(Decimal('0.01'))])
+    valor = models.DecimalField(
+        decimal_places=2, max_digits=10, validators=[MinValueValidator(Decimal("0.01"))]
+    )
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = 'Otro costo'
-        verbose_name_plural = 'Otros costos'
+        verbose_name = "Otro costo"
+        verbose_name_plural = "Otros costos"
 
     def __str__(self):
         return str(self.id)
 
     def save(self, *args, **kwargs):
-        ''' On save, update timestamps '''
+        """On save, update timestamps"""
         if not self.id:
             self.created = timezone.now()
         self.modified = timezone.now()
@@ -717,20 +790,24 @@ class CostosAccOtros(models.Model):
 class CostosAccMaquinaria(models.Model):
     accidente = models.ForeignKey(Accidente, on_delete=models.CASCADE)
     elemento = models.CharField(max_length=200)
-    valor = models.DecimalField(decimal_places=2, max_digits=10, validators=[MinValueValidator(Decimal('0.01'))])
-    cantidad = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(1000)])
+    valor = models.DecimalField(
+        decimal_places=2, max_digits=10, validators=[MinValueValidator(Decimal("0.01"))]
+    )
+    cantidad = models.PositiveIntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(1000)]
+    )
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = 'Maquinaria requerida'
-        verbose_name_plural = 'Lista de maquinaria requerida'
+        verbose_name = "Maquinaria requerida"
+        verbose_name_plural = "Lista de maquinaria requerida"
 
     def __str__(self):
         return str(self.id)
 
     def save(self, *args, **kwargs):
-        ''' On save, update timestamps '''
+        """On save, update timestamps"""
         if not self.id:
             self.created = timezone.now()
         self.modified = timezone.now()
@@ -740,20 +817,24 @@ class CostosAccMaquinaria(models.Model):
 class CostosAccRepuestos(models.Model):
     accidente = models.ForeignKey(Accidente, on_delete=models.CASCADE)
     elemento = models.CharField(max_length=200)
-    valor = models.DecimalField(decimal_places=2, max_digits=10, validators=[MinValueValidator(Decimal('0.01'))])
-    cantidad = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(1000)])
+    valor = models.DecimalField(
+        decimal_places=2, max_digits=10, validators=[MinValueValidator(Decimal("0.01"))]
+    )
+    cantidad = models.PositiveIntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(1000)]
+    )
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = 'Repuesto requerido'
-        verbose_name_plural = 'Lista de repuestos requeridos'
+        verbose_name = "Repuesto requerido"
+        verbose_name_plural = "Lista de repuestos requeridos"
 
     def __str__(self):
         return str(self.id)
 
     def save(self, *args, **kwargs):
-        ''' On save, update timestamps '''
+        """On save, update timestamps"""
         if not self.id:
             self.created = timezone.now()
         self.modified = timezone.now()
@@ -763,20 +844,24 @@ class CostosAccRepuestos(models.Model):
 class CostosAccManoObra(models.Model):
     accidente = models.ForeignKey(Accidente, on_delete=models.CASCADE)
     descripcion = models.CharField(max_length=200)
-    valor = models.DecimalField(decimal_places=2, max_digits=10, validators=[MinValueValidator(Decimal('0.01'))])
-    cantidad = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(1000)])
+    valor = models.DecimalField(
+        decimal_places=2, max_digits=10, validators=[MinValueValidator(Decimal("0.01"))]
+    )
+    cantidad = models.PositiveIntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(1000)]
+    )
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = 'Mano de obra requerida'
-        verbose_name_plural = 'Lista de mano de obra requerida'
+        verbose_name = "Mano de obra requerida"
+        verbose_name_plural = "Lista de mano de obra requerida"
 
     def __str__(self):
         return str(self.id)
 
     def save(self, *args, **kwargs):
-        ''' On save, update timestamps '''
+        """On save, update timestamps"""
         if not self.id:
             self.created = timezone.now()
         self.modified = timezone.now()
@@ -784,21 +869,25 @@ class CostosAccManoObra(models.Model):
 
 
 class FactorIPC(models.Model):
-    anio = models.PositiveIntegerField(validators=[MinValueValidator(1900), MaxValueValidator(2100)])
-    mes = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(12)])
+    anio = models.PositiveIntegerField(
+        validators=[MinValueValidator(1900), MaxValueValidator(2100)]
+    )
+    mes = models.PositiveIntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(12)]
+    )
     factor = models.DecimalField(decimal_places=2, max_digits=5)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = 'Factor IPC'
-        verbose_name_plural = 'Factores IPC'
+        verbose_name = "Factor IPC"
+        verbose_name_plural = "Factores IPC"
 
     def __str__(self):
-        return '%s - %s => %s' % (self.anio, self.mes, self.factor)
+        return "%s - %s => %s" % (self.anio, self.mes, self.factor)
 
     def save(self, *args, **kwargs):
-        ''' On save, update timestamps '''
+        """On save, update timestamps"""
         if not self.id:
             self.created = timezone.now()
         self.modified = timezone.now()
@@ -806,26 +895,24 @@ class FactorIPC(models.Model):
 
 
 class ExpectativaVida(models.Model):
-    GENERO = (
-        ('M', 'Masculino'),
-        ('F', 'Femenino'),
-        ('B', 'No binario')
+    GENERO = (("M", "Masculino"), ("F", "Femenino"), ("B", "No binario"))
+    edad = models.PositiveIntegerField(
+        validators=[MinValueValidator(10), MaxValueValidator(150)]
     )
-    edad = models.PositiveIntegerField(validators=[MinValueValidator(10), MaxValueValidator(150)])
     tipo = models.CharField(max_length=1, choices=GENERO)
     expectativa = models.DecimalField(decimal_places=2, max_digits=5)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = 'Expectativa de vida'
-        verbose_name_plural = 'Expectativas de vida'
+        verbose_name = "Expectativa de vida"
+        verbose_name_plural = "Expectativas de vida"
 
     def __str__(self):
-        return '%s - %s => %s' % (self.edad, self.tipo, self.expectativa)
+        return "%s - %s => %s" % (self.edad, self.tipo, self.expectativa)
 
     def save(self, *args, **kwargs):
-        ''' On save, update timestamps '''
+        """On save, update timestamps"""
         if not self.id:
             self.created = timezone.now()
         self.modified = timezone.now()
@@ -835,19 +922,21 @@ class ExpectativaVida(models.Model):
 class CostosAccDanoEmergente(models.Model):
     accidente = models.ForeignKey(Accidente, on_delete=models.CASCADE)
     descripcion = models.CharField(max_length=200)
-    valor = models.DecimalField(decimal_places=2, max_digits=10, validators=[MinValueValidator(Decimal('0.01'))])
+    valor = models.DecimalField(
+        decimal_places=2, max_digits=10, validators=[MinValueValidator(Decimal("0.01"))]
+    )
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = 'Daño emergente'
-        verbose_name_plural = 'Lista de daños emergentes'
+        verbose_name = "Daño emergente"
+        verbose_name_plural = "Lista de daños emergentes"
 
     def __str__(self):
         return str(self.id)
 
     def save(self, *args, **kwargs):
-        ''' On save, update timestamps '''
+        """On save, update timestamps"""
         if not self.id:
             self.created = timezone.now()
         self.modified = timezone.now()
@@ -862,19 +951,18 @@ class FactorTiemposAcompanamiento(models.Model):
     updated = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = 'Factor tiempo acompañamiento'
-        verbose_name_plural = 'Factores acompañamiento'
+        verbose_name = "Factor tiempo acompañamiento"
+        verbose_name_plural = "Factores acompañamiento"
 
     def __str__(self):
         return str(self.tipo_acompanamiento)
 
     def save(self, *args, **kwargs):
-        ''' On save, update timestamps '''
+        """On save, update timestamps"""
         if not self.id:
             self.created = timezone.now()
         self.modified = timezone.now()
         return super(FactorTiemposAcompanamiento, self).save(*args, **kwargs)
-
 
 
 class TipoAcompanamiento(models.Model):
@@ -883,23 +971,26 @@ class TipoAcompanamiento(models.Model):
     updated = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = 'Tipo acompañamiento'
-        verbose_name_plural = 'Tipos de acompañamiento'
+        verbose_name = "Tipo acompañamiento"
+        verbose_name_plural = "Tipos de acompañamiento"
 
     def __str__(self):
         return str(self.descripcion)
 
     def save(self, *args, **kwargs):
-        ''' On save, update timestamps '''
+        """On save, update timestamps"""
         if not self.id:
             self.created = timezone.now()
         self.modified = timezone.now()
         return super(TipoAcompanamiento, self).save(*args, **kwargs)
 
+
 class TiemposAccAcompanamiento(models.Model):
     accidente = models.ForeignKey(Accidente, on_delete=models.CASCADE)
     empleado = models.ForeignKey(Persona, on_delete=models.CASCADE)
-    tipo_acompanamiento = models.ForeignKey(TipoAcompanamiento, on_delete=models.CASCADE)
+    tipo_acompanamiento = models.ForeignKey(
+        TipoAcompanamiento, on_delete=models.CASCADE
+    )
     tiempo = models.TimeField()
     factor = models.ForeignKey(FactorTiemposAcompanamiento, on_delete=models.CASCADE)
     salario = models.DecimalField(decimal_places=2, max_digits=10)
@@ -910,86 +1001,149 @@ class TiemposAccAcompanamiento(models.Model):
     updated = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = 'Acompañaieno en el accidente'
-        verbose_name_plural = 'Acompañamientos en el accidente'
+        verbose_name = "Acompañaieno en el accidente"
+        verbose_name_plural = "Acompañamientos en el accidente"
 
     def __str__(self):
         return str(self.id)
 
     def save(self, *args, **kwargs):
-        ''' On save, update timestamps '''
+        """On save, update timestamps"""
         if not self.id:
             self.created = timezone.now()
         self.modified = timezone.now()
         return super(TiemposAccAcompanamiento, self).save(*args, **kwargs)
 
+
 class ReemplazoAccidente(models.Model):
-    TIPO_REEMPLAZO=(
-        ('INTERNO', 'Interno'),
-        ('EXTERNO', 'Externo')
-    )
+    TIPO_REEMPLAZO = (("INTERNO", "Interno"), ("EXTERNO", "Externo"))
     accidente = models.ForeignKey(Accidente, on_delete=models.CASCADE)
-    reemplazo = models.ForeignKey(Persona, on_delete=models.SET_NULL, blank=True, null=True)
+    reemplazo = models.ForeignKey(
+        Persona, on_delete=models.SET_NULL, blank=True, null=True
+    )
     tipo_reemplazo = models.CharField(max_length=7, choices=TIPO_REEMPLAZO)
-    dias = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(150)])
-    salario = models.DecimalField(decimal_places=2, max_digits=10, blank=True, null=True)
+    dias = models.PositiveIntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(150)]
+    )
+    salario = models.DecimalField(
+        decimal_places=2, max_digits=10, blank=True, null=True
+    )
     costo = models.DecimalField(decimal_places=2, max_digits=10, blank=True, null=True)
     nombre_reemplazo = models.CharField(max_length=255, blank=True, null=True)
-    valor_salarial_real = models.DecimalField(decimal_places=2, max_digits=10, blank=True, null=True)
+    valor_salarial_real = models.DecimalField(
+        decimal_places=2, max_digits=10, blank=True, null=True
+    )
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = 'Remplazo del accideentado'
-        verbose_name_plural = 'Reemplazo del accidentado'
+        verbose_name = "Remplazo del accideentado"
+        verbose_name_plural = "Reemplazo del accidentado"
 
     def __str__(self):
         return str(self.reemplazo)
 
     def save(self, *args, **kwargs):
-        ''' On save, update timestamps '''
+        """On save, update timestamps"""
         if not self.id:
             self.created = timezone.now()
         self.modified = timezone.now()
 
-        if self.tipo_reemplazo == 'INTERNO':
+        if self.tipo_reemplazo == "INTERNO":
             self.salario = self.reemplazo.salario
             self.nombre_reemplazo = self.reemplazo.nombre
-            valor_salarial = (self.accidente.salario_accidentado-self.reemplazo.salario)
-            self.valor_salarial_real = 0 if valor_salarial < 0 else valor_salarial/30
-            self.costo = (self.valor_salarial_real * Decimal(55.68/100) + self.valor_salarial_real) * Decimal(self.dias)
+            valor_salarial = self.accidente.salario_accidentado - self.reemplazo.salario
+            self.valor_salarial_real = 0 if valor_salarial < 0 else valor_salarial / 30
+            self.costo = (
+                self.valor_salarial_real * Decimal(55.68 / 100)
+                + self.valor_salarial_real
+            ) * Decimal(self.dias)
         else:
             self.valor_salarial_real = (abs(self.salario)) / 30
-            self.costo = (self.valor_salarial_real * Decimal(55.68 / 100) + self.valor_salarial_real) * Decimal(self.dias)
+            self.costo = (
+                self.valor_salarial_real * Decimal(55.68 / 100)
+                + self.valor_salarial_real
+            ) * Decimal(self.dias)
         return super(ReemplazoAccidente, self).save(*args, **kwargs)
 
 
 class CapacitadorAccidente(models.Model):
     accidente = models.ForeignKey(Accidente, on_delete=models.CASCADE)
     capacitador = models.ForeignKey(Persona, on_delete=models.CASCADE)
-    dias = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(150)])
-    salario = models.DecimalField(decimal_places=2, max_digits=10, blank=True,null=True)
+    dias = models.PositiveIntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(150)]
+    )
+    salario = models.DecimalField(
+        decimal_places=2, max_digits=10, blank=True, null=True
+    )
     costo = models.DecimalField(decimal_places=2, max_digits=10, blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = 'Capacitación para el reemplazo'
-        verbose_name_plural = 'Capacitación para el reemplazo'
+        verbose_name = "Capacitación para el reemplazo"
+        verbose_name_plural = "Capacitación para el reemplazo"
 
     def __str__(self):
         return str(self.capacitador)
 
     def save(self, *args, **kwargs):
-        ''' On save, update timestamps '''
+        """On save, update timestamps"""
         if not self.id:
             self.created = timezone.now()
         self.modified = timezone.now()
         valor_salarial = 0
         self.salario = self.capacitador.salario
         valor_salarial = (abs(self.salario)) / 30
-        self.costo = (valor_salarial * Decimal(55.68 / 100) + valor_salarial) * Decimal(self.dias)
+        self.costo = (valor_salarial * Decimal(55.68 / 100) + valor_salarial) * Decimal(
+            self.dias
+        )
         return super(CapacitadorAccidente, self).save(*args, **kwargs)
+
+
+class BalanceAccidente(models.Model):
+    TIPO = (("AD", "AD"), ("AI", "AI"), ("ND", "ND"), ("NI", "NI"))
+    accidente = models.ForeignKey(Accidente, on_delete=models.CASCADE)
+    tipo1 = models.CharField(max_length=2, choices=TIPO)
+    tipo2 = models.CharField(max_length=2, choices=TIPO)
+    tipo3 = models.CharField(max_length=2, choices=TIPO)
+    tipo4 = models.CharField(max_length=2, choices=TIPO)
+    tipo5 = models.CharField(max_length=2, choices=TIPO)
+    tipo6 = models.CharField(max_length=2, choices=TIPO)
+    tipo7 = models.CharField(max_length=2, choices=TIPO)
+    tipo8 = models.CharField(max_length=2, choices=TIPO)
+    tipo9 = models.CharField(max_length=2, choices=TIPO)
+    tipo10 = models.CharField(max_length=2, choices=TIPO)
+    tipo11 = models.CharField(max_length=2, choices=TIPO)
+    tipo12 = models.CharField(max_length=2, choices=TIPO)
+    tipo13 = models.CharField(max_length=2, choices=TIPO)
+    tipo14 = models.CharField(max_length=2, choices=TIPO)
+    tipo15 = models.CharField(max_length=2, choices=TIPO)
+    tipo16 = models.CharField(max_length=2, choices=TIPO)
+    tipo17 = models.CharField(max_length=2, choices=TIPO)
+    tipo18 = models.CharField(max_length=2, choices=TIPO)
+    tipo19 = models.CharField(max_length=2, choices=TIPO)
+    tipo20 = models.CharField(max_length=2, choices=TIPO)
+    tipo21 = models.CharField(max_length=2, choices=TIPO)
+    tipo22 = models.CharField(max_length=2, choices=TIPO)
+    tipo23 = models.CharField(max_length=2, choices=TIPO)
+    tipo24 = models.CharField(max_length=2, choices=TIPO)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Balance clasificado por tipologia"
+        verbose_name_plural = "Balances clasificados por tipologia"
+
+    def __str__(self):
+        return str(self.accidente)
+
+    def save(self, *args, **kwargs):
+        """On save, update timestamps"""
+        if not self.id:
+            self.created = timezone.now()
+        self.modified = timezone.now()
+        return super(BalanceAccidente, self).save(*args, **kwargs)
 
 
 class FactorAccParafiscales(models.Model):
@@ -999,14 +1153,14 @@ class FactorAccParafiscales(models.Model):
     updated = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = 'Factor de accidentalidad por Parafiscales'
-        verbose_name_plural = 'Factores de accidentalidad por parafiscales'
+        verbose_name = "Factor de accidentalidad por Parafiscales"
+        verbose_name_plural = "Factores de accidentalidad por parafiscales"
 
     def __str__(self):
-        return '%s - %s' % (self.descripcion, self.factor)
+        return "%s - %s" % (self.descripcion, self.factor)
 
     def save(self, *args, **kwargs):
-        ''' On save, update timestamps '''
+        """On save, update timestamps"""
         if not self.id:
             self.created = timezone.now()
         self.modified = timezone.now()
@@ -1016,52 +1170,65 @@ class FactorAccParafiscales(models.Model):
 class CostosAccAdicionales(models.Model):
     accidente = models.ForeignKey(Accidente, on_delete=models.CASCADE)
     actividad = models.CharField(max_length=200)
-    valor = models.DecimalField(decimal_places=2, max_digits=10, validators=[MinValueValidator(Decimal('0.01'))])
+    valor = models.DecimalField(
+        decimal_places=2, max_digits=10, validators=[MinValueValidator(Decimal("0.01"))]
+    )
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = 'Costos adicionales'
-        verbose_name_plural = 'Lista de costos adicionales'
+        verbose_name = "Costos adicionales"
+        verbose_name_plural = "Lista de costos adicionales"
 
     def __str__(self):
         return str(self.id)
 
     def save(self, *args, **kwargs):
-        ''' On save, update timestamps '''
+        """On save, update timestamps"""
         if not self.id:
             self.created = timezone.now()
         self.modified = timezone.now()
         return super(CostosAccAdicionales, self).save(*args, **kwargs)
 
 
-
 class NivDanoMoral(models.Model):
-    TIPO_DANO = (
-        ('M', 'Muerte'),
-        ('I', 'Invalidez')
-    )
+    TIPO_DANO = (("M", "Muerte"), ("I", "Invalidez"))
     tipo_dano = models.CharField(max_length=1, choices=TIPO_DANO)
-    rango_inf = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(100)])
-    rango_sup = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(100)])
-    nivel = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(15)])
-    valor = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(100)])
+    rango_inf = models.PositiveIntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(100)]
+    )
+    rango_sup = models.PositiveIntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(100)]
+    )
+    nivel = models.PositiveIntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(15)]
+    )
+    valor = models.PositiveIntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(100)]
+    )
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = 'Niveles de daño moral'
-        verbose_name_plural = 'Niveles de daño moral'
+        verbose_name = "Niveles de daño moral"
+        verbose_name_plural = "Niveles de daño moral"
 
     def __str__(self):
-        return '%s (%s : %s) - %s => %s' % (self.tipo_dano, self.rango_inf, self.rango_sup, self.nivel, self.valor)
+        return "%s (%s : %s) - %s => %s" % (
+            self.tipo_dano,
+            self.rango_inf,
+            self.rango_sup,
+            self.nivel,
+            self.valor,
+        )
 
     def save(self, *args, **kwargs):
-        ''' On save, update timestamps '''
+        """On save, update timestamps"""
         if not self.id:
             self.created = timezone.now()
         self.modified = timezone.now()
         return super(NivDanoMoral, self).save(*args, **kwargs)
+
 
 class ParametrosApp(models.Model):
     parametro = models.CharField(max_length=100)
@@ -1070,18 +1237,15 @@ class ParametrosApp(models.Model):
     updated = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = 'Parámetro de la aplicación'
-        verbose_name_plural = 'Parámetros de la aplicación'
+        verbose_name = "Parámetro de la aplicación"
+        verbose_name_plural = "Parámetros de la aplicación"
 
     def __str__(self):
-        return '%s => %s' % (self.parametro, self.valor)
+        return "%s => %s" % (self.parametro, self.valor)
 
     def save(self, *args, **kwargs):
-        ''' On save, update timestamps '''
+        """On save, update timestamps"""
         if not self.id:
             self.created = timezone.now()
         self.modified = timezone.now()
         return super(ParametrosApp, self).save(*args, **kwargs)
-
-
-

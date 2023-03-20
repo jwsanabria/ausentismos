@@ -1143,7 +1143,8 @@ class BalanceView(View):
     def get(self, request, pk):
         balance = crear_balance()
         accidente = get_object_or_404(Accidente, id=pk)
-        f_balance_asegurable = BalanceAsegurableForm()
+
+        tipos = BalanceAccidente.objects.filter(accidente=pk)
 
         calcular_seccion_costos(accidente, balance)
         calcular_dano_emergente(accidente, balance)
@@ -1152,6 +1153,39 @@ class BalanceView(View):
         calcular_apropiaciones_nomina(accidente, balance)
         calcular_niveles_dano_moral(accidente, balance)
         calcular_balances(balance)
+
+        if tipos is not None and len(tipos) > 0:
+            calcular_tipos_balance(tipos[0], balance)
+            f_balance_asegurable = BalanceAsegurableForm(
+                initial={
+                    "tipo1": tipos[0].tipo1,
+                    "tipo2": tipos[0].tipo2,
+                    "tipo3": tipos[0].tipo3,
+                    "tipo4": tipos[0].tipo4,
+                    "tipo5": tipos[0].tipo5,
+                    "tipo6": tipos[0].tipo6,
+                    "tipo7": tipos[0].tipo7,
+                    "tipo8": tipos[0].tipo8,
+                    "tipo9": tipos[0].tipo9,
+                    "tipo10": tipos[0].tipo10,
+                    "tipo11": tipos[0].tipo11,
+                    "tipo12": tipos[0].tipo12,
+                    "tipo13": tipos[0].tipo13,
+                    "tipo14": tipos[0].tipo14,
+                    "tipo15": tipos[0].tipo15,
+                    "tipo16": tipos[0].tipo16,
+                    "tipo17": tipos[0].tipo17,
+                    "tipo18": tipos[0].tipo18,
+                    "tipo19": tipos[0].tipo19,
+                    "tipo20": tipos[0].tipo20,
+                    "tipo21": tipos[0].tipo21,
+                    "tipo22": tipos[0].tipo22,
+                    "tipo23": tipos[0].tipo23,
+                    "tipo24": tipos[0].tipo24,
+                }
+            )
+        else:
+            f_balance_asegurable = BalanceAsegurableForm()
 
         context_data = {
             "balance": balance,
@@ -1162,169 +1196,39 @@ class BalanceView(View):
         return render(request, "accidentes/balance.html", context_data)
 
     def post(selft, request, *args, **kwargs):
-        balance = crear_balance()
         try:
             accidente = get_object_or_404(Accidente, id=kwargs["pk"])
-            BalanceAsegurable = BalanceAsegurableForm(request.POST)
+            tipos = BalanceAccidente.objects.filter(accidente=accidente.id)
 
-            calcular_seccion_costos(accidente, balance)
-            calcular_dano_emergente(accidente, balance)
-            calcular_lucros(accidente, balance)
-            calcular_adaptacion_cambio(accidente, balance)
-            calcular_apropiaciones_nomina(accidente, balance)
-            calcular_niveles_dano_moral(accidente, balance)
-            calcular_balances(balance)
+            form = BalanceAsegurableForm(request.POST)
 
-            calcular_tipo_balance(
-                BalanceAsegurable,
-                request,
-                balance["otros"]["costos_insumos_medicos"],
-                "tipo1",
-            )
-            calcular_tipo_balance(
-                BalanceAsegurable,
-                request,
-                balance["otros"]["costo_transporte"],
-                "tipo2",
-            )
-            calcular_tipo_balance(
-                BalanceAsegurable, request, balance["otros"]["otros_costos"], "tipo3"
-            )
-            calcular_tipo_balance(
-                BalanceAsegurable,
-                request,
-                balance["maquinaria"]["lista_maquinaria"],
-                "tipo4",
-            )
-            calcular_tipo_balance(
-                BalanceAsegurable,
-                request,
-                balance["material"]["lista_materia_prima"],
-                "tipo5",
-            )
-            calcular_tipo_balance(
-                BalanceAsegurable,
-                request,
-                balance["mano_obra"]["lista_mano_obra_requerida"],
-                "tipo6",
-            )
-            calcular_tipo_balance(
-                BalanceAsegurable, request, balance["otros"]["dano_material"], "tipo7"
-            )
-            calcular_tipo_balance(
-                BalanceAsegurable, request, balance["otros"]["lucro_cesante"], "tipo8"
-            )
-            calcular_tipo_balance(
-                BalanceAsegurable,
-                request,
-                balance["otros"]["lucro_cesante_futuro"],
-                "tipo9",
-            )
-            calcular_tipo_balance(
-                BalanceAsegurable, request, balance["otros"]["nivel1"], "tipo10"
-            )
-            calcular_tipo_balance(
-                BalanceAsegurable, request, balance["otros"]["nivel2"], "tipo11"
-            )
-            calcular_tipo_balance(
-                BalanceAsegurable, request, balance["otros"]["nivel3"], "tipo12"
-            )
-            calcular_tipo_balance(
-                BalanceAsegurable, request, balance["otros"]["nivel4"], "tipo13"
-            )
-            calcular_tipo_balance(
-                BalanceAsegurable, request, balance["otros"]["nivel5"], "tipo14"
-            )
-            calcular_tipo_balance(
-                BalanceAsegurable,
-                request,
-                balance["mano_obra"]["reemplazos_valor"],
-                "tipo15",
-            )
-            calcular_tipo_balance(
-                BalanceAsegurable,
-                request,
-                balance["mano_obra"]["capacitaciones_valor"],
-                "tipo16",
-            )
-            calcular_tipo_balance(
-                BalanceAsegurable,
-                request,
-                balance["mano_obra"]["costos_adicionales_valor"],
-                "tipo17",
-            )
-            calcular_tipo_balance(
-                BalanceAsegurable,
-                request,
-                balance["mano_obra"]["apro_encontraba_momento_valor"],
-                "tipo18",
-            )
-            calcular_tipo_balance(
-                BalanceAsegurable,
-                request,
-                balance["mano_obra"]["apro_ayudo_rescate_valor"],
-                "tipo19",
-            )
-            calcular_tipo_balance(
-                BalanceAsegurable,
-                request,
-                balance["mano_obra"]["apro_encontraba_area_valor"],
-                "tipo20",
-            )
-            calcular_tipo_balance(
-                BalanceAsegurable,
-                request,
-                balance["mano_obra"]["apro_ayuda_investigacion_valor"],
-                "tipo21",
-            )
-            calcular_tipo_balance(
-                BalanceAsegurable,
-                request,
-                balance["mano_obra"]["apro_ayuda_imple_valor"],
-                "tipo22",
-            )
-            calcular_tipo_balance(
-                BalanceAsegurable,
-                request,
-                balance["mano_obra"]["parafiscales_valor"],
-                "tipo23",
-            )
-            calcular_tipo_balance(
-                BalanceAsegurable,
-                request,
-                balance["mano_obra"]["prestaciones_valor"],
-                "tipo24",
-            )
-
-            # form.instance.accidente = accidente
+            form.instance.accidente = accidente
+            if tipos is not None:
+                form.instance.pk = tipos[0].pk
+                form.instance.created = tipos[0].created
+                form.instance.updated = tipos[0].updated
             # save the data and after fetch the object in instance
-            # if form.is_valid():
-            #    instance = form.save()
-            #   return HttpResponseRedirect(
-            # reverse(
-            #    "apropiaciones_nomina", kwargs={"pk": instance.accidente.id}
-            # )
-            # )
+            if form.is_valid():
+                instance = form.save()
+                return HttpResponseRedirect(
+                    reverse("balance", kwargs={"pk": instance.accidente.id})
+                )
+            else:
+                logger.error(form.is_valid())
         except Exception as e:
             logger.error(e)
             messages.error(request, str(e))
 
-        context_data = {
-            "balance": balance,
-            "accidente": accidente,
-            "f_balance_asegurable": BalanceAsegurable,
-        }
         # some error occured
         return HttpResponseRedirect(
             reverse(
-                "apropiaciones_nomina", kwargs={"pk": kwargs["pk"]}, args=context_data
+                "balance",
+                kwargs={"pk": kwargs["pk"]},
             )
         )
 
 
-def calcular_tipo_balance(BalanceAsegurable, request, valor, balance, campo):
-    tipo = get_object_or_404(BalanceAsegurable, id=request.POST[campo])
-
+def calcular_tipo_balance(tipo, valor, balance):
     if tipo == "AD" or tipo == "AI":
         balance["asegurable"] += valor
     else:
@@ -1408,6 +1312,63 @@ def crear_balance():
     }
 
     return balance
+
+
+def calcular_tipos_balance(tipos, balance):
+    calcular_tipo_balance(
+        tipos.tipo1, balance["otros"]["costos_insumos_medicos"], balance
+    )
+    calcular_tipo_balance(tipos.tipo2, balance["otros"]["costo_transporte"], balance)
+    calcular_tipo_balance(tipos.tipo3, balance["otros"]["otros_costos"], balance)
+    calcular_tipo_balance(
+        tipos.tipo4, balance["maquinaria"]["lista_maquinaria"], balance
+    )
+    calcular_tipo_balance(
+        tipos.tipo5, balance["material"]["lista_materia_prima"], balance
+    )
+    calcular_tipo_balance(
+        tipos.tipo6, balance["mano_obra"]["lista_mano_obra_requerida"], balance
+    )
+    calcular_tipo_balance(tipos.tipo7, balance["otros"]["dano_material"], balance)
+    calcular_tipo_balance(tipos.tipo8, balance["otros"]["lucro_cesante"], balance)
+    calcular_tipo_balance(
+        tipos.tipo9, balance["otros"]["lucro_cesante_futuro"], balance
+    )
+    calcular_tipo_balance(tipos.tipo10, balance["otros"]["nivel1"], balance)
+    calcular_tipo_balance(tipos.tipo11, balance["otros"]["nivel2"], balance)
+    calcular_tipo_balance(tipos.tipo12, balance["otros"]["nivel3"], balance)
+    calcular_tipo_balance(tipos.tipo13, balance["otros"]["nivel4"], balance)
+    calcular_tipo_balance(tipos.tipo14, balance["otros"]["nivel5"], balance)
+    calcular_tipo_balance(
+        tipos.tipo15, balance["mano_obra"]["reemplazos_valor"], balance
+    )
+    calcular_tipo_balance(
+        tipos.tipo16, balance["mano_obra"]["capacitaciones_valor"], balance
+    )
+    calcular_tipo_balance(
+        tipos.tipo17, balance["mano_obra"]["costos_adicionales_valor"], balance
+    )
+    calcular_tipo_balance(
+        tipos.tipo18, balance["mano_obra"]["apro_encontraba_momento_valor"], balance
+    )
+    calcular_tipo_balance(
+        tipos.tipo19, balance["mano_obra"]["apro_ayudo_rescate_valor"], balance
+    )
+    calcular_tipo_balance(
+        tipos.tipo20, balance["mano_obra"]["apro_encontraba_area_valor"], balance
+    )
+    calcular_tipo_balance(
+        tipos.tipo21, balance["mano_obra"]["apro_ayuda_investigacion_valor"], balance
+    )
+    calcular_tipo_balance(
+        tipos.tipo22, balance["mano_obra"]["apro_ayuda_imple_valor"], balance
+    )
+    calcular_tipo_balance(
+        tipos.tipo23, balance["mano_obra"]["parafiscales_valor"], balance
+    )
+    calcular_tipo_balance(
+        tipos.tipo24, balance["mano_obra"]["prestaciones_valor"], balance
+    )
 
 
 def calcular_tiempo(dic, indice, dias):
