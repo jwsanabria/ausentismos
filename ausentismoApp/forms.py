@@ -271,7 +271,7 @@ class BalanceAsegurableForm(forms.Form):
         ("NI", "NO ASEGURABLE - INDIRECTO"),
     )
 
-    asegurable = forms.CharField(widget=forms.Select(choices=ASEGURABLE))
+    tipo = forms.CharField(widget=forms.Select(choices=TIPO))
 
     def __init__(self, *args, **kwargs):
         super(BalanceAsegurableForm, self).__init__(*args, **kwargs)
