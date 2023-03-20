@@ -14,6 +14,14 @@ def prepend_dollars(dollars):
 
 
 @register.filter
+def prepend_time(time):
+    if time:
+        return time
+    else:
+        return "00:00"
+
+
+@register.filter
 def prepend_hours(hours):
     if hours:
         hours = hours.strftime("%H:%M")

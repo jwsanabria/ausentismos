@@ -1327,6 +1327,8 @@ def calcular_balances(balance):
         + balance["sub_apropiaciones_valor"]
     )
 
+    balance["total_tiempo"] = balance["mano_obra"]["subtotal_tiempo"]
+
 
 def calcular_adaptacion_cambio(accidente, balance):
     # Reemplazos
