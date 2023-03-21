@@ -24,11 +24,62 @@ from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.contrib.auth.decorators import login_required
 import json
 import logging
+import csv
 from django.contrib import messages
 
 logger = logging.getLogger(__name__)
 
 interes_tecnico = 0.004867
+
+
+def export_accidentes_csv(request):
+    accidentes = Accidente.objects.all()
+
+    list_balances = []
+    for acc in accidentes:
+        balance = crear_balance()
+        tipos = BalanceAccidente.objects.filter(accidente=acc.id)
+
+        calcular_seccion_costos(acc, balance)
+        calcular_dano_emergente(acc, balance)
+        calcular_lucros(acc, balance)
+        calcular_adaptacion_cambio(acc, balance)
+        calcular_apropiaciones_nomina(acc, balance)
+        calcular_niveles_dano_moral(acc, balance)
+        calcular_balances(balance)
+
+        if tipos is not None and len(tipos) > 0:
+            calcular_tipos_balance(tipos[0], balance)
+
+        list_balances.append(balance)
+
+    response = HttpResponse(content_type="text/csv")
+    response["Content-Disposition"] = 'atachment; filename="accidentes.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow(
+        [
+            "total_mano_obra",
+            "total_material",
+            "total_otros",
+            "total_maquinaria",
+            "total",
+            "total_tiempo",
+        ]
+    )
+    for obj in list_balances:
+        writer.writerrow(
+            [
+                obj["mano_obra"]["subtotal_valor"],
+                obj["material"]["subtotal_valor"],
+                obj["otros"]["subtotal_valor"],
+                obj["maquinaria"]["subtotal_valor"],
+                obj["total_valor"],
+                obj["total_tiempo"],
+            ]
+        )
+
+    return response
 
 
 def page_not_found_view(request, exception):
