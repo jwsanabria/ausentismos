@@ -326,25 +326,15 @@
                         <td>
                             {{ f_balance_asegurable.tipo23 }}
                         </td>
-                        <td>PARAFISCALES</td>
+                        <td>PARAFISCALES Y PRESTACIONES SOCIALES</td>
                         <td style="text-align:right">{{balance.mano_obra.parafiscales_valor|prepend_dollars}}</td>
                         <td style="text-align:right">{{valor_1}}</td>
                     </tr>
                     <tr>
-                        <td>MANO DE OBRA</td>
-                        <td>
-                            {{ f_balance_asegurable.tipo24 }}
-
-                        </td>
-                        <td>PRESTACIONES SOCIALES</td>
-                        <td style="text-align:right">{{valor_9|prepend_dollars}}</td>
-                        <td style="text-align:right">{{valor_5}}</td>
-                    </tr>
-                    <tr>
                         <td colspan="2"></td>
                         <td class="bg-secondary text-white">SUBTOTAL</td>
-                        <td class="bg-secondary text-white" style="text-align:right">{{subtotal_adaptacion_cambio|prepend_dollars}}</td>
-                        <td class="bg-secondary text-white" style="text-align:right">{{subtotal_tiempo_adaptacion}}</td>
+                        <td class="bg-secondary text-white" style="text-align:right">{{balance.sub_apropiaciones_valor|prepend_dollars}}</td>
+                        <td class="bg-secondary text-white" style="text-align:right">{{balance.sub_apropiaciones_tiempo}}</td>
                     </tr>
                     <tr>
                         <td colspan="2" rowspan="13"><button type="submit" class="btn btn-primary mb-2"><span class="fa fa-save"></span> Refrescar</button></td>
