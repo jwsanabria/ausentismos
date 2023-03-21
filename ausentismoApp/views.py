@@ -24,7 +24,7 @@ from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.contrib.auth.decorators import login_required
 import json
 import logging
-import csv
+import cs
 from django.contrib import messages
 
 logger = logging.getLogger(__name__)
@@ -68,7 +68,7 @@ def export_accidentes_csv(request):
         ]
     )
     for obj in list_balances:
-        writer.writerrow(
+        writer.writerow(
             [
                 obj["mano_obra"]["subtotal_valor"],
                 obj["material"]["subtotal_valor"],
