@@ -294,7 +294,6 @@ class BalanceAsegurableForm(ModelForm):
     tipo21 = forms.CharField(widget=forms.Select(choices=TIPO))
     tipo22 = forms.CharField(widget=forms.Select(choices=TIPO))
     tipo23 = forms.CharField(widget=forms.Select(choices=TIPO))
-    tipo24 = forms.CharField(widget=forms.Select(choices=TIPO))
 
     def __init__(self, *args, **kwargs):
         super(BalanceAsegurableForm, self).__init__(*args, **kwargs)
@@ -332,7 +331,6 @@ class BalanceAsegurableForm(ModelForm):
             "tipo21",
             "tipo22",
             "tipo23",
-            "tipo24",
         )
 
 

@@ -1127,7 +1127,6 @@ class BalanceAccidente(models.Model):
     tipo21 = models.CharField(max_length=2, choices=TIPO)
     tipo22 = models.CharField(max_length=2, choices=TIPO)
     tipo23 = models.CharField(max_length=2, choices=TIPO)
-    tipo24 = models.CharField(max_length=2, choices=TIPO)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now_add=True)
 

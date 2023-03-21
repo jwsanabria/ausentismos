@@ -1050,108 +1050,6 @@ class LucroView(View):
         return render(request, "accidentes/lucro.html", context_data)
 
 
-class AprociacionesView(View):
-    def get(self, request, pk):
-        f_tiempos_acompanamiento = TiemposAccAcompanamientoForm()
-        accidente = get_object_or_404(Accidente, id=pk)
-
-        matrix = []
-
-        r_reemplazos = ReemplazoAccidente.objects.filter(accidente=pk).aggregate(
-            total=Sum(F("valor_salarial_real") * F("dias"))
-        )["total"]
-        r_capacitaciones = CapacitadorAccidente.objects.filter(accidente=pk).aggregate(
-            total=Sum(F("salario") / 30 * F("dias"))
-        )["total"]
-
-        result = (
-            TiemposAccAcompanamiento.objects.filter(accidente=pk)
-            .values("tipo_acompanamiento")
-            .order_by("tipo_acompanamiento")
-            .annotate(dTotal=Sum("total"))
-        )
-        tipos_acompanamiento = TipoAcompanamiento.objects.all().order_by("id")
-        factor_parafiscales = FactorAccParafiscales.objects.all().order_by("id")
-        for parafiscal in factor_parafiscales:
-            fila = []
-            fila.append(parafiscal.descripcion)
-            for tipo in tipos_acompanamiento:
-                valor = 0
-                if tipo.id == 5:
-                    result_5 = (
-                        TiemposAccAcompanamiento.objects.filter(
-                            accidente=pk, tipo_acompanamiento=5
-                        )
-                        .values("tipo_acompanamiento")
-                        .annotate(dTotal=Sum("total"))
-                    )
-                    valores_adicionales = 0
-                    if r_reemplazos is not None:
-                        valores_adicionales = r_reemplazos
-                    if r_capacitaciones is not None:
-                        valores_adicionales += r_capacitaciones
-
-                    for r5 in result_5.iterator():
-                        valores_adicionales += r5["dTotal"]
-                    valor = parafiscal.factor * valores_adicionales
-
-                for r in result.iterator():
-                    if tipo.id == r["tipo_acompanamiento"] and tipo.id != 5:
-                        valor = parafiscal.factor * r["dTotal"]
-
-                fila.append(valor)
-            matrix.append(fila)
-
-        context_data = {
-            "accidente": accidente,
-            "f_tiempos_acompanamiento": f_tiempos_acompanamiento,
-            "list_acompanamientos": TiemposAccAcompanamiento.objects.filter(
-                accidente=pk
-            ),
-            "matrix": matrix,
-            "factor_parafiscal": factor_parafiscales,
-            "tipos_acompanamiento": tipos_acompanamiento,
-        }
-
-        return render(request, "accidentes/apropiaciones.html", context_data)
-
-    def post(selft, request, *args, **kwargs):
-        try:
-            accidente = get_object_or_404(Accidente, id=kwargs["pk"])
-            form = TiemposAccAcompanamientoForm(request.POST)
-            acompanante = get_object_or_404(Persona, id=request.POST["empleado"])
-            factor = get_object_or_404(
-                FactorTiemposAcompanamiento, id=request.POST["factor"]
-            )
-            form.instance.salario = acompanante.salario
-            form.instance.valor_diario = acompanante.salario / 240
-            form.instance.valor_factor = factor.factor
-            logger.info(form.instance.tiempo)
-            logger.info(request.POST["tiempo"])
-            form.instance.tiempo = datetime.strptime(request.POST["tiempo"], "%H:%M")
-            tiempo = form.instance.tiempo.hour + form.instance.tiempo.minute / 60
-            form.instance.total = (
-                (acompanante.salario / 240) * Decimal(tiempo) * factor.factor
-            )
-
-            form.instance.accidente = accidente
-            # save the data and after fetch the object in instance
-            if form.is_valid():
-                instance = form.save()
-                return HttpResponseRedirect(
-                    reverse(
-                        "apropiaciones_nomina", kwargs={"pk": instance.accidente.id}
-                    )
-                )
-        except Exception as e:
-            logger.error(e)
-            messages.error(request, str(e))
-        # some error occured
-        return HttpResponseRedirect(
-            reverse("apropiaciones_nomina", kwargs={"pk": kwargs["pk"]})
-        )
-
-
 class CostosNuevosView(CreateView):
     model = CostosAccInsumosMedicos
     template_name = "accidentes/costo_insumos_med.html"
@@ -1241,7 +1139,6 @@ class BalanceView(View):
                     "tipo21": tipos[0].tipo21,
                     "tipo22": tipos[0].tipo22,
                     "tipo23": tipos[0].tipo23,
-                    "tipo24": tipos[0].tipo24,
                 }
             )
         else:
@@ -1428,9 +1325,6 @@ def calcular_tipos_balance(tipos, balance):
     )
     calcular_tipo_balance(
         tipos.tipo23, balance["mano_obra"]["parafiscales_valor"], balance
-    )
-    calcular_tipo_balance(
-        tipos.tipo24, balance["mano_obra"]["prestaciones_valor"], balance
     )
 
 
@@ -1709,3 +1603,105 @@ def calcular_niveles_dano_moral(accidente, balance):
         + balance["otros"]["nivel5"]
     )
     balance["otros"]["subtotal_valor"] += balance["sub_dano_moral"]
+
+
+class AprociacionesView(View):
+    def get(self, request, pk):
+        f_tiempos_acompanamiento = TiemposAccAcompanamientoForm()
+        accidente = get_object_or_404(Accidente, id=pk)
+
+        matrix = []
+
+        r_reemplazos = ReemplazoAccidente.objects.filter(accidente=pk).aggregate(
+            total=Sum(F("valor_salarial_real") * F("dias"))
+        )["total"]
+        r_capacitaciones = CapacitadorAccidente.objects.filter(accidente=pk).aggregate(
+            total=Sum(F("salario") / 30 * F("dias"))
+        )["total"]
+
+        result = (
+            TiemposAccAcompanamiento.objects.filter(accidente=pk)
+            .values("tipo_acompanamiento")
+            .order_by("tipo_acompanamiento")
+            .annotate(dTotal=Sum("total"))
+        )
+        tipos_acompanamiento = TipoAcompanamiento.objects.all().order_by("id")
+        factor_parafiscales = FactorAccParafiscales.objects.all().order_by("id")
+        for parafiscal in factor_parafiscales:
+            fila = []
+            fila.append(parafiscal.descripcion)
+            for tipo in tipos_acompanamiento:
+                valor = 0
+                if tipo.id == 5:
+                    result_5 = (
+                        TiemposAccAcompanamiento.objects.filter(
+                            accidente=pk, tipo_acompanamiento=5
+                        )
+                        .values("tipo_acompanamiento")
+                        .annotate(dTotal=Sum("total"))
+                    )
+                    valores_adicionales = 0
+                    if r_reemplazos is not None:
+                        valores_adicionales = r_reemplazos
+                    if r_capacitaciones is not None:
+                        valores_adicionales += r_capacitaciones
+
+                    for r5 in result_5.iterator():
+                        valores_adicionales += r5["dTotal"]
+                    valor = parafiscal.factor * valores_adicionales
+
+                for r in result.iterator():
+                    if tipo.id == r["tipo_acompanamiento"] and tipo.id != 5:
+                        valor = parafiscal.factor * r["dTotal"]
+
+                fila.append(valor)
+            matrix.append(fila)
+
+        context_data = {
+            "accidente": accidente,
+            "f_tiempos_acompanamiento": f_tiempos_acompanamiento,
+            "list_acompanamientos": TiemposAccAcompanamiento.objects.filter(
+                accidente=pk
+            ),
+            "matrix": matrix,
+            "factor_parafiscal": factor_parafiscales,
+            "tipos_acompanamiento": tipos_acompanamiento,
+        }
+
+        return render(request, "accidentes/apropiaciones.html", context_data)
+
+    def post(selft, request, *args, **kwargs):
+        try:
+            accidente = get_object_or_404(Accidente, id=kwargs["pk"])
+            form = TiemposAccAcompanamientoForm(request.POST)
+            acompanante = get_object_or_404(Persona, id=request.POST["empleado"])
+            factor = get_object_or_404(
+                FactorTiemposAcompanamiento, id=request.POST["factor"]
+            )
+            form.instance.salario = acompanante.salario
+            form.instance.valor_diario = acompanante.salario / 240
+            form.instance.valor_factor = factor.factor
+            logger.info(form.instance.tiempo)
+            logger.info(request.POST["tiempo"])
+            form.instance.tiempo = datetime.strptime(request.POST["tiempo"], "%H:%M")
+            tiempo = form.instance.tiempo.hour + form.instance.tiempo.minute / 60
+            form.instance.total = (
+                (acompanante.salario / 240) * Decimal(tiempo) * factor.factor
+            )
+
+            form.instance.accidente = accidente
+            # save the data and after fetch the object in instance
+            if form.is_valid():
+                instance = form.save()
+                return HttpResponseRedirect(
+                    reverse(
+                        "apropiaciones_nomina", kwargs={"pk": instance.accidente.id}
+                    )
+                )
+        except Exception as e:
+            logger.error(e)
+            messages.error(request, str(e))
+        # some error occured
+        return HttpResponseRedirect(
+            reverse("apropiaciones_nomina", kwargs={"pk": kwargs["pk"]})
+        )
