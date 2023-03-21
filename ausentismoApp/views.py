@@ -1663,9 +1663,9 @@ def calcular_apropiaciones_nomina(accidente, balance):
         subtotal_tiempo, balance["dias_adaptacion"]
     )
 
-    balance["mano_obra"]["parafiscales_valor"] += (
-        balance["sub_apropiaciones_valor"] * 0.5568
-    )
+    balance["mano_obra"]["parafiscales_valor"] += balance[
+        "sub_apropiaciones_valor"
+    ] * Decimal(0.5568)
 
 
 def calcular_niveles_dano_moral(accidente, balance):
