@@ -62,6 +62,9 @@ def export_accidentes_csv(request):
     writer = csv.writer(response)
     writer.writerow(
         [
+            "id_accidente",
+            "fecha",
+            "accidentado",
             "total_mano_obra",
             "total_material",
             "total_otros",
@@ -73,6 +76,9 @@ def export_accidentes_csv(request):
     for obj in list_balances:
         writer.writerow(
             [
+                obj["id_accidente"],
+                obj["fecha_accidente"],
+                obj["accidenteado"],
                 obj["mano_obra"]["subtotal_valor"],
                 obj["material"]["subtotal_valor"],
                 obj["otros"]["subtotal_valor"],
