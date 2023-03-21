@@ -28,6 +28,7 @@
         {% load querystring from django_tables2 %}
         <div class="card-footer">
             <a href="{% url 'accidente_add_view' %}" class="btn btn-primary">Registrar Accidente</a>
+            <a href="{% url 'export_accidentes' %}" class="btn btn-secondary">Descargar Info de Accidentes</a>
 
         </div>
     </div>
