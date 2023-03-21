@@ -47,6 +47,9 @@ def export_accidentes_csv(request):
         calcular_apropiaciones_nomina(acc, balance)
         calcular_niveles_dano_moral(acc, balance)
         calcular_balances(balance)
+        balance["id_accidente"] = acc.id
+        balance["fecha_accidente"] = acc.fecha_accidente
+        balance["accidenteado"] = acc.empleado
 
         if tipos is not None and len(tipos) > 0:
             calcular_tipos_balance(tipos[0], balance)
@@ -1293,6 +1296,9 @@ def calcular_tipo_balance(tipo, valor, balance):
 
 def crear_balance():
     balance = {
+        "id_accidente": 0,
+        "fecha_accidente": 0,
+        "accidenteado": 0,
         "total_valor": 0,
         "total_tiempo": 0,
         "sub_secc_1": 0,
