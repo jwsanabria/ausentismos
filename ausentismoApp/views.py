@@ -1160,7 +1160,7 @@ class BalanceView(View):
             form = BalanceAsegurableForm(request.POST)
 
             form.instance.accidente = accidente
-            if tipos is not None or len(tipos) > 0:
+            if tipos is not None and len(tipos) > 0:
                 form.instance.pk = tipos[0].pk
                 form.instance.created = tipos[0].created
                 form.instance.updated = tipos[0].updated
