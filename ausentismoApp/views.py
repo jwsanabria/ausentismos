@@ -24,7 +24,7 @@ from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.contrib.auth.decorators import login_required
 import json
 import logging
-import cs
+import csv
 from django.contrib import messages
 
 logger = logging.getLogger(__name__)
